@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '142.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '142.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '143.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '143.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -2742,26 +2742,32 @@
 
                 <!-- 0.5. Racha SENS & Gamificación Quiet Luxury (BIGG / Apple Health Benchmark) -->
                 <div class="sens-streak-card" id="sensDailyStreakCard">
-                    <!-- Fila 1: Hero Badge + Contador de Racha + Nivel + Status Pill -->
-                    <div class="sens-streak-top-row">
-                        <div class="sens-streak-badge-wrap">
-                            <div class="sens-streak-flame-icon active-glow" id="sensStreakFlameIcon" style="background: #FAF7F2 !important; border: 1px solid rgba(197, 168, 128, 0.45) !important; color: #705B3E !important;">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#705B3E"
-                                    stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- Fila Compacta de Racha (Estilo Entrenar) + Detalle Expandible al Tocar -->
+                    <div role="button" tabindex="0" onclick="var d=document.getElementById('sensStreakDetailWrap'); var c=document.getElementById('sensStreakChevron'); var l=document.getElementById('sensStreakCtaLabel'); if(d){ var open=d.style.display!=='none'; d.style.display=open?'none':'block'; if(c) c.style.transform=open?'rotate(0deg)':'rotate(180deg)'; if(l) l.textContent=open?'Ver detalle':'Ocultar'; }" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer;">
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                            <div class="sens-streak-flame-icon active-glow" id="sensStreakFlameIcon" style="width: 34px; height: 34px; min-width: 34px; border-radius: 50%; background: #FAF7F2 !important; border: none !important; color: #9E7D4B !important; display: flex; align-items: center; justify-content: center;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9E7D4B"
+                                    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <path
                                         d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
                                 </svg>
                             </div>
-                            <div class="sens-streak-count-col">
-                                <div class="sens-streak-count-row">
-                                    <span class="sens-streak-hero-num" id="sensStreakHeroNum">0</span>
-                                    <span class="sens-streak-hero-unit">DÍAS CONSECUTIVOS</span>
+                            <div style="min-width: 0;">
+                                <div style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <span style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em;">Racha</span>
+                                    <span class="sens-streak-status-pill" id="sensStreakStatusPill" style="font-size: 10px; padding: 1px 7px;">En progreso</span>
                                 </div>
+                                <div id="sensPillarsRatio" style="font-size: 12.5px; font-weight: 600; color: #6E6E73; margin-top: 1px;">0 de 3 completados</div>
                             </div>
                         </div>
-                        <span class="sens-streak-status-pill" id="sensStreakStatusPill">En progreso</span>
+                        <div style="text-align: right; flex-shrink: 0;">
+                            <div style="font-size: 17px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; line-height: 1.15;"><span class="sens-streak-hero-num" id="sensStreakHeroNum" style="font-size: 17px;">0</span> días</div>
+                            <span style="display: inline-flex; align-items: center; gap: 3px; margin-top: 2px; font-size: 10.5px; font-weight: 700; color: #705B3E; background: #FAF7F2; padding: 2px 7px; border-radius: 999px;"><span id="sensStreakCtaLabel">Ver detalle</span> <span id="sensStreakChevron" style="display: inline-block; transition: transform 0.2s ease;">▾</span></span>
+                        </div>
                     </div>
 
+                    <!-- Detalle Expandible de Racha (Semana en curso + 3 Pilares) -->
+                    <div id="sensStreakDetailWrap" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(18, 18, 20, 0.07);">
                     <!-- Fila 2: Subtítulo con ancho completo (Zero Overlap) -->
                     <div class="sens-streak-sub-row">
                         <div class="sens-streak-sub" id="sensStreakSubText">Seguimiento diario de tus 3 pilares biológicos (Entrenamiento, Nutrición y Pasos/Cardio).</div>
@@ -2793,20 +2799,9 @@
                     </div>
 
                     <!-- Los 3 Pilares Diarios SENS (Colapsables por Defecto) -->
-                    <div class="sens-streak-pillars-wrap is-collapsed" id="sensStreakPillarsWrap">
-                        <div class="sens-streak-pillars-header"
-                            onclick="window.toggleSensPillarsCollapse && window.toggleSensPillarsCollapse()"
-                            role="button" tabindex="0" aria-expanded="false"
-                            title="Tocar para ver u ocultar detalle de objetivos">
+                    <div class="sens-streak-pillars-wrap" id="sensStreakPillarsWrap">
+                        <div class="sens-streak-pillars-header" style="display: none;">
                             <span class="sens-pillars-title">OBJETIVOS DIARIOS SENS</span>
-                            <div class="sens-pillars-header-right">
-                                <span class="sens-pillars-ratio" id="sensPillarsRatio">2 de 3 completados</span>
-                                <svg class="sens-pillars-toggle-icon" width="13" height="13" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
                         </div>
                         <div class="sens-pillars-grid" id="sensPillarsGrid">
                             <!-- Pilar 1: Entrenamiento -->
@@ -3897,47 +3892,47 @@
                     </div>
                 </div>
 
-                <!-- 2. Hero Calórico Compacto (Estilo Entrenar) + Detalle Expandible al Tocar -->
+                <!-- 2. Hero Calórico Compacto (Estilo Entrenar) + Línea de Avance Visible + CTA Macros -->
                 <div class="sens-nutri-hero-primary-card" id="sensNutriHeroCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 12px 16px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
-                    <!-- Fila Compacta Siempre Visible (Tocar para expandir detalle) -->
-                    <div role="button" tabindex="0" onclick="var d=document.getElementById('sensNutriHeroDetailWrap'); var c=document.getElementById('nutriHeroChevron'); if(d){ var open=d.style.display!=='none'; d.style.display=open?'none':'block'; if(c) c.style.transform=open?'rotate(0deg)':'rotate(180deg)'; }" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer;">
+                    <!-- Fila Compacta + CTA Limpio (Tocar para ver macros) -->
+                    <div role="button" tabindex="0" onclick="var d=document.getElementById('sensNutriHeroDetailWrap'); var c=document.getElementById('nutriHeroChevron'); var l=document.getElementById('nutriHeroCtaLabel'); if(d){ var open=d.style.display!=='none'; d.style.display=open?'none':'block'; if(c) c.style.transform=open?'rotate(0deg)':'rotate(180deg)'; if(l) l.textContent=open?'Ver macros':'Ocultar'; }" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer;">
                         <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
                             <div style="width: 34px; height: 34px; border-radius: 50%; background: #FAF7F2; color: #9E7D4B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
                             </div>
                             <div style="min-width: 0;">
-                                <div style="display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em;">
-                                    <span>Calorías del día</span>
-                                    <span id="nutriHeroChevron" style="display: inline-block; font-size: 10px; transition: transform 0.2s ease;">▾</span>
-                                </div>
+                                <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em;">Calorías del día</div>
                                 <div id="nutriRemainingKcal" style="font-size: 12.5px; font-weight: 600; color: #6E6E73; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Restan 1.950 kcal</div>
                             </div>
                         </div>
                         <div style="text-align: right; flex-shrink: 0;">
                             <div style="font-size: 17px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; line-height: 1.15;"><span id="nutriConsumedNum">0</span> kcal</div>
-                            <div style="font-size: 11px; font-weight: 700; color: #6E6E73; margin-top: 2px;">Meta: <span id="nutriTargetKcal">1.950 kcal</span></div>
+                            <div style="display: inline-flex; align-items: center; gap: 6px; margin-top: 2px;">
+                                <span style="font-size: 11px; font-weight: 700; color: #6E6E73;">Meta: <span id="nutriTargetKcal">1.950 kcal</span></span>
+                                <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 700; color: #705B3E; background: #FAF7F2; padding: 2px 7px; border-radius: 999px;"><span id="nutriHeroCtaLabel">Ver macros</span> <span id="nutriHeroChevron" style="display: inline-block; transition: transform 0.2s ease;">▾</span></span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Panel de Detalle Expandible (Barra de Rango Óptimo + Macros) -->
-                    <div id="sensNutriHeroDetailWrap" style="display: none; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(18, 18, 20, 0.07);">
+                    <!-- Línea de Avance y Rango Óptimo Siempre a Primera Vista -->
+                    <div class="sens-nutri-progress-track-wrap" style="margin-top: 10px; margin-bottom: 0;">
+                        <div class="sens-nutri-progress-track">
+                            <div class="sens-nutri-progress-fill" id="nutriSliderFill" style="width: 0%;"></div>
+                            <div class="sens-nutri-optimal-zone" id="nutriOptimalZoneMarker"
+                                style="left: 69%; width: 16%;" title="Zona calórica óptima"></div>
+                        </div>
+                        <div class="sens-nutri-progress-labels">
+                            <span>0 kcal</span>
+                            <span id="nutriOptimalRangeText">Rango óptimo: 1.750 - 2.140 kcal</span>
+                            <span id="nutriMaxKcalLabel">2.400 kcal</span>
+                        </div>
+                    </div>
+
+                    <!-- Panel de Detalle Expandible (Macros + Objetivo) -->
+                    <div id="sensNutriHeroDetailWrap" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(18, 18, 20, 0.07);">
                         <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
                             <span class="pill pill-champagne" id="nutriDailyGoalBadge">Meta: Déficit Calórico</span>
                             <span class="sens-macro-toggle-summary" id="nutriMacroQuickSummary" style="font-size: 11.5px; color: #6E6E73; font-weight: 600;">0g Prot • 0g Carbs • 0g Grasas</span>
-                        </div>
-
-                        <!-- Barra de Progreso y Zona de Rango Óptimo -->
-                        <div class="sens-nutri-progress-track-wrap" style="margin-bottom: 12px;">
-                            <div class="sens-nutri-progress-track">
-                                <div class="sens-nutri-progress-fill" id="nutriSliderFill" style="width: 0%;"></div>
-                                <div class="sens-nutri-optimal-zone" id="nutriOptimalZoneMarker"
-                                    style="left: 69%; width: 16%;" title="Zona calórica óptima"></div>
-                            </div>
-                            <div class="sens-nutri-progress-labels">
-                                <span>0 kcal</span>
-                                <span id="nutriOptimalRangeText">Rango óptimo: 1.750 - 2.140 kcal</span>
-                                <span id="nutriMaxKcalLabel">2.400 kcal</span>
-                            </div>
                         </div>
 
                         <!-- Desglose de Macronutrientes -->
