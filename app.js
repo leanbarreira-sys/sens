@@ -34891,30 +34891,45 @@ window.renderTrackingCalsBars = function() {
         goalLabel.textContent = `Objetivo: ${goalText} · ${pctAdherence}% adherencia`;
     }
 
-    // Construir gráfico SVG divergente: Barras (+ Nutrición arriba / - Basal, Ejercicio, Cardio abajo) + Línea de Balance Neto
+    // Construir gráfico SVG divergente: Fila superior de totales netos + Barras (+ Nutrición / - Gasto) + Línea Neta
     const W = 350;
-    const H = 196;
+    const H = 216;
     const padX = 12;
-    const topY = 18;
-    const midY = 96;
-    const botY = 166;
-    const halfH = midY - topY; // ~78px arriba y ~70px abajo
-    const downH = botY - midY;
+    const topY = 36;
+    const midY = 114;
+    const botY = 184;
+    const halfH = midY - topY; // ~78px arriba
+    const downH = botY - midY; // ~70px abajo
     const colW = (W - padX * 2) / 7;
     const barW = 20;
 
     let barsSvg = '';
     const linePts = [];
     let dotsSvg = '';
+    let topTotalsSvg = '';
     let xLabelsSvg = '';
 
     daysData.forEach((day, idx) => {
         const cx = padX + colW * idx + colW / 2;
         const bx = cx - barW / 2;
 
-        // Fondo de selección del día
+        // Fondo de selección del día (envuelve total superior, barras y día)
         if (day.isSelected || day.isToday) {
-            barsSvg += `<rect x="${(cx - colW / 2 + 2).toFixed(1)}" y="6" width="${(colW - 4).toFixed(1)}" height="${H - 12}" rx="8" fill="${day.isSelected ? 'rgba(229,203,167,0.18)' : 'rgba(18,18,20,0.03)'}"/>`;
+            barsSvg += `<rect x="${(cx - colW / 2 + 2).toFixed(1)}" y="2" width="${(colW - 4).toFixed(1)}" height="${H - 4}" rx="9" fill="${day.isSelected ? 'rgba(229,203,167,0.18)' : 'rgba(18,18,20,0.03)'}"/>`;
+        }
+
+        // Total neto del día afuera del gráfico, arriba de cada columna (escalable a los 7 días)
+        if (!day.isFuture && day.intake > 0) {
+            const netLabel = `${day.netDiff > 0 ? '+' : ''}${day.netDiff}`;
+            const pillW = Math.max(36, colW - 5);
+            const pillFill = day.isGood
+                ? (day.isSelected ? 'rgba(5, 150, 105, 0.18)' : 'rgba(5, 150, 105, 0.11)')
+                : (day.isSelected ? 'rgba(217, 119, 6, 0.20)' : 'rgba(217, 119, 6, 0.12)');
+            const pillTextFill = day.isGood ? '#047857' : '#B45309';
+            topTotalsSvg += `<rect x="${(cx - pillW / 2).toFixed(1)}" y="6" width="${pillW.toFixed(1)}" height="19" rx="6" fill="${pillFill}"/>`;
+            topTotalsSvg += `<text x="${cx.toFixed(1)}" y="18.5" text-anchor="middle" font-size="9" font-weight="800" fill="${pillTextFill}" style="font-variant-numeric: tabular-nums;">${netLabel}</text>`;
+        } else if (!day.isFuture) {
+            topTotalsSvg += `<text x="${cx.toFixed(1)}" y="18.5" text-anchor="middle" font-size="9" font-weight="700" fill="#A1A1AA">—</text>`;
         }
 
         // Barra arriba (+ Nutrición)
@@ -34942,25 +34957,20 @@ window.renderTrackingCalsBars = function() {
             barsSvg += `<rect x="${bx.toFixed(1)}" y="${curY.toFixed(1)}" width="${barW}" height="${cH.toFixed(1)}" rx="2" fill="#3B82F6"/>`;
         }
 
-        // Punto de línea neta
+        // Punto de línea neta (limpio, sin texto superpuesto sobre las barras)
         if (!day.isFuture) {
             const clampedNet = Math.max(-maxMag, Math.min(maxMag, day.netDiff));
             const netY = midY - (clampedNet / maxMag) * (halfH - 10);
             linePts.push(`${cx.toFixed(1)},${netY.toFixed(1)}`);
 
             const dotColor = day.intake === 0 ? '#71717A' : (day.isGood ? '#059669' : '#D97706');
-            const netLabel = day.intake === 0 ? '' : `${day.netDiff > 0 ? '+' : ''}${day.netDiff}`;
             dotsSvg += `<circle cx="${cx.toFixed(1)}" cy="${netY.toFixed(1)}" r="4" fill="#FFFFFF" stroke="${dotColor}" stroke-width="2.5"/>`;
-            if (netLabel) {
-                const lblY = day.netDiff >= 0 ? Math.max(12, netY - 7) : Math.min(botY + 10, netY + 13);
-                dotsSvg += `<text x="${cx.toFixed(1)}" y="${lblY.toFixed(1)}" text-anchor="middle" font-size="8.5" font-weight="800" fill="${dotColor}">${netLabel}</text>`;
-            }
         }
 
         // Eje X clickable
         const lblColor = (day.isSelected || day.isToday) ? '#121214' : '#71717A';
         const lblWeight = (day.isSelected || day.isToday) ? '900' : '700';
-        xLabelsSvg += `<text x="${cx.toFixed(1)}" y="${H - 4}" text-anchor="middle" font-size="9.5" font-weight="${lblWeight}" fill="${lblColor}">${day.label}</text>`;
+        xLabelsSvg += `<text x="${cx.toFixed(1)}" y="${H - 7}" text-anchor="middle" font-size="9.5" font-weight="${lblWeight}" fill="${lblColor}">${day.label}</text>`;
         // Hitbox invisible para seleccionar día
         xLabelsSvg += `<rect x="${(cx - colW / 2).toFixed(1)}" y="0" width="${colW.toFixed(1)}" height="${H}" fill="transparent" style="cursor:pointer;" onclick="if(typeof AppState!=='undefined'){ AppState.selectedDate=new Date('${day.d.toISOString()}'); if(typeof renderPortalWeekStrip==='function') renderPortalWeekStrip(); if(typeof updateNutriSummaryCardData==='function') updateNutriSummaryCardData(); if(typeof renderTrackingCalsBars==='function') renderTrackingCalsBars(); if(typeof renderObjectiveBalanceCard==='function') renderObjectiveBalanceCard(); }"/>`;
     });
@@ -34974,6 +34984,7 @@ window.renderTrackingCalsBars = function() {
             <line x1="${padX}" y1="${midY}" x2="${W - padX}" y2="${midY}" stroke="rgba(18,18,20,0.22)" stroke-width="1" stroke-dasharray="3 3"/>
             <text x="${padX}" y="${midY - 3}" font-size="7.5" font-weight="700" fill="#71717A">0</text>
             ${barsSvg}
+            ${topTotalsSvg}
             ${polylineSvg}
             ${dotsSvg}
             ${xLabelsSvg}
