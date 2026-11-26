@@ -8569,19 +8569,19 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         if (totalEx > 0) {
             const allDone = doneEx >= totalEx && totalEx > 0;
             workoutBurnMiniHtml = `
-                <div id="workoutDailyBurnMiniCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 16px; padding: 12px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
-                    <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-                        <div style="width: 34px; height: 34px; border-radius: 50%; background: #FAF7F2; color: #9E7D4B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7v10"/><path d="M18 7v10"/><path d="M3 10v4"/><path d="M21 10v4"/><path d="M6 12h12"/></svg>
+                <div id="workoutDailyBurnMiniCard" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 18px; padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025);">
+                    <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+                        <div style="width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: #FAF7F2; color: #9E7D4B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7v10"/><path d="M18 7v10"/><path d="M3 10v4"/><path d="M21 10v4"/><path d="M6 12h12"/></svg>
                         </div>
-                        <div style="min-width: 0;">
-                            <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em;">Gasto aproximado</div>
-                            <div style="font-size: 12.5px; font-weight: 600; color: #6E6E73; margin-top: 1px;">${doneEx} de ${totalEx} ejercicios</div>
+                        <div style="min-width: 0; flex: 1;">
+                            <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2;">Gasto aproximado</div>
+                            <div style="font-size: 12.5px; font-weight: 500; color: #6E6E73; margin-top: 2px; line-height: 1.3;">${doneEx} de ${totalEx} ejercicios</div>
                         </div>
                     </div>
                     <div style="text-align: right; flex-shrink: 0;">
-                        <div style="font-size: 17px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; line-height: 1.15;">~${doneKcal.toLocaleString('es-AR')} kcal</div>
-                        <div style="font-size: 11px; font-weight: 700; color: ${allDone ? '#059669' : '#6E6E73'}; margin-top: 2px;">${allDone ? 'Sesión completa ✓' : `Meta sesión: ~${totalKcal.toLocaleString('es-AR')} kcal`}</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #121214; font-variant-numeric: tabular-nums; line-height: 1.15; letter-spacing: -0.02em;">~${doneKcal.toLocaleString('es-AR')}<span style="font-size: 12.5px; font-weight: 600; color: #6E6E73; margin-left: 2px;">kcal</span></div>
+                        <div style="font-size: 11px; font-weight: 600; color: ${allDone ? '#059669' : '#6E6E73'}; margin-top: 2px; font-variant-numeric: tabular-nums;">${allDone ? 'Sesión completa ✓' : `Meta: ~${totalKcal.toLocaleString('es-AR')} kcal`}</div>
                     </div>
                 </div>
             `;
