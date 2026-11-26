@@ -21990,7 +21990,7 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                     const athName = (AppState.profile?.full_name || 'Atleta').split(' ')[0];
                     const waText = encodeURIComponent(`Hola Nico! Soy ${athName}, completé mi diagnóstico en SENS y quiero consultar sobre la asignación de mi entrenamiento.`);
                     restActions.innerHTML = `
-                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" class="btn btn-dark sens-btn-empty-log-food" onclick="event.stopPropagation();" style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <a href="https://wa.me/5491136329846?text=${waText}" target="_blank" rel="noopener noreferrer" class="btn btn-dark sens-btn-empty-log-food" onclick="event.stopPropagation();" style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
                             Consultar a Nico
                         </a>
                         <button type="button" class="btn btn-outline sens-btn-empty-view-plan" id="btnRestGoWorkout" onclick="event.stopPropagation(); if(typeof switchPortalView==='function') switchPortalView('workoutView');">
