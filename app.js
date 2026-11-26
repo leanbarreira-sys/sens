@@ -9016,6 +9016,18 @@ function renderModalSeriesList() {
             </div>
         `).join('');
     }
+
+    const finishBtn = document.getElementById('btnModalFinishExercise');
+    if (finishBtn) {
+        const allDone = totalCount > 0 && completedCount === totalCount;
+        finishBtn.style.background = allDone ? '#22C55E' : '';
+        finishBtn.style.borderColor = allDone ? '#22C55E' : '';
+        finishBtn.style.color = allDone ? '#FFFFFF' : '';
+        const finishText = document.getElementById('btnModalFinishExerciseText') || finishBtn.querySelector('span');
+        if (finishText) {
+            finishText.textContent = allDone ? 'Ejercicio completado' : 'Finalizar';
+        }
+    }
 }
 
 window.stepSetWeight = function(idx, delta) {

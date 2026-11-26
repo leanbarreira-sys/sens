@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '197.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '197.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '198.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '198.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -3767,7 +3767,7 @@
                                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            <span>Finalizar</span>
+                            <span id="btnModalFinishExerciseText">Finalizar</span>
                         </button>
                     </div>
                 </div>
@@ -9057,7 +9057,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=133.0"></script>
+    <script defer src="app.js?v=134.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
