@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '143.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '143.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '144.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '144.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -2936,6 +2936,7 @@
                         <div class="sens-streak-unlock-chips-strip" id="dashUnlockablesChipsStrip">
                             <!-- Inyectado dinámicamente por renderSensUnlockablesModule() en app.js -->
                         </div>
+                    </div>
                     </div>
                 </div>
 
