@@ -18610,31 +18610,44 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     const fatsGramsEl = document.getElementById('nutriFatsGrams');
     const protGramsEl = document.getElementById('nutriProtGrams');
 
+    const minOptKcal = Math.round(targetKcal * 0.9);
+    const maxOptKcal = Math.round(targetKcal * 1.1);
+    const maxScaleKcal = Math.max(1, Math.round(targetKcal * 1.3));
+    const maxKcalLabelEl = document.getElementById('nutriMaxKcalLabel');
+    if (maxKcalLabelEl) maxKcalLabelEl.textContent = maxScaleKcal.toLocaleString('es-AR');
+
     if (consumedNum) consumedNum.textContent = totalConsumedKcal.toLocaleString('es-AR');
     if (targetKcalEl) targetKcalEl.textContent = `${targetKcal.toLocaleString('es-AR')} kcal`;
     if (remainingEl) {
         const diff = targetKcal - totalConsumedKcal;
         if (totalConsumedKcal === 0) {
             remainingEl.textContent = `Restan ${targetKcal.toLocaleString('es-AR')} kcal para tu objetivo`;
-            remainingEl.style.color = '#575659';
-        } else if (diff > 0) {
-            remainingEl.textContent = `Restan ${diff.toLocaleString('es-AR')} kcal para tu objetivo`;
-            remainingEl.style.color = '#575659';
-        } else if (diff === 0) {
-            remainingEl.textContent = 'Meta calórica alcanzada exacta';
+            remainingEl.style.color = '#6E6E73';
+        } else if (totalConsumedKcal < minOptKcal) {
+            remainingEl.textContent = `Faltan ${diff.toLocaleString('es-AR')} kcal para tu objetivo`;
+            remainingEl.style.color = '#9E7D4B';
+        } else if (totalConsumedKcal <= maxOptKcal) {
+            remainingEl.textContent = diff === 0 ? 'Objetivo exacto alcanzado' : 'En rango óptimo';
             remainingEl.style.color = '#059669';
         } else {
-            remainingEl.textContent = `+${Math.abs(diff).toLocaleString('es-AR')} kcal sobre objetivo`;
-            remainingEl.style.color = '#D97706';
+            const overMax = totalConsumedKcal - maxOptKcal;
+            remainingEl.textContent = `+${overMax.toLocaleString('es-AR')} kcal sobre el rango óptimo`;
+            remainingEl.style.color = '#DC2626';
         }
     }
     if (optimalRangeEl) {
-        optimalRangeEl.textContent = `Rango óptimo: ${Math.round(targetKcal * 0.9).toLocaleString('es-AR')} - ${Math.round(targetKcal * 1.1).toLocaleString('es-AR')} kcal`;
+        optimalRangeEl.textContent = `Rango óptimo: ${minOptKcal.toLocaleString('es-AR')} - ${maxOptKcal.toLocaleString('es-AR')} kcal`;
     }
     if (sliderFill) {
-        const pct = targetKcal > 0 ? Math.min(100, Math.round((totalConsumedKcal / targetKcal) * 100)) : 0;
+        const pct = Math.min(100, Math.max(0, Math.round((totalConsumedKcal / maxScaleKcal) * 100)));
         sliderFill.style.width = `${pct}%`;
-        sliderFill.style.background = totalConsumedKcal > (targetKcal * 1.1) ? 'linear-gradient(90deg, #F59E0B, #EF4444)' : 'linear-gradient(90deg, #9E7D4B 0%, #E5CBA7 100%)';
+        if (totalConsumedKcal > maxOptKcal) {
+            sliderFill.style.background = '#EF4444';
+        } else if (totalConsumedKcal >= minOptKcal) {
+            sliderFill.style.background = '#10B981';
+        } else {
+            sliderFill.style.background = '#C5A880';
+        }
     }
 
     // Resumen y Desglose de Macronutrientes en Acordeón Integrado (Consumido / Meta del Coach)

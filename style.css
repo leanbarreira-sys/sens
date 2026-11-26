@@ -32171,7 +32171,7 @@ body.in-portal #nutritionView #nutriTargetKcal,
 
 body.in-portal #nutritionView #nutriRemainingKcal,
 #nutriRemainingKcal {
-    color: #9E7D4B !important;
+    color: #6E6E73;
     font-weight: 700 !important;
     font-size: 11.5px !important;
 }
@@ -32195,7 +32195,7 @@ body.in-portal #nutritionView .sens-nutri-progress-track,
 
 body.in-portal #nutritionView #nutriSliderFill,
 #nutriSliderFill {
-    background: linear-gradient(90deg, #9E7D4B 0%, #121214 100%) !important;
+    background: #C5A880;
     border-radius: 9999px !important;
 }
 
