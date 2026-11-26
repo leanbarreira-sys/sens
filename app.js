@@ -35063,26 +35063,17 @@ window.renderTrackingCalsBars = function() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const profile = AppState.profile || {};
-    const userGoal = String(profile.goal || 'fat_loss').toLowerCase();
-    const isMuscleGain = userGoal.includes('muscle') || userGoal.includes('gain') || userGoal.includes('hipertrofia');
-    const isMaintenance = userGoal.includes('maint') || userGoal.includes('general') || userGoal.includes('vitality');
-    const goalText = isMuscleGain ? 'Aumento' : (isMaintenance ? 'Mantener' : 'Déficit');
-    const goalRangeShort = isMuscleGain
-        ? '+150 a +450'
-        : (isMaintenance ? '±150' : '−200 a −600');
-    const goalPill = document.getElementById('dashObjectiveGoalPill');
-    if (goalPill) {
-        goalPill.innerHTML = `<span class="bal-goal-dot" style="width:6px;height:6px;border-radius:50%;background:#9E7D4B;flex-shrink:0;"></span><span>Meta: ${goalRangeShort} cal</span>`;
-        goalPill.classList.remove('is-good', 'is-warn');
-        goalPill.style.background = '';
-        goalPill.style.color = '';
-    }
+    const formatNetVal = (v) => {
+        const r = Math.round(v);
+        if (r > 0) return `+${r.toLocaleString('es-AR')}`;
+        if (r < 0) return `−${Math.abs(r).toLocaleString('es-AR')}`;
+        return '0';
+    };
 
+    const profile = AppState.profile || {};
+    const goalPill = document.getElementById('dashObjectiveGoalPill');
     if (goalLabel) {
-        goalLabel.textContent = isMaintenance
-            ? 'Balance neto diario'
-            : 'Comida vs gasto del día';
+        goalLabel.textContent = 'Comida vs gasto del día';
     }
 
     const daysData = [];
@@ -35104,6 +35095,9 @@ window.renderTrackingCalsBars = function() {
 
         const m = (typeof getDailyMetabolicMetrics === 'function') ? getDailyMetabolicMetrics(d) : null;
         const intake = m ? (Number(m.targetIntake) || 0) : ((typeof getAthleteConsumedCalories === 'function') ? getAthleteConsumedCalories(athId, d) : 0);
+        const prescribed = (m && Number(m.prescribedCalories) > 0)
+            ? Number(m.prescribedCalories)
+            : ((typeof getAthletePrescribedCalories === 'function') ? getAthletePrescribedCalories(athId, d) : 2000);
         const rawBasal = m ? (Number(m.bmr) || 0) : 1650;
         const workout = m ? (Number(m.workoutBurn) || 0) : 0;
         const cardio = m ? ((Number(m.stepsBurn) || 0) + (Number(m.cardioBurn) || 0)) : 0;
@@ -35112,6 +35106,12 @@ window.renderTrackingCalsBars = function() {
         const basal = (!isFuture && hasActivity) ? rawBasal : 0;
         const totalBurn = basal + workout + cardio;
         const netDiff = intake - totalBurn;
+
+        const refBurn = totalBurn > 0 ? totalBurn : (rawBasal + (m ? (Number(m.plannedWorkoutBurn) || 0) : 0));
+        const minOptIntake = Math.round(prescribed * 0.80);
+        const maxOptIntake = Math.round(prescribed * 1.10);
+        const minNet = minOptIntake - refBurn;
+        const maxNet = maxOptIntake - refBurn;
 
         if (!isFuture && hasActivity) {
             weekIntakeSum += intake;
@@ -35123,25 +35123,25 @@ window.renderTrackingCalsBars = function() {
         let isGood = false;
         if (!isFuture && intake > 0) {
             daysWithRecords++;
-            if (isMuscleGain) isGood = (netDiff >= 100 && netDiff <= 600);
-            else if (isMaintenance) isGood = (Math.abs(netDiff) <= 250);
-            else isGood = (netDiff <= -150 && netDiff >= -950);
+            isGood = (netDiff >= minNet && netDiff <= maxNet);
             if (isGood) goodDaysCount++;
         }
 
         const hasPendingWorkout = Boolean(m && m.totalExCount > 0 && m.completedExCount === 0 && workout === 0);
         const hasPendingCardio = (cardio === 0);
         const dateIso = (typeof getFormattedDateKey === 'function') ? getFormattedDateKey(d) : d.toISOString().slice(0, 10);
-        const entry = { i, label: dayNames[i], d, dateIso, isToday, isSelected, isFuture, hasActivity, hasPendingWorkout, hasPendingCardio, intake, basal, workout, cardio, totalBurn, netDiff, isGood };
+        const entry = { i, label: dayNames[i], d, dateIso, isToday, isSelected, isFuture, hasActivity, hasPendingWorkout, hasPendingCardio, intake, basal, workout, cardio, totalBurn, netDiff, minNet, maxNet, isGood };
         daysData.push(entry);
         if (isSelected) selectedDayMetrics = entry;
     }
 
-    if (goalLabel && isMaintenance) {
-        const selBurn = (selectedDayMetrics && selectedDayMetrics.totalBurn > 0) ? selectedDayMetrics.totalBurn : 0;
-        if (selBurn > 0) {
-            goalLabel.textContent = `${goalText} · Para mantener hoy: ~${selBurn.toLocaleString('es-AR')} kcal`;
-        }
+    const selForPill = selectedDayMetrics || daysData[0];
+    const goalRangeShort = selForPill ? `${formatNetVal(selForPill.minNet)} a ${formatNetVal(selForPill.maxNet)}` : '−200 a +200';
+    if (goalPill) {
+        goalPill.innerHTML = `<span class="bal-goal-dot" style="width:6px;height:6px;border-radius:50%;background:#9E7D4B;flex-shrink:0;"></span><span>Meta: ${goalRangeShort} cal</span>`;
+        goalPill.classList.remove('is-good', 'is-warn');
+        goalPill.style.background = '';
+        goalPill.style.color = '';
     }
 
     // Construir gráfico SVG divergente: Fila superior de totales netos + Barras (+ Nutrición / - Gasto) + Línea Neta

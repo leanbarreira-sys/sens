@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '192.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '192.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '193.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '193.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -9060,7 +9060,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=129.0"></script>
+    <script defer src="app.js?v=130.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
