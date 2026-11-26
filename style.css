@@ -35507,18 +35507,21 @@ body.in-portal .sens-week-day-pill.active .sens-day-dot.scheduled {
     background: #E5CBA7 !important;
 }
 
-body.in-portal #workoutView .sens-workout-filters-row {
+body.in-portal #workoutView .sens-workout-filters-row,
+body.in-portal #nutritionView .sens-nutri-filter-scroll {
     gap: 6px !important;
     padding: 2px 0 6px !important;
     margin-bottom: 10px !important;
     scrollbar-width: none;
 }
 
-body.in-portal #workoutView .sens-workout-filters-row::-webkit-scrollbar {
+body.in-portal #workoutView .sens-workout-filters-row::-webkit-scrollbar,
+body.in-portal #nutritionView .sens-nutri-filter-scroll::-webkit-scrollbar {
     display: none;
 }
 
-body.in-portal #workoutView .workout-filter-chip {
+body.in-portal #workoutView .workout-filter-chip,
+body.in-portal #nutritionView .sens-nutri-tab-pill {
     min-height: 36px !important;
     padding: 7px 14px !important;
     border-radius: 9999px !important;
@@ -35532,7 +35535,8 @@ body.in-portal #workoutView .workout-filter-chip {
     -webkit-tap-highlight-color: transparent;
 }
 
-body.in-portal #workoutView .workout-filter-chip.active {
+body.in-portal #workoutView .workout-filter-chip.active,
+body.in-portal #nutritionView .sens-nutri-tab-pill.active {
     background: #F6EFE4 !important;
     border: 1px solid rgba(112, 91, 62, 0.36) !important;
     color: #121214 !important;

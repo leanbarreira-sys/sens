@@ -18569,14 +18569,13 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
             const imgUrl = resolved?.image || resolved?.image_url || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp';
             const foodTitle = item.name || item.nombre_alimento_o_plato || resolved?.nombre_alimento_o_plato || resolved?.name || resolved?.name_es || 'Alimento SENS';
-            const sourceLabel = item.isCustom ? 'Agregado' : 'Plan';
 
             return `
                 <div class="sens-nutri-food-card ${isLogged ? 'is-logged' : ''}" data-food-id="${rowKey}" data-meal-slot="${item.mealSlot}" data-grams="${grams}">
                     <img class="sens-nutri-food-thumb" src="${imgUrl}" alt="${foodTitle}" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                     <div class="sens-nutri-food-info">
                         <div class="sens-nutri-food-title" title="${foodTitle}">${foodTitle}</div>
-                        <div class="sens-nutri-food-meta" style="margin-top: 2px;">${grams}g • ${sourceLabel}</div>
+                        <div class="sens-nutri-food-meta" style="margin-top: 2px;">${grams}g</div>
                     </div>
                     <div class="sens-nutri-food-right" style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
                         <div class="sens-nutri-kcal-badge" style="font-variant-numeric: tabular-nums;">${macros.calories} kcal</div>
