@@ -18923,7 +18923,23 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
     // 3. Alimentos personalizados registrados por el alumno para este día
     userCustomMeals.forEach((cm, cmIdx) => {
-        allDayFoods.push(Object.assign({}, cm, { isCustom: true, _occIdx: `c${cmIdx}` }));
+        allDayFoods.push(Object.assign({}, cm, { isCustom: true, _occIdx: `c${cmIdx}`, _customIdx: cmIdx }));
+    });
+
+    // 3b. Aplicar movimientos de momento de ingesta guardados por el alumno
+    let movedFoodsMap = {};
+    try {
+        movedFoodsMap = JSON.parse(localStorage.getItem(`sens_user_moved_foods_${athId}_${dateIso}`) || '{}') || {};
+    } catch (e) {}
+    allDayFoods.forEach((f, fIdx) => {
+        const resolved = (typeof window.getResolvedFood === 'function') ? window.getResolvedFood(f, athId) : f;
+        const occIdx = f._occIdx !== undefined ? f._occIdx : fIdx;
+        f._origMealSlot = f.mealSlot || 'almuerzo';
+        const baseKey = window.getNutritionFoodRowKey(f._origMealSlot, occIdx, f, resolved);
+        f._baseRowKey = baseKey;
+        if (movedFoodsMap[baseKey] && mealKeys.includes(movedFoodsMap[baseKey])) {
+            f.mealSlot = movedFoodsMap[baseKey];
+        }
     });
 
     // 4. Renderizar Subsecciones Visuales con Container Encompassing Parent Card (Item 1 & 2)
@@ -18952,7 +18968,7 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
             const foodKey = resolved?.id || resolved?.codigo || item.id || item.name;
             const occIdx = item._occIdx !== undefined ? item._occIdx : sIdx;
-            const rowKey = window.getNutritionFoodRowKey(mKey, occIdx, item, resolved);
+            const rowKey = item._baseRowKey || window.getNutritionFoodRowKey(item._origMealSlot || mKey, occIdx, item, resolved);
             item._rowKey = rowKey;
             const grams = userAdjusted[rowKey] ? parseInt(userAdjusted[rowKey], 10) : (userAdjusted[foodKey] ? parseInt(userAdjusted[foodKey], 10) : (item.grams || resolved?.defaultGrams || 100));
 
@@ -19084,11 +19100,208 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
             });
         });
 
-        // Listener: Card de alimento abre el Inspector
+        // Listener: Card de alimento (Long-press -> modo edición jiggle/multi-select, Tap normal -> Inspector)
+        if (!window._sensNutriEditState) {
+            window._sensNutriEditState = { active: false, selectedKeys: new Set(), showMoveSlots: false };
+        }
+        const editState = window._sensNutriEditState;
+
+        const exitNutriEditMode = () => {
+            editState.active = false;
+            editState.selectedKeys.clear();
+            editState.showMoveSlots = false;
+            foodListEl.classList.remove('sens-nutri-edit-mode');
+            foodListEl.querySelectorAll('.sens-nutri-food-card.is-edit-selected').forEach(c => c.classList.remove('is-edit-selected'));
+            const bar = document.getElementById('sensNutriEditBar');
+            if (bar) bar.remove();
+        };
+
+        const renderNutriEditBar = () => {
+            let bar = document.getElementById('sensNutriEditBar');
+            if (!editState.active) {
+                if (bar) bar.remove();
+                return;
+            }
+            if (!bar) {
+                bar = document.createElement('div');
+                bar.id = 'sensNutriEditBar';
+                bar.className = 'sens-nutri-edit-bar';
+                document.body.appendChild(bar);
+            }
+            const count = editState.selectedKeys.size;
+            const slotButtonsHtml = editState.showMoveSlots ? `
+                <div class="sens-nutri-edit-move-slots">
+                    ${mealKeys.map(mk => `<button type="button" class="sens-nutri-edit-slot-pill" data-target-slot="${mk}">${mealLabels[mk]}</button>`).join('')}
+                </div>
+            ` : '';
+            bar.innerHTML = `
+                <div class="sens-nutri-edit-bar-top">
+                    <span class="sens-nutri-edit-count">${count} ${count === 1 ? 'seleccionado' : 'seleccionados'}</span>
+                    <div class="sens-nutri-edit-actions">
+                        <button type="button" class="sens-nutri-edit-btn move" id="btnNutriEditMove" ${count === 0 ? 'disabled style="opacity:0.4;"' : ''}>Mover a</button>
+                        <button type="button" class="sens-nutri-edit-btn delete" id="btnNutriEditDelete" ${count === 0 ? 'disabled style="opacity:0.4;"' : ''}>Eliminar</button>
+                        <button type="button" class="sens-nutri-edit-btn done" id="btnNutriEditDone">Listo</button>
+                    </div>
+                </div>
+                ${slotButtonsHtml}
+            `;
+
+            const doneBtn = document.getElementById('btnNutriEditDone');
+            if (doneBtn) doneBtn.onclick = exitNutriEditMode;
+
+            const moveBtn = document.getElementById('btnNutriEditMove');
+            if (moveBtn) {
+                moveBtn.onclick = () => {
+                    if (editState.selectedKeys.size === 0) return;
+                    editState.showMoveSlots = !editState.showMoveSlots;
+                    renderNutriEditBar();
+                };
+            }
+
+            const deleteBtn = document.getElementById('btnNutriEditDelete');
+            if (deleteBtn) {
+                deleteBtn.onclick = () => {
+                    if (editState.selectedKeys.size === 0) return;
+                    const keysToDelete = new Set(editState.selectedKeys);
+                    const customKey = `sens_user_logged_meals_${athId}_${dateIso}`;
+                    const removedKey = `sens_user_removed_foods_${athId}_${dateIso}`;
+                    const consumedKey = `sens_user_consumed_foods_${athId}_${dateIso}`;
+
+                    let customArr = [];
+                    try { customArr = JSON.parse(localStorage.getItem(customKey) || '[]') || []; } catch (e) {}
+                    let removedArr = [];
+                    try { removedArr = JSON.parse(localStorage.getItem(removedKey) || '[]') || []; } catch (e) {}
+                    let consumedMap = {};
+                    try { consumedMap = JSON.parse(localStorage.getItem(consumedKey) || '{}') || {}; } catch (e) {}
+
+                    const customIndicesToRemove = new Set();
+                    keysToDelete.forEach(rk => {
+                        const item = allDayFoods.find(f => f._rowKey === rk || f._baseRowKey === rk);
+                        if (item && item.isCustom && item._customIdx !== undefined) {
+                            customIndicesToRemove.add(item._customIdx);
+                        } else {
+                            if (!removedArr.includes(rk)) removedArr.push(rk);
+                        }
+                        delete consumedMap[rk];
+                    });
+
+                    if (customIndicesToRemove.size > 0) {
+                        customArr = customArr.filter((_, idx) => !customIndicesToRemove.has(idx));
+                        localStorage.setItem(customKey, JSON.stringify(customArr));
+                    }
+                    localStorage.setItem(removedKey, JSON.stringify(removedArr));
+                    localStorage.setItem(consumedKey, JSON.stringify(consumedMap));
+
+                    exitNutriEditMode();
+                    renderMemberNutritionPlan(athId, sDate);
+                    if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry(sDate);
+                    if (typeof showSensToast === 'function') {
+                        showSensToast(`${keysToDelete.size} ${keysToDelete.size === 1 ? 'alimento eliminado' : 'alimentos eliminados'}`, 'champagne', 2200);
+                    }
+                };
+            }
+
+            bar.querySelectorAll('.sens-nutri-edit-slot-pill').forEach(pill => {
+                pill.onclick = () => {
+                    const targetSlot = pill.getAttribute('data-target-slot');
+                    if (!targetSlot || editState.selectedKeys.size === 0) return;
+                    const movedKey = `sens_user_moved_foods_${athId}_${dateIso}`;
+                    let movedMap = {};
+                    try { movedMap = JSON.parse(localStorage.getItem(movedKey) || '{}') || {}; } catch (e) {}
+                    const movedCount = editState.selectedKeys.size;
+                    editState.selectedKeys.forEach(rk => {
+                        movedMap[rk] = targetSlot;
+                    });
+                    localStorage.setItem(movedKey, JSON.stringify(movedMap));
+
+                    exitNutriEditMode();
+                    renderMemberNutritionPlan(athId, sDate);
+                    if (typeof showSensToast === 'function') {
+                        showSensToast(`Movido a ${mealLabels[targetSlot] || targetSlot} (${movedCount})`, 'champagne', 2200);
+                    }
+                };
+            });
+        };
+
+        if (editState.active) {
+            foodListEl.classList.add('sens-nutri-edit-mode');
+            renderNutriEditBar();
+        } else {
+            foodListEl.classList.remove('sens-nutri-edit-mode');
+            const staleBar = document.getElementById('sensNutriEditBar');
+            if (staleBar) staleBar.remove();
+        }
+
         foodListEl.querySelectorAll('.sens-nutri-food-card').forEach(card => {
-            card.addEventListener('click', (e) => {
+            const foodKey = card.getAttribute('data-food-id');
+            if (editState.active && editState.selectedKeys.has(foodKey)) {
+                card.classList.add('is-edit-selected');
+            }
+
+            let pressTimer = null;
+            let startX = 0;
+            let startY = 0;
+            let longPressTriggered = false;
+
+            const cancelPress = () => {
+                if (pressTimer) {
+                    clearTimeout(pressTimer);
+                    pressTimer = null;
+                }
+            };
+
+            card.addEventListener('pointerdown', (e) => {
                 if (e.target.closest('.sens-btn-quick-log, .btn-quick-add-to-meal')) return;
-                const foodKey = card.getAttribute('data-food-id');
+                longPressTriggered = false;
+                startX = e.clientX || 0;
+                startY = e.clientY || 0;
+                cancelPress();
+                pressTimer = setTimeout(() => {
+                    longPressTriggered = true;
+                    editState.active = true;
+                    editState.selectedKeys.add(foodKey);
+                    editState.showMoveSlots = false;
+                    foodListEl.classList.add('sens-nutri-edit-mode');
+                    card.classList.add('is-edit-selected');
+                    try { if (navigator.vibrate) navigator.vibrate(25); } catch (err) {}
+                    renderNutriEditBar();
+                }, 420);
+            });
+
+            card.addEventListener('pointermove', (e) => {
+                if (!pressTimer) return;
+                const dx = Math.abs((e.clientX || 0) - startX);
+                const dy = Math.abs((e.clientY || 0) - startY);
+                if (dx > 8 || dy > 8) cancelPress();
+            });
+
+            card.addEventListener('pointerup', cancelPress);
+            card.addEventListener('pointercancel', cancelPress);
+            card.addEventListener('contextmenu', (e) => {
+                if (editState.active || longPressTriggered) e.preventDefault();
+            });
+
+            card.addEventListener('click', (e) => {
+                if (longPressTriggered) {
+                    longPressTriggered = false;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
+                if (editState.active) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (editState.selectedKeys.has(foodKey)) {
+                        editState.selectedKeys.delete(foodKey);
+                        card.classList.remove('is-edit-selected');
+                    } else {
+                        editState.selectedKeys.add(foodKey);
+                        card.classList.add('is-edit-selected');
+                    }
+                    renderNutriEditBar();
+                    return;
+                }
+                if (e.target.closest('.sens-btn-quick-log, .btn-quick-add-to-meal')) return;
                 const mealSlot = card.getAttribute('data-meal-slot');
                 const item = allDayFoods.find(f => (f._rowKey === foodKey || f.id === foodKey || f.codigo === foodKey || f.name === foodKey));
                 if (item) {
