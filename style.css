@@ -15818,24 +15818,25 @@ body.pending-activation #portalSubNav {
 @media (max-width: 900px) {
     body.in-portal:not(.pending-activation):not([data-active-view="activationPendingView"]):not([data-active-view="onboardingSection"]) #sensFloatingDock {
         position: fixed !important;
-        bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+        bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
         left: 50% !important;
         transform: translate3d(-50%, 0, 0) !important;
         -webkit-transform: translate3d(-50%, 0, 0) !important;
-        width: calc(100% - 32px) !important;
-        max-width: 400px !important;
+        width: calc(100% - 76px) !important;
+        min-width: 260px !important;
+        max-width: 296px !important;
         box-sizing: border-box !important;
         display: grid !important;
         grid-template-columns: repeat(4, 1fr) !important;
-        gap: 4px !important;
-        padding: 6px 8px !important;
-        background: rgba(255, 255, 255, 0.94) !important;
-        backdrop-filter: blur(20px) !important;
-        -webkit-backdrop-filter: blur(20px) !important;
-        border: 1px solid rgba(18, 18, 20, 0.08) !important;
-        border-radius: 36px !important;
-        box-shadow: 0 10px 32px -4px rgba(18, 18, 20, 0.12), 0 2px 6px rgba(18, 18, 20, 0.04) !important;
-        z-index: 99999 !important;
+        gap: 2px !important;
+        padding: 4px 5px !important;
+        background: rgba(255, 255, 255, 0.38) !important;
+        backdrop-filter: blur(22px) saturate(190%) !important;
+        -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.72) !important;
+        border-radius: 9999px !important;
+        box-shadow: 0 12px 32px rgba(18, 18, 20, 0.12), inset 0 1.5px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(18, 18, 20, 0.05) !important;
+        z-index: 100001 !important;
         overflow: hidden !important;
         pointer-events: auto !important;
         touch-action: manipulation !important;
@@ -24483,7 +24484,6 @@ body.sens-power-save *::after {
 /* 6. Reducción de carga de sombreado gaussiano (backdrop-filter) en pantallas móviles de alta densidad (3x Retina) */
 @media (max-width: 768px) {
     .glass-panel,
-    .sens-floating-dock,
     .portal-topbar {
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
@@ -28231,12 +28231,12 @@ body.in-portal .sens-workout-rest-pane p {
 
 /* 5. Floating Dock Inferior — iOS 26 Liquid Glass Quiet Luxury */
 body.in-portal #sensFloatingDock {
-    background: rgba(255, 255, 255, 0.36) !important;
-    backdrop-filter: blur(20px) saturate(200%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(200%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.68) !important;
+    background: rgba(255, 255, 255, 0.38) !important;
+    backdrop-filter: blur(22px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.72) !important;
     border-radius: 9999px !important;
-    box-shadow: 0 10px 30px rgba(18, 18, 20, 0.12), inset 0 1.5px 0 rgba(255, 255, 255, 0.88), inset 0 -1px 0 rgba(18, 18, 20, 0.06) !important;
+    box-shadow: 0 12px 32px rgba(18, 18, 20, 0.12), inset 0 1.5px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(18, 18, 20, 0.05) !important;
     padding: 4px 5px !important;
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
@@ -28246,15 +28246,15 @@ body.in-portal #sensFloatingDock {
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 100001 !important; pointer-events: auto !important;
-    width: calc(100% - 88px) !important;
-    min-width: 256px !important;
-    max-width: 288px !important;
+    width: calc(100% - 76px) !important;
+    min-width: 260px !important;
+    max-width: 296px !important;
     box-sizing: border-box !important;
 }
 
 body.in-portal #sensFloatingDock .sens-dock-item {
     background: transparent !important;
-    color: #3F3F46 !important;
+    color: #52525B !important;
     border: none !important;
     border-radius: 9999px !important;
     padding: 4px 3px !important;
@@ -28275,23 +28275,24 @@ body.in-portal #sensFloatingDock .sens-dock-item {
 }
 
 body.in-portal #sensFloatingDock .sens-dock-item.active {
-    background: rgba(18, 18, 20, 0.84) !important;
-    color: #FFFFFF !important;
+    background: rgba(255, 255, 255, 0.62) !important;
+    color: #121214 !important;
     font-weight: 700 !important;
-    box-shadow: 0 3px 10px rgba(18, 18, 20, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
 body.in-portal #sensFloatingDock .sens-dock-item svg {
     width: 16px !important;
     height: 16px !important;
     stroke: currentColor !important;
-    stroke-width: 1.85 !important;
+    stroke-width: 1.75 !important;
     margin: 0 auto !important;
     flex-shrink: 0 !important;
 }
 
 body.in-portal #sensFloatingDock .sens-dock-item.active svg {
-    stroke: #FFFFFF !important;
+    stroke: #121214 !important;
+    stroke-width: 2.15 !important;
 }
 
 body.in-portal #sensFloatingDock .sens-dock-item span {
