@@ -8097,7 +8097,7 @@ window.toggleExerciseFinished = function(exId, dayKey, targetDateStr = null) {
 
     if (allDone) {
         if (typeof window.showSensCelebrationToast === 'function') {
-            window.showSensCelebrationToast('¡Entrenamiento Completado!', 'Completaste el 100% de los ejercicios de hoy. ¡Racha de fuerza asegurada!');
+            window.showSensCelebrationToast('¡Entreno adentro!', 'Cerraste la rutina de hoy');
         } else if (typeof showSensToast === 'function') {
             showSensToast('¡Felicitaciones! Completaste todos los ejercicios de la sesión.', 'champagne');
         }
@@ -9426,7 +9426,7 @@ const SensConfetti = {
         const h = (this.canvas.height = window.innerHeight);
         this.canvas.style.display = 'block';
 
-        const colors = ['#F7E8D0', '#E5CBA7', '#D4B07A', '#FFFFFF', '#C8A87A'];
+        const colors = ['#34D399', '#22C55E', '#6EE7B7', '#A7F3D0', '#FFFFFF'];
         this.particles = [];
 
         const cx = w * 0.5;
@@ -9512,70 +9512,57 @@ const SensGamification = {
             if (!ctx) return;
             const now = ctx.currentTime;
 
-            // Master warm filter + subtle spatial echo tail (Apple / Oura organic chime)
+            // Fanfare alegre y brillante de festejo (estilo Nintendo/Duolingo/Apple Ring Close)
             const masterGain = ctx.createGain();
-            masterGain.gain.setValueAtTime(0.85, now);
+            masterGain.gain.setValueAtTime(0.95, now);
             masterGain.connect(ctx.destination);
 
             const filter = ctx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(2800, now);
-            filter.frequency.exponentialRampToValueAtTime(950, now + 1.4);
+            filter.frequency.setValueAtTime(4800, now);
+            filter.frequency.exponentialRampToValueAtTime(2400, now + 0.9);
             filter.connect(masterGain);
 
-            const delay = ctx.createDelay(0.5);
-            delay.delayTime.setValueAtTime(0.14, now);
-            const feedback = ctx.createGain();
-            feedback.gain.setValueAtTime(0.22, now);
-            const wetGain = ctx.createGain();
-            wetGain.gain.setValueAtTime(0.24, now);
-            filter.connect(delay);
-            delay.connect(feedback);
-            feedback.connect(delay);
-            delay.connect(wetGain);
-            wetGain.connect(masterGain);
-
-            // Arpegio orgánico Fmaj9 (F4 -> A4 -> C5 -> E5 -> G5) + calidez sub F3
+            // Arpegio rápido ascendente en Do Mayor (C5 -> E5 -> G5 -> C6) + brillo E6
             const notes = [
-                { f: 174.61, start: 0.00, dur: 1.25, gain: 0.05, type: 'sine' },     // F3 calidez
-                { f: 349.23, start: 0.00, dur: 0.95, gain: 0.065, type: 'triangle' }, // F4
-                { f: 440.00, start: 0.055, dur: 1.00, gain: 0.06, type: 'triangle' }, // A4
-                { f: 523.25, start: 0.11, dur: 1.15, gain: 0.065, type: 'triangle' }, // C5
-                { f: 659.25, start: 0.165, dur: 1.30, gain: 0.055, type: 'sine' },    // E5
-                { f: 783.99, start: 0.22, dur: 1.45, gain: 0.05, type: 'sine' }       // G5 aire
+                { f: 261.63, start: 0.00,  dur: 0.30, gain: 0.08, type: 'triangle' }, // C4 punch base
+                { f: 523.25, start: 0.00,  dur: 0.24, gain: 0.10, type: 'triangle' }, // C5
+                { f: 659.25, start: 0.06,  dur: 0.24, gain: 0.10, type: 'triangle' }, // E5
+                { f: 783.99, start: 0.12,  dur: 0.26, gain: 0.11, type: 'triangle' }, // G5
+                { f: 1046.50, start: 0.18, dur: 0.65, gain: 0.12, type: 'triangle' }, // C6 clímax
+                { f: 1318.51, start: 0.23, dur: 0.55, gain: 0.07, type: 'sine' }      // E6 sparkle
             ];
 
             notes.forEach(note => {
                 const t = now + note.start;
                 const osc = ctx.createOscillator();
-                const oscOct = ctx.createOscillator();
+                const oscBright = ctx.createOscillator();
                 const gain = ctx.createGain();
-                const octGain = ctx.createGain();
+                const brightGain = ctx.createGain();
 
                 osc.type = note.type;
                 osc.frequency.setValueAtTime(note.f, t);
 
-                oscOct.type = 'sine';
-                oscOct.frequency.setValueAtTime(note.f * 2, t);
-                oscOct.detune.setValueAtTime(4, t);
+                oscBright.type = 'sine';
+                oscBright.frequency.setValueAtTime(note.f * 2, t);
 
                 gain.gain.setValueAtTime(0.0001, t);
-                gain.gain.linearRampToValueAtTime(note.gain, t + 0.018);
+                gain.gain.linearRampToValueAtTime(note.gain, t + 0.006);
                 gain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur);
 
-                octGain.gain.setValueAtTime(0.0001, t);
-                octGain.gain.linearRampToValueAtTime(note.gain * 0.18, t + 0.015);
-                octGain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur * 0.55);
+                brightGain.gain.setValueAtTime(0.0001, t);
+                brightGain.gain.linearRampToValueAtTime(note.gain * 0.25, t + 0.005);
+                brightGain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur * 0.6);
 
                 osc.connect(gain);
-                oscOct.connect(octGain);
+                oscBright.connect(brightGain);
                 gain.connect(filter);
-                octGain.connect(filter);
+                brightGain.connect(filter);
 
                 osc.start(t);
-                oscOct.start(t);
-                osc.stop(t + note.dur + 0.05);
-                oscOct.stop(t + note.dur + 0.05);
+                oscBright.start(t);
+                osc.stop(t + note.dur + 0.04);
+                oscBright.stop(t + note.dur + 0.04);
             });
         } catch (e) {}
     },
@@ -9635,17 +9622,22 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
         }
     }
 
-    if (titleEl) titleEl.textContent = isPerfectDay ? 'Día perfecto completado' : (title || 'Objetivo cumplido');
-    if (subtitleEl) subtitleEl.textContent = isPerfectDay ? 'Entreno, nutrición y movimiento al 100% hoy' : (subtitle || 'Racha diaria activa');
-    if (levelPillEl) levelPillEl.textContent = isPerfectDay ? 'DÍA PERFECTO · 3 DE 3 PILARES' : `RACHA ACTIVA · NIVEL ${levelInfo.level}`;
+    const donePillars = Math.max(1, Math.min(3, dayRec.completedCount || 1));
+    if (titleEl) titleEl.textContent = isPerfectDay ? '¡Día completo!' : (title || '¡Objetivo cumplido!');
+    if (subtitleEl) subtitleEl.textContent = isPerfectDay ? 'Entreno, comida y movimiento al 100%' : (subtitle || 'Sumaste un pilar más hoy');
+    if (levelPillEl) {
+        levelPillEl.textContent = isPerfectDay
+            ? '3 DE 3 · DÍA COMPLETO'
+            : (donePillars === 2 ? '2 DE 3 · A UN PASO DEL 100%' : '1 DE 3 · RACHA EN MARCHA');
+    }
     if (bumpNumEl) bumpNumEl.textContent = streakDays;
     if (bumpLabelEl) bumpLabelEl.textContent = streakDays === 1 ? 'DÍA EN RACHA' : 'DÍAS EN RACHA';
 
-    // Anillo SVG animado proporcional a los pilares completados hoy (1/3, 2/3, 3/3)
+    // Anillo SVG animado proporcional a los pilares completados hoy (1/3, 2/3, 3/3) siempre en verde
     if (ringFillEl) {
         const circumference = 2 * Math.PI * 50; // r=50 -> ~314.16
-        const ratio = Math.max(0.33, Math.min(1, (dayRec.completedCount || 1) / 3));
-        ringFillEl.style.stroke = isPerfectDay ? 'url(#sensPerfectRingGrad)' : 'url(#sensChampagneRingGrad)';
+        const ratio = Math.max(0.33, Math.min(1, donePillars / 3));
+        ringFillEl.style.stroke = 'url(#sensPerfectRingGrad)';
         ringFillEl.style.strokeDasharray = `${circumference}`;
         ringFillEl.style.strokeDashoffset = `${circumference}`;
         setTimeout(() => {
@@ -9693,8 +9685,8 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
         const nextMilestone = streakDays < 3 ? 3 : (streakDays < 7 ? 7 : (streakDays < 14 ? 14 : 30));
         const remDays = Math.max(0, nextMilestone - streakDays);
         milestoneTextEl.textContent = remDays > 0
-            ? `Faltan ${remDays} ${remDays === 1 ? 'día' : 'días'} para tu hito de ${nextMilestone} días`
-            : `Hito de ${nextMilestone} días alcanzado`;
+            ? `Te faltan ${remDays} ${remDays === 1 ? 'día' : 'días'} para la racha de ${nextMilestone}`
+            : `¡Alcanzaste los ${nextMilestone} días seguidos!`;
     }
 
     SensGamification.playCelebrationFanfare();
@@ -9735,8 +9727,8 @@ function triggerCongratsCelebration(customTitle = null, customSubtitle = null) {
 
     // La landing full-screen se reserva exclusivamente para cuando se gana alguna de las 3 rachas
     if (dayRec && dayRec.workout && dayRec.workout.done) {
-        const title = customTitle || 'Entrenamiento completado';
-        const subtitle = customSubtitle || 'Completaste el 100% de la sesión de hoy. Racha de entreno activa.';
+        const title = customTitle || '¡Entreno adentro!';
+        const subtitle = customSubtitle || 'Cerraste la rutina de hoy';
         window.showSensCelebrationToast(title, subtitle);
         return;
     }
@@ -18416,7 +18408,7 @@ window.handleNutritionStreakTransition = function(streakEval) {
 
     if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
         if (typeof window.showSensCelebrationToast === 'function') {
-            window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) están en el rango óptimo (-10% / +10%).`);
+            window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`);
         }
     } else if (nutriStatus === 'exceeded' && prevStatus !== 'exceeded') {
         if (typeof showSensToast === 'function') {
@@ -20046,7 +20038,7 @@ function initUserCustomMealModal(athId) {
 
                 if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
                     if (typeof window.showSensCelebrationToast === 'function') {
-                        window.showSensCelebrationToast('¡Racha Nutricional Activa!', `Tus calorías (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron en el rango óptimo (-10% / +10%).`);
+                        window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`);
                     }
                 } else if (nutriStatus === 'exceeded') {
                     if (typeof showSensToast === 'function') {
@@ -24402,10 +24394,10 @@ window.saveActivityChanges = function(isExplicitSave = false, isAutoSave = false
 
             if (typeof window.showSensCelebrationToast === 'function') {
                 window.showSensCelebrationToast(
-                    isAllThreeDone ? 'Día perfecto completado' : 'Meta de movimiento cumplida',
+                    isAllThreeDone ? '¡Día completo!' : '¡Movimiento cumplido!',
                     isAllThreeDone
-                        ? 'Entreno, nutrición y movimiento al 100% hoy'
-                        : `${totalBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} cal de movimiento diario`
+                        ? 'Entreno, comida y movimiento al 100%'
+                        : `${totalBurn.toLocaleString('es-AR')} kcal activas hoy`
                 );
             }
         } else if (!isAutoSave && !qualifies) {
