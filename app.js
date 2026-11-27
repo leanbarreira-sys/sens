@@ -9735,7 +9735,16 @@ window.showSensCelebrationToast = function(title, subtitle, quoteOrPillar) {
             { key: 'nutrition', label: 'Nutrición', done: Boolean(dayRec.nutrition?.done) },
             { key: 'cardio', label: 'Movimiento', done: Boolean(dayRec.cardio?.done) }
         ];
-        pillarsRowEl.innerHTML = pList.map(p => {
+        // Orden progresivo izquierda -> derecha: [ya completadas] -> [recién ganada] -> [pendientes]
+        const alreadyDone = pList.filter(p => p.done && p.key !== earnedPillar);
+        const earnedItem = earnedPillar ? pList.find(p => p.key === earnedPillar) : null;
+        const pendingItems = pList.filter(p => !p.done && p.key !== earnedPillar);
+        const orderedPillars = [
+            ...alreadyDone,
+            ...(earnedItem ? [earnedItem] : []),
+            ...pendingItems
+        ];
+        pillarsRowEl.innerHTML = orderedPillars.map(p => {
             const isJustEarned = p.done && (p.key === earnedPillar);
             return `
             <div class="sens-celeb-pillar-seg ${p.done ? 'is-done' : ''} ${isJustEarned ? 'is-just-earned' : ''}">
