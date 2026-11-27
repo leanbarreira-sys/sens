@@ -8078,23 +8078,6 @@ window.toggleExerciseFinished = function(exId, dayKey, targetDateStr = null) {
         durationMinutes: durationMins
     });
 
-    if (allDone) {
-        if (typeof window.showSensCelebrationToast === 'function') {
-            window.showSensCelebrationToast('¡Entrenamiento Completado!', 'Completaste el 100% de los ejercicios de hoy. ¡Racha de fuerza asegurada!');
-        } else if (typeof showSensToast === 'function') {
-            showSensToast('¡Felicitaciones! Completaste todos los ejercicios de la sesión.', 'champagne');
-        }
-    } else {
-        const wasCompleted = Boolean(currentExecution.completed);
-        if (wasCompleted) {
-            if (typeof showSensToast === 'function') {
-                showSensToast('Perdiste el objetivo de racha de entrenamiento de hoy (sesión incompleta).', 'warning', 4000);
-            }
-        } else if (typeof showSensToast === 'function') {
-            showSensToast(nextState ? `✓ ${ex.name} finalizado` : `Ejercicio desmarcado`, 'info');
-        }
-    }
-
     AppState.selectedDate = effectiveDate;
     AppState.currentDay = dayKey;
 
@@ -8109,6 +8092,23 @@ window.toggleExerciseFinished = function(exId, dayKey, targetDateStr = null) {
         }
         if (typeof updateSensStreakCard === 'function') {
             updateSensStreakCard(effectiveDate);
+        }
+    }
+
+    if (allDone) {
+        if (typeof window.showSensCelebrationToast === 'function') {
+            window.showSensCelebrationToast('¡Entrenamiento Completado!', 'Completaste el 100% de los ejercicios de hoy. ¡Racha de fuerza asegurada!');
+        } else if (typeof showSensToast === 'function') {
+            showSensToast('¡Felicitaciones! Completaste todos los ejercicios de la sesión.', 'champagne');
+        }
+    } else {
+        const wasCompleted = Boolean(currentExecution.completed);
+        if (wasCompleted) {
+            if (typeof showSensToast === 'function') {
+                showSensToast('Perdiste el objetivo de racha de entrenamiento de hoy (sesión incompleta).', 'warning', 4000);
+            }
+        } else if (typeof showSensToast === 'function') {
+            showSensToast(nextState ? `✓ ${ex.name} finalizado` : `Ejercicio desmarcado`, 'info');
         }
     }
 };
@@ -23135,6 +23135,25 @@ const SensDailyStreakManager = {
     getStorageKey(athId) {
         const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
         return `${this.STORAGE_PREFIX}_${id}`;
+    },
+
+    getDateKey(targetDate = new Date()) {
+        const sDate = (targetDate instanceof Date) ? targetDate : new Date(targetDate);
+        return `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+    },
+
+    getDayRecord(athId = null, targetDate = new Date()) {
+        const id = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : 'mock_vip');
+        const dateIso = this.getDateKey(targetDate);
+        const records = this.getAllRecords(id);
+        if (records[dateIso]) return records[dateIso];
+        return {
+            workout: { done: false },
+            nutrition: { done: false, status: 'pending' },
+            cardio: { done: false },
+            completedCount: 0,
+            isQualified: false
+        };
     },
 
     getAllRecords(athId) {
