@@ -11824,6 +11824,9 @@ function initTopbarAvatar() {
         window._lastAvatarToggleTs = nowTs;
         const drop = document.getElementById('userAvatarDropdown');
         if (!drop) return;
+        if (drop.parentElement !== document.body) {
+            document.body.appendChild(drop);
+        }
         if (typeof syncAvatarData === 'function') syncAvatarData();
         drop.classList.toggle('active');
     };
