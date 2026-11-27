@@ -7967,6 +7967,11 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
 
             const hasWk = Boolean(curSession && Array.isArray(curSession.exercises) && curSession.exercises.length > 0 && !curSession.isRestDay);
             if (isBringingToRestDay && !hasWk) continue;
+            // Nunca traer una sesión de ayer si ayer ya se completó
+            if (isBringingToRestDay && offset === -1 && typeof getAthleteWorkoutExecution === 'function') {
+                const yEx = getAthleteWorkoutExecution(athId, curD);
+                if (yEx && yEx.completed) continue;
+            }
             // Nunca intercambiar una sesión futura hacia un día pasado ya vencido
             if (isSourceInPast && hasWk) continue;
 
@@ -8373,10 +8378,16 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         }
     }
 
-    // 4.5. Detección de sesión no completada de ayer para recuperación/reprogramación
-    let missedRecoveryHtml = '';
+    const execCurrent = (typeof getAthleteWorkoutExecution === 'function') ? getAthleteWorkoutExecution(athId, effectiveDate) : null;
+    const completedCurrentMap = (execCurrent && execCurrent.completedExercises) ? execCurrent.completedExercises : {};
+    const doneExCountCurrent = exercisesToShow.filter(ex => Boolean(completedCurrentMap[ex.id])).length;
+    const isCurrentWorkoutStarted = Boolean((execCurrent && execCurrent.completed) || doneExCountCurrent > 0);
     const todayIso = getFormattedDateKey(new Date());
-    if (dateIso === todayIso) {
+
+    // 4.5. Detección inteligente de sesiones pendientes (Caso 2A: banner solo si hoy es Descanso; Caso 2B: discreto al pie si hoy está pendiente; Caso 4: oculto si hoy ya entrenó)
+    let missedRecoveryHtml = '';
+    let missedFooterHintHtml = '';
+    if (dateIso === todayIso && !isCurrentWorkoutStarted) {
         const yDate = new Date();
         yDate.setDate(yDate.getDate() - 1);
         const yDateIso = getFormattedDateKey(yDate);
@@ -8390,6 +8401,10 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         try {
             yAttendance = JSON.parse(localStorage.getItem(yAttendanceKey) || '{}');
         } catch (_) {}
+        const yExec = (typeof getAthleteWorkoutExecution === 'function') ? getAthleteWorkoutExecution(athId, yDate) : null;
+        const yDoneCount = (yDayData && Array.isArray(yDayData.exercises) && yExec && yExec.completedExercises)
+            ? yDayData.exercises.filter(ex => Boolean(yExec.completedExercises[ex.id])).length
+            : 0;
 
         const userCreatedRaw = AppState.profile?.created_at || (AppState.user && AppState.user.created_at) || null;
         const userCreatedDate = userCreatedRaw ? new Date(userCreatedRaw) : new Date();
@@ -8398,37 +8413,56 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         yDateMidnight.setHours(0, 0, 0, 0);
 
         const yHasExercises = yDayData && !yDayData.isRestDay && Array.isArray(yDayData.exercises) && yDayData.exercises.length > 0;
-        const yWasMissed = yAttendance.attended === false || yAttendance.missed === true;
-        const yWasNotCompleted = !yAttendance.completed && !yAttendance.attended;
+        const yWasCompleted = Boolean((yExec && yExec.completed) || (yHasExercises && yDoneCount >= yDayData.exercises.length) || yAttendance.completed || yAttendance.attended === true);
 
-        if (yDateMidnight >= userCreatedDate && yHasExercises && (yWasMissed || yWasNotCompleted)) {
+        if (yDateMidnight >= userCreatedDate && yHasExercises && !yWasCompleted) {
             const cleanMissedTitle = (yDayData.title || 'Entrenamiento')
                 .replace(/^(?:Lunes|Martes|Miércoles|Miercoles|Jueves|Viernes|Sábado|Sabado|Domingo)\s*[-–—:+]\s*/i, '')
                 .trim() || 'Entrenamiento';
-            const missedEyebrow = exercisesToShow.length === 0 ? 'Hoy es descanso · Sesión pendiente de ayer' : 'Sesión pendiente de ayer';
-            missedRecoveryHtml = `
-                <div class="sens-missed-recovery-banner" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 16px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 2px 12px rgba(18, 18, 20, 0.03);">
-                    <div style="display: flex; align-items: flex-start; gap: 12px;">
-                        <div style="width: 38px; height: 38px; border-radius: 50%; background: #FAF7F2; display: flex; align-items: center; justify-content: center; color: #9E7D4B; flex-shrink: 0; margin-top: 2px;">
-                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            if (exercisesToShow.length === 0) {
+                // Caso 2A: Hoy es descanso y ayer quedó pendiente -> Banner útil
+                missedRecoveryHtml = `
+                    <div class="sens-missed-recovery-banner" style="background: #FFFFFF; border: 1px solid rgba(18, 18, 20, 0.08); border-radius: 20px; padding: 16px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 2px 12px rgba(18, 18, 20, 0.03);">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="width: 38px; height: 38px; border-radius: 50%; background: #FAF7F2; display: flex; align-items: center; justify-content: center; color: #9E7D4B; flex-shrink: 0; margin-top: 2px;">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                            </div>
+                            <div style="min-width: 0; flex: 1;">
+                                <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.2;">Hoy es descanso · Sesión pendiente de ayer</div>
+                                <div style="font-size: 15px; font-weight: 800; color: #121214; letter-spacing: -0.015em; margin-top: 3px; line-height: 1.25;">¿Recuperamos la sesión de ayer?</div>
+                                <div style="font-size: 12.5px; color: #6E6E73; margin-top: 3px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${cleanMissedTitle} · ${yDayData.exercises.length} ejercicios</div>
+                            </div>
                         </div>
-                        <div style="min-width: 0; flex: 1;">
-                            <div style="font-size: 10.5px; font-weight: 700; color: #9E7D4B; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.2;">${missedEyebrow}</div>
-                            <div style="font-size: 15px; font-weight: 800; color: #121214; letter-spacing: -0.015em; margin-top: 3px; line-height: 1.25;">¿No pudiste entrenar ayer?</div>
-                            <div style="font-size: 12.5px; color: #6E6E73; margin-top: 3px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${cleanMissedTitle} · ${yDayData.exercises.length} ejercicios</div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button type="button" class="btn btn-dark" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="flex: 1; min-height: 40px; padding: 9px 14px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-size: 12.5px; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer;">
+                                Traer a hoy
+                            </button>
+                            <button type="button" class="btn btn-outline" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="min-height: 40px; padding: 9px 16px; background: #F4F3F1 !important; color: #121214 !important; -webkit-text-fill-color: #121214 !important; font-size: 12.5px; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer;">
+                                Elegir otro día →
+                            </button>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button type="button" class="btn btn-dark" onclick="window.moveWorkoutSession('${yDateIso}', '${dateIso}', 'replace')" style="flex: 1; min-height: 40px; padding: 9px 14px; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; font-size: 12.5px; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer;">
-                            Traer a hoy
-                        </button>
-                        <button type="button" class="btn btn-outline" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="min-height: 40px; padding: 9px 16px; background: #F4F3F1 !important; color: #121214 !important; -webkit-text-fill-color: #121214 !important; font-size: 12.5px; font-weight: 700; text-transform: none; letter-spacing: 0; border: none; border-radius: 9999px; cursor: pointer;">
-                            Elegir otro día →
+                `;
+            } else {
+                // Caso 2B: Hoy ya tiene rutina pendiente -> link discreto al pie (no invade arriba ni pisa hoy)
+                missedFooterHintHtml = `
+                    <div style="text-align: center; margin: 4px 0 18px 0;">
+                        <button type="button" onclick="window.openMoveWorkoutModal('${yDateIso}')" style="background: transparent; border: none; color: #6E6E73; font-size: 12px; font-weight: 600; padding: 6px 12px; cursor: pointer;">
+                            Ayer quedó pendiente una sesión · <span style="color: #121214; font-weight: 700;">Pasar a otro día →</span>
                         </button>
                     </div>
-                </div>
-            `;
+                `;
+            }
         }
+    } else if (dateIso < todayIso && exercisesToShow.length > 0 && !isCurrentWorkoutStarted) {
+        // Caso 5: Día pasado sin completar -> link discreto para recuperar en otro día
+        missedFooterHintHtml = `
+            <div style="text-align: center; margin: 4px 0 18px 0;">
+                <button type="button" onclick="window.openMoveWorkoutModal('${dateIso}')" style="background: transparent; border: none; color: #6E6E73; font-size: 12px; font-weight: 600; padding: 6px 12px; cursor: pointer;">
+                    Esta sesión quedó sin hacer · <span style="color: #121214; font-weight: 700;">Recuperar en otro día →</span>
+                </button>
+            </div>
+        `;
     }
 
     // 5. Estado Vacío si no hay ejercicios para el filtro
@@ -8503,12 +8537,20 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     const activeLang = 'es';
     try { if (typeof localStorage !== 'undefined') localStorage.removeItem('sens_lang'); } catch (_) {}
 
+    let isFirstTypeSection = true;
+    const canMoveCurrentSession = dateIso >= todayIso && !isCurrentWorkoutStarted;
+
     Object.values(typeGroups).forEach(tg => {
         const muscleKeys = Object.keys(tg.muscles);
         if (muscleKeys.length === 0) return;
 
         let totalTypeExercises = 0;
         muscleKeys.forEach(mk => totalTypeExercises += tg.muscles[mk].length);
+
+        const movePillHtml = (isFirstTypeSection && canMoveCurrentSession)
+            ? `<button type="button" onclick="event.stopPropagation(); window.openMoveWorkoutModal('${dateIso}');" style="background: #F4F3F1; color: #121214; border: none; border-radius: 9999px; padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">Mover día ⇄</button>`
+            : '';
+        isFirstTypeSection = false;
 
         groupedHtml += `
             <div class="sens-workout-type-section" data-type="${tg.key}">
@@ -8517,7 +8559,10 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         ${tg.icon}
                         <span>${tg.label}</span>
                     </div>
-                    <span class="sens-workout-type-badge">${totalTypeExercises} ejercicio${totalTypeExercises > 1 ? 's' : ''}</span>
+                    <div style="display: inline-flex; align-items: center; gap: 6px;">
+                        ${movePillHtml}
+                        <span class="sens-workout-type-badge">${totalTypeExercises} ejercicio${totalTypeExercises > 1 ? 's' : ''}</span>
+                    </div>
                 </div>
         `;
 
@@ -8644,9 +8689,9 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     const burnSlot = document.getElementById('workoutBurnSummarySlot');
     if (burnSlot) {
         burnSlot.innerHTML = workoutBurnMiniHtml;
-        container.innerHTML = missedRecoveryHtml + groupedHtml;
+        container.innerHTML = missedRecoveryHtml + groupedHtml + missedFooterHintHtml;
     } else {
-        container.innerHTML = missedRecoveryHtml + workoutBurnMiniHtml + groupedHtml;
+        container.innerHTML = missedRecoveryHtml + workoutBurnMiniHtml + groupedHtml + missedFooterHintHtml;
     }
     if (window.SensBatteryPerfGovernor && typeof window.SensBatteryPerfGovernor.observeVideosInContainer === 'function') {
         window.SensBatteryPerfGovernor.observeVideosInContainer(container);
@@ -22765,8 +22810,8 @@ function updateDynamicTrainingCard(selectedDate = new Date(), dayKey = null) {
                 if (restDesc) restDesc.textContent = 'Hoy tu cuerpo asimila el estímulo previo. Caminata ligera o descanso completo.';
                 if (restActions) {
                     restActions.innerHTML = `
-                        <button type="button" class="btn btn-dark sens-btn-empty-log-food" id="btnRestRescheduleWorkout" onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()));" style="background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;">
-                            Reprogramar sesión
+                        <button type="button" class="btn btn-outline sens-btn-empty-view-plan" id="btnRestRescheduleWorkout" onclick="event.stopPropagation(); openMoveWorkoutModal(getFormattedDateKey(AppState.selectedDate || new Date()));" style="background: #F4F3F1 !important; color: #121214 !important; -webkit-text-fill-color: #121214 !important; border: none !important;">
+                            Traer sesión →
                         </button>
                         <button type="button" class="btn btn-outline sens-btn-empty-view-plan" id="btnRestGoWorkout" onclick="event.stopPropagation(); if(typeof switchPortalView==='function') switchPortalView('workoutView');">
                             Ir a Entrenar →
