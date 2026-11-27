@@ -23927,20 +23927,20 @@ body:has(.modal.show) #sensCoachFloatingDock {
    SENS PWA ENGINE & MARKETING POPUP (QUIET LUXURY OBSIDIAN & CHAMPAGNE)
    ============================================================================= */
 
-/* 1. Marketing Install Floating Popup / Toast - Quiet Light Luxury */
+/* 1. Marketing Install Floating Popup / Toast - iOS 26 Liquid Glass */
 .sens-pwa-marketing-popup {
     position: fixed;
     bottom: 24px;
     right: 20px;
     width: calc(100% - 40px);
     max-width: 420px;
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.72) !important;
+    border: 1px solid rgba(255, 255, 255, 0.34) !important;
+    border-radius: 24px;
     padding: 16px 18px 18px;
-    box-shadow: 0 20px 48px rgba(18, 18, 20, 0.12), 0 4px 12px rgba(18, 18, 20, 0.04) !important;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 20px 48px rgba(18, 18, 20, 0.16), 0 4px 12px rgba(18, 18, 20, 0.05) !important;
+    backdrop-filter: blur(26px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(26px) saturate(190%) !important;
     z-index: 99999;
     box-sizing: border-box;
     display: none;
@@ -31223,10 +31223,10 @@ body.in-portal #userAvatarDropdown,
     left: auto !important;
     width: 316px !important;
     max-width: calc(100vw - 24px) !important;
-    background: rgba(255, 255, 255, 0.93) !important;
-    backdrop-filter: blur(32px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
-    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    background: rgba(255, 255, 255, 0.70) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.34) !important;
     border-radius: 26px !important;
     padding: 15px !important;
     box-shadow: 0 24px 60px -12px rgba(18, 18, 20, 0.20), 0 4px 16px rgba(18, 18, 20, 0.06) !important;
