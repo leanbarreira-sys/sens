@@ -27887,44 +27887,47 @@ body.in-portal .sens-week-day-pill.is-today .sens-day-dot.scheduled {
     background: #564428 !important;
 }
 
-/* 3. Tarjeta de Racha SENS (Blanco Puro en lugar de Negro - Image 1) */
+/* 3. Tarjeta de Racha SENS (Unificada al píxel con Gasto y Calorías) */
 body.in-portal .sens-streak-card,
 body.in-portal #sensDailyStreakCard {
     background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.06) !important;
-    border-radius: 24px !important;
-    padding: 20px !important;
-    box-shadow: 0 4px 24px rgba(18, 18, 20, 0.03) !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 16px 18px !important;
+    box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03) !important;
     color: #121214 !important;
-    margin-bottom: 24px !important;
+    margin-bottom: 14px !important;
 }
 
 body.in-portal .sens-streak-flame-icon {
-    width: 40px !important;
-    height: 40px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
     border-radius: 50% !important;
-    background: rgba(251, 222, 185, 0.45) !important;
-    color: #705B3E !important;
+    background: #FAF7F2 !important;
+    color: #9E7D4B !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    box-shadow: 0 0 16px rgba(251, 222, 185, 0.6) !important;
+    box-shadow: none !important;
     border: none !important;
 }
 
 body.in-portal .sens-streak-hero-num {
-    font-size: 22px !important;
-    font-weight: 700 !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
     color: #121214 !important;
-    letter-spacing: -0.01em !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.15 !important;
 }
 
-body.in-portal .sens-streak-hero-unit {
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    color: #9E7D4B !important;
-    letter-spacing: 0.1em !important;
-    text-transform: uppercase !important;
+body.in-portal .sens-streak-hero-unit,
+body.in-portal #sensStreakHeroUnit {
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    color: #6E6E73 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
 }
 
 body.in-portal .sens-streak-level-tag {
@@ -32182,18 +32185,20 @@ body.in-portal #sensExerciseModalSheet #btnModalFinishExercise *,
    2. SECCIÓN NUTRICIÓN (#nutritionView): REEMPLAZO DE CAJAS NEGRAS POR GAMA SENS LUXURY
    ============================================================================= */
 
-/* Tarjeta Hero Calórico Primario: Quiet Luxury Light (#FFFFFF) alineado con el resto de la app */
+/* Tarjeta Hero Calórico Primario + Gasto Entrenamiento: Unificadas al píxel con Racha */
 body.in-portal #nutritionView #sensNutriHeroCard,
 body.in-portal #nutritionView .sens-nutri-hero-primary-card,
+body.in-portal #workoutDailyBurnMiniCard,
 #sensNutriHeroCard,
+#workoutDailyBurnMiniCard,
 .sens-nutri-hero-primary-card {
     background: #FFFFFF !important;
     border: 1px solid rgba(18, 18, 20, 0.08) !important;
     border-radius: 20px !important;
-    padding: 18px 20px !important;
+    padding: 16px 18px !important;
     box-shadow: 0 4px 20px rgba(18, 18, 20, 0.03) !important;
     color: #121214 !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 14px !important;
 }
 
 body.in-portal #nutritionView #sensNutriHeroCard .sens-nutri-hero-header,
