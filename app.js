@@ -31226,13 +31226,38 @@ const CoachWorkoutsMaster = {
 
     bindStep1Actions() {
         const startDaySelect = document.getElementById('wizardStartDayOfWeekSelect');
+        const pillsWrap = document.getElementById('wizardStartDayPills');
+        const syncPills = (val) => {
+            if (!pillsWrap) return;
+            pillsWrap.querySelectorAll('.coach-cycle-day-pill').forEach(p => {
+                const isMatch = p.getAttribute('data-day') === String(val);
+                p.classList.toggle('active', isMatch);
+                p.setAttribute('aria-checked', isMatch ? 'true' : 'false');
+            });
+        };
         if (startDaySelect && !startDaySelect._hasListener) {
             startDaySelect._hasListener = true;
             const todayDay = new Date().getDay();
             startDaySelect.value = String(todayDay);
+            syncPills(startDaySelect.value);
             startDaySelect.addEventListener('change', () => {
+                syncPills(startDaySelect.value);
                 this.generateUpcomingDays();
                 this.renderStep1();
+            });
+        } else if (startDaySelect) {
+            syncPills(startDaySelect.value);
+        }
+        if (pillsWrap && !pillsWrap._hasListener) {
+            pillsWrap._hasListener = true;
+            pillsWrap.addEventListener('click', (e) => {
+                const btn = e.target.closest('.coach-cycle-day-pill');
+                if (!btn || !startDaySelect) return;
+                const dayVal = btn.getAttribute('data-day');
+                if (dayVal === null) return;
+                startDaySelect.value = dayVal;
+                syncPills(dayVal);
+                startDaySelect.dispatchEvent(new Event('change', { bubbles: true }));
             });
         }
     },

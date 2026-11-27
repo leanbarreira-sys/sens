@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=123.0">
+    <link rel="stylesheet" href="style.css?v=124.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '243.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '243.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '244.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '244.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4833,7 +4833,7 @@
                                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                                 </svg>
                                 <input type="text" id="coachSearchAthleteInput" class="input-control"
-                                    placeholder="Buscar usuario por nombre, email o plan..."
+                                    placeholder="Buscar por nombre o email..."
                                     style="margin-bottom: 0; width: 100%;">
                             </div>
 
@@ -5247,7 +5247,7 @@
                                         stroke-width="2.5">
                                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                                     </svg>
-                                    <span>Planif. Masivo</span>
+                                    <span>Semanal</span>
                                 </button>
                                 <button type="button" class="coach-vision-tab-btn" id="btnToggleCoachWorkoutsMonth"
                                     data-target="month">
@@ -5315,7 +5315,16 @@
                                 <div class="coach-cycle-control-bar">
                                     <div class="coach-cycle-start-group">
                                         <span class="coach-cycle-label">Inicio del ciclo</span>
-                                        <select id="wizardStartDayOfWeekSelect" class="input-control coach-cycle-select">
+                                        <div class="coach-cycle-day-pills" id="wizardStartDayPills" role="radiogroup" aria-label="Inicio del ciclo">
+                                            <button type="button" class="coach-cycle-day-pill" data-day="1">Lun</button>
+                                            <button type="button" class="coach-cycle-day-pill" data-day="2">Mar</button>
+                                            <button type="button" class="coach-cycle-day-pill" data-day="3">Mié</button>
+                                            <button type="button" class="coach-cycle-day-pill" data-day="4">Jue</button>
+                                            <button type="button" class="coach-cycle-day-pill" data-day="5">Vie</button>
+                                            <button type="button" class="coach-cycle-day-pill" data-day="6">Sáb</button>
+                                            <button type="button" class="coach-cycle-day-pill" data-day="0">Dom</button>
+                                        </div>
+                                        <select id="wizardStartDayOfWeekSelect" class="input-control coach-cycle-select" style="display: none;" aria-hidden="true" tabindex="-1">
                                             <option value="1">Lunes</option>
                                             <option value="2">Martes</option>
                                             <option value="3">Miércoles</option>
@@ -5933,8 +5942,9 @@
                                     <button type="button" class="btn btn-primary btn-sm"
                                         id="btnQuickAssignStarterNutrition"
                                         onclick="window.applyCoachInstantNutritionPlan && window.applyCoachInstantNutritionPlan()"
-                                        style="font-weight: 800; padding: 6px 13px; font-size: 11px; border-radius: 8px; background: #9E7D4B; color: #FFFFFF; border: none; cursor: pointer;">
-                                        ⚡ Auto-Asignar Plan Nutricional
+                                        style="font-weight: 800; padding: 8px 14px; font-size: 11.5px; border-radius: 999px; background: #121214; color: #FFFFFF; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+                                        <span>Auto-Asignar Plan</span>
                                     </button>
                                     <button type="button" class="coach-athlete-pill-trigger btn-trigger-athlete-sheet"
                                         id="btnCoachNutriAthletePicker" aria-label="Cambiar alumno">
@@ -5956,7 +5966,7 @@
                                         stroke-width="2.5">
                                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                                     </svg>
-                                    <span>Planif. Masivo</span>
+                                    <span>Semanal</span>
                                 </button>
                                 <button type="button" class="coach-vision-tab-btn" data-target="month">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -5966,7 +5976,7 @@
                                         <line x1="8" y1="2" x2="8" y2="6" />
                                         <line x1="3" y1="10" x2="21" y2="10" />
                                     </svg>
-                                    <span>Plan Mensual</span>
+                                    <span>Mensual</span>
                                 </button>
                                 <button type="button" class="coach-vision-tab-btn" data-target="library">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -5974,7 +5984,7 @@
                                         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                                         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
                                     </svg>
-                                    <span>Biblioteca 500 Alimentos</span>
+                                    <span>Alimentos</span>
                                 </button>
                             </div>
                         </div>
@@ -6075,7 +6085,7 @@
                                 <span class="taxonomy-level-label">Vista:</span>
                                 <div class="coach-horizontal-pills" id="coachLibQuickFilterBar">
                                     <button type="button" class="pill pill-champagne lib-quick-btn active" data-quick="all">Todos</button>
-                                    <button type="button" class="pill pill-dark lib-quick-btn" data-quick="favorites">★ Favoritos</button>
+                                    <button type="button" class="pill pill-dark lib-quick-btn" data-quick="favorites" style="display: inline-flex; align-items: center; gap: 5px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>Favoritos</span></button>
                                     <button type="button" class="pill pill-dark lib-quick-btn" data-quick="custom">Mis Ejercicios</button>
                                     <button type="button" class="pill pill-dark lib-quick-btn" data-quick="no_media">Sin Video/Foto</button>
                                 </div>
@@ -9065,7 +9075,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=159.0"></script>
+    <script defer src="app.js?v=160.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
