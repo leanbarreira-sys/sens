@@ -28229,44 +28229,44 @@ body.in-portal .sens-workout-rest-pane p {
     font-size: 13px !important;
 }
 
-/* 5. Floating Dock Inferior (Icono + Texto Vertical sin letras rotas ni truncamientos) */
+/* 5. Floating Dock Inferior — iOS 26 Liquid Glass Quiet Luxury */
 body.in-portal #sensFloatingDock {
-    background: rgba(255, 255, 255, 0.96) !important;
-    backdrop-filter: blur(24px) !important;
-    -webkit-backdrop-filter: blur(24px) !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(250, 249, 246, 0.56) 100%) !important;
+    backdrop-filter: blur(24px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.82) !important;
     border-radius: 9999px !important;
-    box-shadow: 0 10px 32px -4px rgba(18, 18, 20, 0.12), 0 2px 6px rgba(18, 18, 20, 0.04) !important;
-    padding: 5px 8px !important;
+    box-shadow: 0 12px 32px -6px rgba(18, 18, 20, 0.14), 0 2px 8px rgba(18, 18, 20, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.92), inset 0 -1px 0 rgba(18, 18, 20, 0.04) !important;
+    padding: 4px 6px !important;
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
-    gap: 4px !important;
+    gap: 2px !important;
     position: fixed !important;
-    bottom: max(16px, env(safe-area-inset-bottom, 16px)) !important;
+    bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 100001 !important; pointer-events: auto !important;
-    width: calc(100% - 32px) !important;
-    max-width: 360px !important;
+    width: calc(100% - 56px) !important;
+    max-width: 312px !important;
     box-sizing: border-box !important;
 }
 
 body.in-portal .sens-dock-item {
     background: transparent !important;
-    color: #77767B !important;
+    color: #52525B !important;
     border: none !important;
     border-radius: 9999px !important;
-    padding: 7px 4px !important;
+    padding: 5px 4px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 3px !important;
-    font-size: 10.5px !important;
+    gap: 2px !important;
+    font-size: 9.5px !important;
     font-weight: 600 !important;
     text-transform: none !important;
-    letter-spacing: -0.01em !important;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    letter-spacing: 0 !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
     cursor: pointer !important;
     min-width: 0 !important;
     width: 100% !important;
@@ -28274,17 +28274,17 @@ body.in-portal .sens-dock-item {
 }
 
 body.in-portal .sens-dock-item.active {
-    background: #121214 !important;
+    background: rgba(18, 18, 20, 0.88) !important;
     color: #FFFFFF !important;
     font-weight: 700 !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
+    box-shadow: 0 4px 12px rgba(18, 18, 20, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
 }
 
 body.in-portal .sens-dock-item svg {
-    width: 18px !important;
-    height: 18px !important;
+    width: 17px !important;
+    height: 17px !important;
     stroke: currentColor !important;
-    stroke-width: 2 !important;
+    stroke-width: 1.85 !important;
     margin: 0 auto !important;
     flex-shrink: 0 !important;
 }
@@ -28294,9 +28294,9 @@ body.in-portal .sens-dock-item.active svg {
 }
 
 body.in-portal .sens-dock-item span {
-    font-size: 10px !important;
+    font-size: 9.5px !important;
     font-weight: 600 !important;
-    letter-spacing: -0.01em !important;
+    letter-spacing: 0 !important;
     color: inherit !important;
     white-space: nowrap !important;
     overflow: visible !important;
