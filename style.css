@@ -34415,9 +34415,8 @@ body.in-portal .sens-tracking-seg-pill,
 }
 
 .sens-nutri-edit-mode .sens-nutri-food-card.is-edit-selected {
-    box-shadow: 0 0 0 2.5px #22C55E, 0 10px 24px rgba(34, 197, 94, 0.28) !important;
-    animation: none !important;
-    transform: scale(0.97) !important;
+    border: 3px solid #22C55E !important;
+    box-shadow: inset 0 0 0 1.5px rgba(34, 197, 94, 0.45) !important;
 }
 
 .sens-nutri-edit-bar {
@@ -36102,6 +36101,14 @@ body.in-portal #nutritionView .sens-ex-compact-card.sens-nutri-food-card {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+body.in-portal #nutritionView .sens-nutri-edit-mode .sens-ex-compact-card.sens-nutri-food-card.is-edit-selected {
+    border: 3px solid #22C55E !important;
+    box-shadow: inset 0 0 0 1.5px rgba(34, 197, 94, 0.45) !important;
 }
 
 body.in-portal #nutritionView .sens-ex-compact-card.sens-nutri-food-card .ex-compact-check-btn {
