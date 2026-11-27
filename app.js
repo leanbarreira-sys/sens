@@ -24404,7 +24404,7 @@ function updateSensStreakCard(targetDate = null) {
     const streakProgLabel = document.getElementById('sensStreakProgressLabel');
     if (streakFill) {
         const pct = Math.min(100, Math.max(0, Math.round((dayRec.completedCount / 3) * 100)));
-        const barColor = dayRec.completedCount >= 3 ? '#16A34A' : (dayRec.completedCount >= 2 ? '#22C55E' : (dayRec.completedCount === 1 ? '#B08D57' : '#D4D4D8'));
+        const barColor = dayRec.completedCount >= 3 ? '#16A34A' : (dayRec.completedCount >= 1 ? '#22C55E' : '#D4D4D8');
         streakFill.style.width = `${pct}%`;
         streakFill.style.setProperty('background', barColor, 'important');
     }
