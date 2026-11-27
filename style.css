@@ -34412,20 +34412,12 @@ body.in-portal .sens-tracking-seg-pill,
 
 .sens-nutri-edit-mode .sens-nutri-food-card .sens-btn-quick-log {
     pointer-events: none !important;
-    opacity: 0.35 !important;
 }
 
 .sens-nutri-edit-mode .sens-nutri-food-card.is-edit-selected {
-    box-shadow: 0 0 0 2.5px #22C55E, 0 10px 24px rgba(34, 197, 94, 0.25) !important;
+    box-shadow: 0 0 0 2.5px #22C55E, 0 10px 24px rgba(34, 197, 94, 0.28) !important;
     animation: none !important;
     transform: scale(0.97) !important;
-}
-
-.sens-nutri-edit-mode .sens-nutri-food-card.is-edit-selected .sens-btn-quick-log {
-    opacity: 1 !important;
-    background: #22C55E !important;
-    border-color: #22C55E !important;
-    color: #FFFFFF !important;
 }
 
 .sens-nutri-edit-bar {
