@@ -7912,6 +7912,15 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
     const todayIso = getFormattedDateKey(today);
     const isSourceInPast = sourceDateIso < todayIso;
 
+    const execSource = (typeof getAthleteWorkoutExecution === 'function')
+        ? getAthleteWorkoutExecution(athId, sDate)
+        : null;
+    const doneExSource = (execSource && Array.isArray(execSource.exercisesCompleted))
+        ? execSource.exercisesCompleted.length
+        : 0;
+    const isSourceCompleted = Boolean(execSource && execSource.completed) || (exCount > 0 && doneExSource >= exCount);
+    const isSourceStarted = !isBringingToRestDay && (isSourceCompleted || doneExSource > 0);
+
     if (modalTitleEl) {
         modalTitleEl.textContent = isBringingToRestDay
             ? `Entrenar el ${sourceDayName} ${sourceDateShort}`
@@ -7920,11 +7929,14 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
     if (modalSubEl) {
         modalSubEl.textContent = isBringingToRestDay
             ? 'Elegí qué sesión de tu semana querés traer a este día.'
-            : (isSourceInPast
-                ? 'Elegí un día libre para recuperar esta sesión.'
-                : 'Elegí un día libre para moverla o uno ocupado para intercambiar.');
+            : (isSourceStarted
+                ? (isSourceCompleted ? 'Esta sesión ya está completa.' : 'Ya empezaste un ejercicio de esta sesión.')
+                : (isSourceInPast
+                    ? 'Elegí un día libre para recuperar esta sesión.'
+                    : 'Elegí un día libre para moverla o uno ocupado para intercambiar.'));
     }
     if (listLabelEl) {
+        listLabelEl.style.display = isSourceStarted ? 'none' : '';
         listLabelEl.textContent = isBringingToRestDay
             ? 'Sesiones disponibles'
             : (isSourceInPast ? 'Días libres disponibles' : 'Próximos días');
@@ -7949,6 +7961,20 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
     // Lista de fechas: si estamos trayendo a un día de descanso incluimos ayer (-1) por si quedó pendiente
     const listEl = document.getElementById('moveWorkoutTargetDaysList');
     if (listEl) {
+        if (isSourceStarted) {
+            listEl.innerHTML = `
+                <div style="text-align: center; padding: 18px 14px; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); border-radius: 14px;">
+                    <div style="font-size: 13px; font-weight: 700; color: #121214; margin-bottom: 4px;">
+                        ${isSourceCompleted ? 'Sesión completada' : 'Sesión ya iniciada'}
+                    </div>
+                    <div style="font-size: 12px; color: #575659; line-height: 1.45;">
+                        ${isSourceCompleted
+                            ? 'No podés mover ni intercambiar este día porque ya completaste el entrenamiento.'
+                            : 'No podés mover ni intercambiar este día porque ya empezaste al menos un ejercicio.'}
+                    </div>
+                </div>
+            `;
+        } else {
         let html = '';
         const startOffset = isBringingToRestDay ? -1 : 0;
 
@@ -8020,6 +8046,7 @@ window.openMoveWorkoutModal = function(sourceDateIso) {
             html = `<div style="text-align: center; padding: 20px 14px; font-size: 12.5px; color: #575659; background: #FAF9F6; border-radius: 14px;">${isSourceInPast ? 'No tenés días libres próximos esta semana para mover esta sesión.' : 'No tenés sesiones programadas en los próximos días para traer a hoy.'}</div>`;
         }
         listEl.innerHTML = html;
+        }
     }
 
     modal.style.display = 'flex';
@@ -8670,13 +8697,12 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                             <span>${doneEx} de ${totalEx} ${totalEx === 1 ? 'ejercicio' : 'ejercicios'}</span>
                         </div>
                     </div>
-                    ${(dateIso >= todayIso && !isCurrentWorkoutStarted) ? `
                     <div style="margin-top: 10px; padding-top: 9px; border-top: 1px solid rgba(18, 18, 20, 0.06); display: flex; align-items: center; justify-content: center;">
                         <button type="button" onclick="event.stopPropagation(); window.openMoveWorkoutModal('${dateIso}');" style="background: transparent; border: none; color: #705B3E; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; padding: 2px 8px;">
                             <span>Mover o intercambiar día</span>
                             <span aria-hidden="true">⇄</span>
                         </button>
-                    </div>` : ''}
+                    </div>
                 </div>
             `;
         }
