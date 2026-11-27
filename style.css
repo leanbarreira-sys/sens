@@ -36179,12 +36179,17 @@ body.in-portal #nutriWelcomeHeader {
 
 body.in-portal #sensCalendarStickyWrapper,
 body.in-portal #workoutCalendarStickyWrapper,
-body.in-portal #nutriCalendarStickyWrapper {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.05) !important;
+body.in-portal #nutriCalendarStickyWrapper,
+body.in-portal #sensCalendarStickyWrapper.is-stuck,
+body.in-portal #workoutCalendarStickyWrapper.is-stuck,
+body.in-portal #nutriCalendarStickyWrapper.is-stuck {
+    background: rgba(255, 255, 255, 0.56) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.36) !important;
     border-radius: 20px !important;
     padding: 12px 12px 10px !important;
-    box-shadow: 0 4px 18px rgba(18, 18, 20, 0.035) !important;
+    box-shadow: 0 10px 28px rgba(18, 18, 20, 0.08) !important;
     margin-bottom: 12px !important;
 }
 
