@@ -15830,12 +15830,12 @@ body.pending-activation #portalSubNav {
         grid-template-columns: repeat(4, 1fr) !important;
         gap: 2px !important;
         padding: 4px 5px !important;
-        background: rgba(255, 255, 255, 0.38) !important;
+        background: rgba(255, 255, 255, 0.52) !important;
         backdrop-filter: blur(22px) saturate(190%) !important;
         -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.72) !important;
+        border: 1px solid rgba(255, 255, 255, 0.26) !important;
         border-radius: 9999px !important;
-        box-shadow: 0 12px 32px rgba(18, 18, 20, 0.12), inset 0 1.5px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(18, 18, 20, 0.05) !important;
+        box-shadow: 0 12px 32px rgba(18, 18, 20, 0.14) !important;
         z-index: 100001 !important;
         overflow: hidden !important;
         pointer-events: auto !important;
@@ -28231,12 +28231,12 @@ body.in-portal .sens-workout-rest-pane p {
 
 /* 5. Floating Dock Inferior — iOS 26 Liquid Glass Quiet Luxury */
 body.in-portal #sensFloatingDock {
-    background: rgba(255, 255, 255, 0.38) !important;
+    background: rgba(255, 255, 255, 0.52) !important;
     backdrop-filter: blur(22px) saturate(190%) !important;
     -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.72) !important;
+    border: 1px solid rgba(255, 255, 255, 0.26) !important;
     border-radius: 9999px !important;
-    box-shadow: 0 12px 32px rgba(18, 18, 20, 0.12), inset 0 1.5px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(18, 18, 20, 0.05) !important;
+    box-shadow: 0 12px 32px rgba(18, 18, 20, 0.14) !important;
     padding: 4px 5px !important;
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
@@ -28254,7 +28254,7 @@ body.in-portal #sensFloatingDock {
 
 body.in-portal #sensFloatingDock .sens-dock-item {
     background: transparent !important;
-    color: #52525B !important;
+    color: rgba(18, 18, 20, 0.68) !important;
     border: none !important;
     border-radius: 9999px !important;
     padding: 4px 3px !important;
@@ -28275,10 +28275,10 @@ body.in-portal #sensFloatingDock .sens-dock-item {
 }
 
 body.in-portal #sensFloatingDock .sens-dock-item.active {
-    background: rgba(255, 255, 255, 0.62) !important;
+    background: rgba(255, 255, 255, 0.76) !important;
     color: #121214 !important;
     font-weight: 700 !important;
-    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
 }
 
 body.in-portal #sensFloatingDock .sens-dock-item svg {
