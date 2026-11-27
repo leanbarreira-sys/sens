@@ -8537,20 +8537,12 @@ function renderWorkoutDay(dayKey, targetDate = null) {
     const activeLang = 'es';
     try { if (typeof localStorage !== 'undefined') localStorage.removeItem('sens_lang'); } catch (_) {}
 
-    let isFirstTypeSection = true;
-    const canMoveCurrentSession = dateIso >= todayIso && !isCurrentWorkoutStarted;
-
     Object.values(typeGroups).forEach(tg => {
         const muscleKeys = Object.keys(tg.muscles);
         if (muscleKeys.length === 0) return;
 
         let totalTypeExercises = 0;
         muscleKeys.forEach(mk => totalTypeExercises += tg.muscles[mk].length);
-
-        const movePillHtml = (isFirstTypeSection && canMoveCurrentSession)
-            ? `<button type="button" onclick="event.stopPropagation(); window.openMoveWorkoutModal('${dateIso}');" style="background: #F4F3F1; color: #121214; border: none; border-radius: 9999px; padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">Mover día ⇄</button>`
-            : '';
-        isFirstTypeSection = false;
 
         groupedHtml += `
             <div class="sens-workout-type-section" data-type="${tg.key}">
@@ -8559,10 +8551,7 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                         ${tg.icon}
                         <span>${tg.label}</span>
                     </div>
-                    <div style="display: inline-flex; align-items: center; gap: 6px;">
-                        ${movePillHtml}
-                        <span class="sens-workout-type-badge">${totalTypeExercises} ejercicio${totalTypeExercises > 1 ? 's' : ''}</span>
-                    </div>
+                    <span class="sens-workout-type-badge" style="white-space: nowrap; flex-shrink: 0;">${totalTypeExercises} ejercicio${totalTypeExercises > 1 ? 's' : ''}</span>
                 </div>
         `;
 
@@ -8681,6 +8670,13 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                             <span>${doneEx} de ${totalEx} ${totalEx === 1 ? 'ejercicio' : 'ejercicios'}</span>
                         </div>
                     </div>
+                    ${(dateIso >= todayIso && !isCurrentWorkoutStarted) ? `
+                    <div style="margin-top: 10px; padding-top: 9px; border-top: 1px solid rgba(18, 18, 20, 0.06); display: flex; align-items: center; justify-content: center;">
+                        <button type="button" onclick="event.stopPropagation(); window.openMoveWorkoutModal('${dateIso}');" style="background: transparent; border: none; color: #705B3E; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; padding: 2px 8px;">
+                            <span>Mover o intercambiar día</span>
+                            <span aria-hidden="true">⇄</span>
+                        </button>
+                    </div>` : ''}
                 </div>
             `;
         }
