@@ -27949,10 +27949,10 @@ body.in-portal .sens-streak-status-pill {
     max-width: 100%;
 }
 
-/* Well de Meta Semanal y Progreso (Fila 3) */
+/* Well de Meta Semanal y Progreso (Fila 3) — Quiet Luxury Alabaster */
 body.in-portal .sens-streak-weekly-row {
     background: #F4F3F1 !important;
-    border: 1px solid rgba(229, 203, 167, 0.35) !important;
+    border: none !important;
     border-radius: 16px !important;
     padding: 12px 14px !important;
     margin: 12px 0 !important;
@@ -27964,20 +27964,181 @@ body.in-portal .sens-streak-weekly-label {
     font-weight: 700 !important;
 }
 
-body.in-portal .sens-streak-dot-ring {
-    background: #E3E2E0 !important;
-    border-color: #E3E2E0 !important;
+body.in-portal .sens-streak-dot-name {
+    color: #71717A !important;
+    font-weight: 700 !important;
 }
 
-body.in-portal .sens-streak-dot-ring.done {
-    background: #1E7B42 !important;
-    border-color: #1E7B42 !important;
+body.in-portal .sens-streak-dot-name.is-today {
+    color: #121214 !important;
+    font-weight: 800 !important;
+}
+
+body.in-portal .sens-streak-dot-ring {
+    width: 20px !important;
+    height: 20px !important;
+    background: #E7E6E3 !important;
+    border: none !important;
+    color: #71717A !important;
+    box-shadow: none !important;
+    font-size: 10px !important;
+}
+
+body.in-portal .sens-streak-dot-ring.neutral {
+    background: #E7E6E3 !important;
+    color: #71717A !important;
+}
+
+body.in-portal .sens-streak-dot-ring.future {
+    background: #ECEBE9 !important;
+    opacity: 0.7 !important;
+}
+
+body.in-portal .sens-streak-dot-ring.today:not(.done):not(.missed) {
+    background: #FFFFFF !important;
+    border: 2px solid #121214 !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-streak-dot-ring.missed {
+    background: rgba(220, 38, 38, 0.12) !important;
+    border: none !important;
+    color: #DC2626 !important;
     box-shadow: none !important;
 }
 
-body.in-portal .sens-streak-dot-ring.today {
-    background: #E5CBA7 !important;
-    border-color: #705B3E !important;
+body.in-portal .sens-streak-dot-ring.done,
+body.in-portal .sens-streak-dot-ring.done.today {
+    background: #16A34A !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    box-shadow: none !important;
+}
+
+body.in-portal .sens-streak-dot-ring.is-selected {
+    box-shadow: 0 0 0 2px #F4F3F1, 0 0 0 3.5px #121214 !important;
+    transform: scale(1.06);
+}
+
+/* Detalle Contextual de Día en Semana en Curso (Quiet Luxury • Semantic Tonal Surface) */
+body.in-portal .sens-streak-missed-detail-box {
+    background: #F4F3F1 !important;
+    border: none !important;
+    border-radius: 16px !important;
+    padding: 14px 16px !important;
+    margin-bottom: 14px !important;
+}
+
+body.in-portal .sens-streak-missed-detail-box.is-qualified {
+    background: #F0F9F3 !important;
+}
+
+body.in-portal .sens-streak-missed-detail-box.is-missed {
+    background: #FEF3F2 !important;
+}
+
+body.in-portal .sens-streak-missed-detail-box.is-future {
+    background: #F4F3F1 !important;
+}
+
+body.in-portal .sens-missed-title {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.04em !important;
+    color: #121214 !important;
+}
+
+body.in-portal .sens-streak-missed-detail-box.is-qualified .sens-missed-title {
+    color: #15803D !important;
+}
+
+body.in-portal .sens-streak-missed-detail-box.is-missed .sens-missed-title {
+    color: #B91C1C !important;
+}
+
+body.in-portal .sens-btn-close-missed {
+    color: #71717A !important;
+    background: rgba(18, 18, 20, 0.05) !important;
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    font-size: 11px !important;
+    line-height: 1;
+}
+
+body.in-portal .sens-streak-detail-qualified-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #166534;
+    line-height: 1.45;
+    padding: 2px 0;
+}
+
+body.in-portal .sens-streak-detail-icon-ok {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #16A34A;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+body.in-portal .sens-streak-detail-status-line {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #3F3F46;
+    line-height: 1.45;
+}
+
+body.in-portal .sens-missed-reason-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px !important;
+    color: #18181B !important;
+    line-height: 1.45 !important;
+}
+
+body.in-portal .sens-missed-cross-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #DC2626 !important;
+    flex-shrink: 0;
+    margin-top: 3px !important;
+}
+
+body.in-portal .sens-missed-reason-pillar {
+    color: #B91C1C !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal .sens-missed-reason-detail {
+    color: #27272A !important;
+    font-weight: 500 !important;
+}
+
+body.in-portal .sens-missed-locked-note {
+    font-size: 11px;
+    color: #52525B;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+body.in-portal .sens-streak-missed-coaching-tip {
+    font-size: 11.5px !important;
+    color: #52525B !important;
+    border-top: 1px solid rgba(18, 18, 20, 0.07) !important;
+    padding-top: 8px !important;
+    margin-top: 2px;
+    line-height: 1.45;
 }
 
 /* Pilares de Hábitos (Fuerza, Nutrición, Pasos) */

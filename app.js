@@ -24093,10 +24093,11 @@ window.SensDailyStreakManager = SensDailyStreakManager;
 window.showStreakMissedDetail = function(dateIso = null) {
     const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
     const sDate = dateIso ? new Date(dateIso + 'T12:00:00') : (AppState.selectedDate || new Date());
+    sDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const iso = dateIso || `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
 
-    const evalResult = SensDailyStreakManager.evaluateDay(sDate, athId);
-    const rec = evalResult.current;
     const box = document.getElementById('sensStreakMissedDetailBox');
     const titleEl = document.getElementById('sensStreakMissedDateTitle');
     const listEl = document.getElementById('sensStreakMissedReasonsList');
@@ -24104,21 +24105,58 @@ window.showStreakMissedDetail = function(dateIso = null) {
 
     if (!box || !listEl) return;
 
+    // Highlight selected day dot
+    document.querySelectorAll('#sensStreakDotsWrap .sens-streak-dot-ring').forEach(el => {
+        el.classList.toggle('is-selected', el.getAttribute('data-streak-iso') === iso);
+    });
+
     const dayName = sDate.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
     const capitalizedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
 
-    if (rec.isQualified) {
-        if (titleEl) titleEl.textContent = `${capitalizedDay} • Racha Activa (${rec.completedCount} / 3)`;
-        titleEl.style.color = '#22C55E';
+    box.classList.remove('is-qualified', 'is-missed', 'is-future');
+
+    if (sDate > today) {
+        box.classList.add('is-future');
+        if (titleEl) {
+            titleEl.textContent = `${capitalizedDay} • Día planificado`;
+            titleEl.style.color = '';
+        }
         listEl.innerHTML = `
-            <div style="font-size: 12px; color: #22C55E; font-weight: 700; padding: 4px 0;">
-                ✓ ¡Racha asegurada! Cumpliste con tus hábitos biológicos programados.
+            <div class="sens-streak-detail-status-line">
+                Este día todavía no comenzó. Completá tus 3 pilares cuando llegue la fecha para sumar a tu racha.
+            </div>
+        `;
+        if (tipEl) tipEl.textContent = '"La constancia se construye un día a la vez."';
+        box.style.display = 'block';
+        box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return;
+    }
+
+    const evalResult = SensDailyStreakManager.evaluateDay(sDate, athId);
+    const rec = evalResult.current;
+
+    const checkSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    const crossSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+
+    if (rec.isQualified) {
+        box.classList.add('is-qualified');
+        if (titleEl) {
+            titleEl.textContent = `${capitalizedDay} • Racha Activa (${rec.completedCount} / 3)`;
+            titleEl.style.color = '';
+        }
+        listEl.innerHTML = `
+            <div class="sens-streak-detail-qualified-row">
+                <span class="sens-streak-detail-icon-ok">${checkSvg}</span>
+                <span>Racha asegurada. Cumpliste con tus hábitos biológicos programados.</span>
             </div>
         `;
         if (tipEl) tipEl.textContent = '"La disciplina consistente es el único atajo comprobado a la recomposición y longevidad celular."';
     } else {
-        if (titleEl) titleEl.textContent = `${capitalizedDay} • Racha no alcanzada`;
-        titleEl.style.color = '#EF4444';
+        box.classList.add('is-missed');
+        if (titleEl) {
+            titleEl.textContent = `${capitalizedDay} • Racha no alcanzada`;
+            titleEl.style.color = '';
+        }
 
         const reasons = (rec.missedReasons && rec.missedReasons.length > 0) ? rec.missedReasons : [
             { pillar: 'Objetivos', detail: 'No se completaron todos los requisitos del día.' }
@@ -24126,13 +24164,13 @@ window.showStreakMissedDetail = function(dateIso = null) {
 
         listEl.innerHTML = reasons.map(r => `
             <div class="sens-missed-reason-item">
-                <span class="sens-missed-cross-badge">✕</span>
-                <div>
-                    <strong style="color: #EF4444;">${r.pillar}:</strong>
-                    <span>${r.detail}</span>
+                <span class="sens-missed-cross-badge">${crossSvg}</span>
+                <div class="sens-missed-reason-copy">
+                    <strong class="sens-missed-reason-pillar">${r.pillar}:</strong>
+                    <span class="sens-missed-reason-detail">${r.detail}</span>
                 </div>
             </div>
-        `).join('') + (rec.locked ? `<div style="font-size: 10px; color: #A1A1AA; margin-top: 6px;">Día finalizado e inmutable. Podés editar cargas y comidas pasadas, pero la racha permanece sellada.</div>` : '');
+        `).join('') + (rec.locked ? `<div class="sens-missed-locked-note">Día finalizado e inmutable. Podés editar cargas y comidas pasadas, pero la racha permanece sellada.</div>` : '');
 
         if (tipEl) tipEl.textContent = '"Un día no define tu metabolismo. Enfocate en clavar tu rutina y rango de calorías de hoy para reactivar el fuego."';
     }
@@ -24144,6 +24182,9 @@ window.showStreakMissedDetail = function(dateIso = null) {
 window.closeStreakMissedDetail = function() {
     const box = document.getElementById('sensStreakMissedDetailBox');
     if (box) box.style.display = 'none';
+    document.querySelectorAll('#sensStreakDotsWrap .sens-streak-dot-ring.is-selected').forEach(el => {
+        el.classList.remove('is-selected');
+    });
 };
 
 function renderStreakWeeklyDots(targetDate) {
@@ -24189,27 +24230,27 @@ function renderStreakWeeklyDots(targetDate) {
 
         let dotHtml = '';
         if (isBeforeRegistration) {
-            dotHtml = `<div class="sens-streak-dot-ring neutral" style="border-color: rgba(255,255,255,0.08); color: #52525B; font-size: 10px; display: flex; align-items: center; justify-content: center;" title="${dayLabels[i]} ${d.getDate()}: Previo al registro">–</div>`;
+            dotHtml = `<div class="sens-streak-dot-ring neutral" data-streak-iso="${dIso}" title="${dayLabels[i]} ${d.getDate()}: Previo al registro">–</div>`;
         } else if (isFuture) {
-            dotHtml = `<div class="sens-streak-dot-ring future" title="${dayLabels[i]} ${d.getDate()}: Planificado"></div>`;
+            dotHtml = `<div class="sens-streak-dot-ring future" data-streak-iso="${dIso}" title="${dayLabels[i]} ${d.getDate()}: Planificado"></div>`;
         } else if (isPast) {
             if (isDone) {
-                dotHtml = `<div class="sens-streak-dot-ring done" onclick="window.showStreakMissedDetail('${dIso}')" title="${dayLabels[i]} ${d.getDate()}: Objetivos cumplidos (Tocar para ver)">✓</div>`;
+                dotHtml = `<div class="sens-streak-dot-ring done" data-streak-iso="${dIso}" title="${dayLabels[i]} ${d.getDate()}: Objetivos cumplidos (Tocar para ver)">✓</div>`;
             } else {
-                dotHtml = `<div class="sens-streak-dot-ring missed" onclick="window.showStreakMissedDetail('${dIso}')" title="${dayLabels[i]} ${d.getDate()}: Racha no alcanzada (Tocar para ver por qué)">✕</div>`;
+                dotHtml = `<div class="sens-streak-dot-ring missed" data-streak-iso="${dIso}" title="${dayLabels[i]} ${d.getDate()}: Racha no alcanzada (Tocar para ver por qué)">✕</div>`;
             }
         } else {
             // Hoy
             if (isDone) {
-                dotHtml = `<div class="sens-streak-dot-ring done today" onclick="window.showStreakMissedDetail('${dIso}')" title="Hoy: Racha activa">✓</div>`;
+                dotHtml = `<div class="sens-streak-dot-ring done today" data-streak-iso="${dIso}" title="Hoy: Racha activa">✓</div>`;
             } else {
-                dotHtml = `<div class="sens-streak-dot-ring today" onclick="window.showStreakMissedDetail('${dIso}')" title="Hoy: En progreso (Tocar para ver)"></div>`;
+                dotHtml = `<div class="sens-streak-dot-ring today" data-streak-iso="${dIso}" title="Hoy: En progreso (Tocar para ver)"></div>`;
             }
         }
 
         html += `
             <div class="sens-streak-day-dot-unit" onclick="window.showStreakMissedDetail('${dIso}')">
-                <span class="sens-streak-dot-name" style="${isToday ? 'color: #E5CBA7; font-weight: 800;' : ''}">${dayLabels[i]}</span>
+                <span class="sens-streak-dot-name${isToday ? ' is-today' : ''}">${dayLabels[i]}</span>
                 ${dotHtml}
             </div>
         `;
