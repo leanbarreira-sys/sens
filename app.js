@@ -8097,7 +8097,7 @@ window.toggleExerciseFinished = function(exId, dayKey, targetDateStr = null) {
 
     if (allDone) {
         if (typeof window.showSensCelebrationToast === 'function') {
-            window.showSensCelebrationToast('¡Entreno adentro!', 'Cerraste la rutina de hoy');
+            window.showSensCelebrationToast('¡Entreno adentro!', 'Cerraste la rutina de hoy', 'workout');
         } else if (typeof showSensToast === 'function') {
             showSensToast('¡Felicitaciones! Completaste todos los ejercicios de la sesión.', 'champagne');
         }
@@ -9518,57 +9518,62 @@ const SensGamification = {
             if (!ctx) return;
             const now = ctx.currentTime;
 
-            // Fanfare alegre y brillante de festejo (estilo Nintendo/Duolingo/Apple Ring Close)
+            // Sound-logo atlético y adulto (ritmo 4 golpes: DA... DA-DA... DAAA! con peso en graves)
             const masterGain = ctx.createGain();
             masterGain.gain.setValueAtTime(0.95, now);
             masterGain.connect(ctx.destination);
 
             const filter = ctx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(4800, now);
-            filter.frequency.exponentialRampToValueAtTime(2400, now + 0.9);
+            filter.frequency.setValueAtTime(2400, now);
+            filter.frequency.exponentialRampToValueAtTime(950, now + 1.35);
             filter.connect(masterGain);
 
-            // Arpegio rápido ascendente en Do Mayor (C5 -> E5 -> G5 -> C6) + brillo E6
-            const notes = [
-                { f: 261.63, start: 0.00,  dur: 0.30, gain: 0.08, type: 'triangle' }, // C4 punch base
-                { f: 523.25, start: 0.00,  dur: 0.24, gain: 0.10, type: 'triangle' }, // C5
-                { f: 659.25, start: 0.06,  dur: 0.24, gain: 0.10, type: 'triangle' }, // E5
-                { f: 783.99, start: 0.12,  dur: 0.26, gain: 0.11, type: 'triangle' }, // G5
-                { f: 1046.50, start: 0.18, dur: 0.65, gain: 0.12, type: 'triangle' }, // C6 clímax
-                { f: 1318.51, start: 0.23, dur: 0.55, gain: 0.07, type: 'sine' }      // E6 sparkle
+            // Sub-kick percussivo sutil en el golpe inicial y en la resolución
+            [0.00, 0.48].forEach((hitTime, idx) => {
+                const t = now + hitTime;
+                const kick = ctx.createOscillator();
+                const kGain = ctx.createGain();
+                kick.type = 'sine';
+                kick.frequency.setValueAtTime(idx === 1 ? 135 : 115, t);
+                kick.frequency.exponentialRampToValueAtTime(48, t + 0.12);
+                kGain.gain.setValueAtTime(0.001, t);
+                kGain.gain.linearRampToValueAtTime(idx === 1 ? 0.22 : 0.16, t + 0.005);
+                kGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
+                kick.connect(kGain);
+                kGain.connect(masterGain);
+                kick.start(t);
+                kick.stop(t + 0.16);
+            });
+
+            // 4 golpes rítmicos tipo brass/synth cálido: A3+E4 -> A3+E4 -> G3+D4 -> A3+C#4+E4+A4
+            const hits = [
+                { start: 0.00, dur: 0.13, gain: 0.075, freqs: [110.00, 220.00, 329.63] },
+                { start: 0.16, dur: 0.12, gain: 0.075, freqs: [110.00, 220.00, 329.63] },
+                { start: 0.31, dur: 0.14, gain: 0.080, freqs: [98.00,  196.00, 293.66] },
+                { start: 0.48, dur: 0.85, gain: 0.085, freqs: [110.00, 220.00, 277.18, 329.63, 440.00] }
             ];
 
-            notes.forEach(note => {
-                const t = now + note.start;
-                const osc = ctx.createOscillator();
-                const oscBright = ctx.createOscillator();
-                const gain = ctx.createGain();
-                const brightGain = ctx.createGain();
+            hits.forEach((hit, hIdx) => {
+                const t = now + hit.start;
+                const isFinal = hIdx === hits.length - 1;
+                hit.freqs.forEach((freq, fIdx) => {
+                    const osc = ctx.createOscillator();
+                    const g = ctx.createGain();
+                    osc.type = fIdx === 0 ? 'triangle' : 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, t);
+                    if (isFinal && fIdx > 0) osc.detune.setValueAtTime((fIdx % 2 === 0 ? 5 : -5), t);
 
-                osc.type = note.type;
-                osc.frequency.setValueAtTime(note.f, t);
+                    const noteGain = fIdx === 0 ? hit.gain * 1.15 : hit.gain * 0.52;
+                    g.gain.setValueAtTime(0.0001, t);
+                    g.gain.linearRampToValueAtTime(noteGain, t + 0.009);
+                    g.gain.exponentialRampToValueAtTime(0.0001, t + hit.dur);
 
-                oscBright.type = 'sine';
-                oscBright.frequency.setValueAtTime(note.f * 2, t);
-
-                gain.gain.setValueAtTime(0.0001, t);
-                gain.gain.linearRampToValueAtTime(note.gain, t + 0.006);
-                gain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur);
-
-                brightGain.gain.setValueAtTime(0.0001, t);
-                brightGain.gain.linearRampToValueAtTime(note.gain * 0.25, t + 0.005);
-                brightGain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur * 0.6);
-
-                osc.connect(gain);
-                oscBright.connect(brightGain);
-                gain.connect(filter);
-                brightGain.connect(filter);
-
-                osc.start(t);
-                oscBright.start(t);
-                osc.stop(t + note.dur + 0.04);
-                oscBright.stop(t + note.dur + 0.04);
+                    osc.connect(g);
+                    g.connect(filter);
+                    osc.start(t);
+                    osc.stop(t + hit.dur + 0.04);
+                });
             });
         } catch (e) {}
     },
@@ -9640,7 +9645,7 @@ function playChimeSequence() {
     SensGamification.playCelebrationFanfare();
 }
 
-window.showSensCelebrationToast = function(title, subtitle, quote) {
+window.showSensCelebrationToast = function(title, subtitle, quoteOrPillar) {
     const overlay = document.getElementById('sensCongratsOverlay');
     const titleEl = document.getElementById('sensCongratsTitle');
     const subtitleEl = document.getElementById('sensCongratsSubtitle');
@@ -9716,19 +9721,29 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
         }).join('');
     }
 
-    // Barras minimalistas de los 3 pilares de hoy (Entreno / Nutrición / Movimiento)
+    // Barras minimalistas de los 3 pilares de hoy (con animación de llenado en el pilar recién ganado)
     if (pillarsRowEl) {
+        let earnedPillar = (quoteOrPillar === 'workout' || quoteOrPillar === 'nutrition' || quoteOrPillar === 'cardio') ? quoteOrPillar : null;
+        if (!earnedPillar && typeof title === 'string') {
+            const tl = title.toLowerCase();
+            if (tl.includes('movimiento')) earnedPillar = 'cardio';
+            else if (tl.includes('nutri')) earnedPillar = 'nutrition';
+            else if (tl.includes('entreno') || tl.includes('entrenamiento')) earnedPillar = 'workout';
+        }
         const pList = [
-            { label: 'Entreno', done: Boolean(dayRec.workout?.done) },
-            { label: 'Nutrición', done: Boolean(dayRec.nutrition?.done) },
-            { label: 'Movimiento', done: Boolean(dayRec.cardio?.done) }
+            { key: 'workout', label: 'Entreno', done: Boolean(dayRec.workout?.done) },
+            { key: 'nutrition', label: 'Nutrición', done: Boolean(dayRec.nutrition?.done) },
+            { key: 'cardio', label: 'Movimiento', done: Boolean(dayRec.cardio?.done) }
         ];
-        pillarsRowEl.innerHTML = pList.map(p => `
-            <div class="sens-celeb-pillar-seg ${p.done ? 'is-done' : ''}">
+        pillarsRowEl.innerHTML = pList.map(p => {
+            const isJustEarned = p.done && (p.key === earnedPillar);
+            return `
+            <div class="sens-celeb-pillar-seg ${p.done ? 'is-done' : ''} ${isJustEarned ? 'is-just-earned' : ''}">
                 <div class="sens-celeb-pillar-bar"></div>
                 <span class="sens-celeb-pillar-name">${p.label}</span>
             </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     if (milestoneTextEl) {
@@ -9889,7 +9904,7 @@ function triggerCongratsCelebration(customTitle = null, customSubtitle = null) {
     if (dayRec && dayRec.workout && dayRec.workout.done) {
         const title = customTitle || '¡Entreno adentro!';
         const subtitle = customSubtitle || 'Cerraste la rutina de hoy';
-        window.showSensCelebrationToast(title, subtitle);
+        window.showSensCelebrationToast(title, subtitle, 'workout');
         return;
     }
 
@@ -18568,7 +18583,7 @@ window.handleNutritionStreakTransition = function(streakEval) {
 
     if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
         if (typeof window.showSensCelebrationToast === 'function') {
-            window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`);
+            window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`, 'nutrition');
         }
     } else if (nutriStatus === 'exceeded') {
         const maxTarget = Math.round(targetKcal * 1.10);
@@ -20224,7 +20239,7 @@ function initUserCustomMealModal(athId) {
 
                 if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
                     if (typeof window.showSensCelebrationToast === 'function') {
-                        window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`);
+                        window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`, 'nutrition');
                     }
                 } else if (nutriStatus === 'exceeded') {
                     const maxTarget = Math.round(targetKcal * 1.10);
@@ -24609,7 +24624,8 @@ window.saveActivityChanges = function(isExplicitSave = false, isAutoSave = false
                     isAllThreeDone ? '¡Día completo!' : '¡Movimiento cumplido!',
                     isAllThreeDone
                         ? 'Entreno, comida y movimiento al 100%'
-                        : `${totalBurn.toLocaleString('es-AR')} kcal activas hoy`
+                        : `${totalBurn.toLocaleString('es-AR')} kcal activas hoy`,
+                    'cardio'
                 );
             }
         } else if (!isAutoSave && !qualifies) {
