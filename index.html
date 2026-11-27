@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '237.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '237.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '238.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '238.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -1019,21 +1019,6 @@
                                 <span style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
                                     <strong style="font-size: 12.5px; font-weight: 700; color: #121214; line-height: 1.2;">Mi Perfil &amp; Planes</strong>
                                     <small style="font-size: 10.5px; color: #575659; font-weight: 500;">Membresía, precios y ajustes</small>
-                                </span>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C8B8E" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                            </button>
-
-                            <button type="button" class="avatar-dropdown-item" id="dropdownGoDiagnosis"
-                                onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active'); if(typeof window.startDiagnosisWizard==='function'){window.startDiagnosisWizard(true);}">
-                                <span style="width: 32px; height: 32px; border-radius: 50%; background: #F4F3F1; color: #121214; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                                        <rect x="8" y="2" width="8" height="4" rx="1" />
-                                    </svg>
-                                </span>
-                                <span style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
-                                    <strong style="font-size: 12.5px; font-weight: 700; color: #121214; line-height: 1.2;">Mi Diagnóstico Físico</strong>
-                                    <small style="font-size: 10.5px; color: #575659; font-weight: 500;">Ficha biomecánica y objetivos</small>
                                 </span>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C8B8E" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                             </button>
