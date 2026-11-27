@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=100.0">
+    <link rel="stylesheet" href="style.css?v=102.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '212.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '212.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '214.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '214.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8569,6 +8569,11 @@
                             <stop offset="55%" stop-color="#34D399" />
                             <stop offset="100%" stop-color="#10B981" />
                         </linearGradient>
+                        <linearGradient id="sensLostRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FCA5A5" />
+                            <stop offset="55%" stop-color="#EF4444" />
+                            <stop offset="100%" stop-color="#B91C1C" />
+                        </linearGradient>
                     </defs>
                     <circle class="sens-celeb-ring-track" cx="60" cy="60" r="50" />
                     <circle class="sens-celeb-ring-fill" id="sensCongratsRingFill" cx="60" cy="60" r="50" />
@@ -9071,7 +9076,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=141.0"></script>
+    <script defer src="app.js?v=143.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

@@ -8104,7 +8104,13 @@ window.toggleExerciseFinished = function(exId, dayKey, targetDateStr = null) {
     } else {
         const wasCompleted = Boolean(currentExecution.completed);
         if (wasCompleted) {
-            if (typeof showSensToast === 'function') {
+            if (typeof window.showSensStreakLostModal === 'function') {
+                window.showSensStreakLostModal(
+                    'Racha de entreno pausada',
+                    'Desmarcaste ejercicios y la sesión quedó incompleta.',
+                    { eyebrow: 'RACHA INCOMPLETA', lostPillar: 'workout', centerValue: '!', centerLabel: 'SESIÓN ABIERTA', footerText: 'Completá los ejercicios restantes para recuperar la racha.' }
+                );
+            } else if (typeof showSensToast === 'function') {
                 showSensToast('Perdiste el objetivo de racha de entrenamiento de hoy (sesión incompleta).', 'warning', 4000);
             }
         } else if (typeof showSensToast === 'function') {
@@ -9575,6 +9581,48 @@ const SensGamification = {
         } catch (e) {}
     },
 
+    playStreakLostTone() {
+        try {
+            const ctx = this.getAudioContext();
+            if (!ctx) return;
+            const now = ctx.currentTime;
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(950, now);
+            filter.connect(ctx.destination);
+
+            // Descenso grave de alerta (E4 -> Bb3): tono firme de racha cortada
+            const notes = [
+                { f: 329.63, start: 0.00, dur: 0.22, gain: 0.11 }, // E4
+                { f: 233.08, start: 0.16, dur: 0.42, gain: 0.13 }  // Bb3 (tritono descendente)
+            ];
+            notes.forEach(note => {
+                const t = now + note.start;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(note.f, t);
+                osc.frequency.exponentialRampToValueAtTime(note.f * 0.94, t + note.dur);
+                gain.gain.setValueAtTime(0.0001, t);
+                gain.gain.linearRampToValueAtTime(note.gain, t + 0.012);
+                gain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur);
+                osc.connect(gain);
+                gain.connect(filter);
+                osc.start(t);
+                osc.stop(t + note.dur + 0.04);
+            });
+        } catch (e) {}
+    },
+
+    playLossHaptic() {
+        try {
+            if (navigator.vibrate) {
+                navigator.vibrate([90, 50, 140]);
+            }
+        } catch (e) {}
+    },
+
     getStreakLevel(streakDays) {
         if (streakDays >= 30) return { level: 5, title: 'Longevidad Élite', next: 'Racha Máxima SENS' };
         if (streakDays >= 14) return { level: 4, title: 'Disciplina Olímpica', next: 'Meta: 30 Días' };
@@ -9615,12 +9663,14 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
     if (overlay) {
         const cardEl = overlay.querySelector('.sens-congrats-card');
         if (cardEl) {
+            cardEl.classList.remove('is-streak-lost');
             cardEl.classList.toggle('is-perfect-day', isPerfectDay);
             cardEl.style.animation = 'none';
             void cardEl.offsetWidth;
             cardEl.style.animation = '';
         }
     }
+    if (continueBtn) continueBtn.textContent = 'Continuar';
 
     const donePillars = Math.max(1, Math.min(3, dayRec.completedCount || 1));
     if (titleEl) titleEl.textContent = isPerfectDay ? '¡Día completo!' : (title || '¡Objetivo cumplido!');
@@ -9714,6 +9764,116 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
         if (typeof showSensToast === 'function') {
             showSensToast(`${title}: ${subtitle}`, 'champagne', 4000);
         }
+    }
+};
+
+window.showSensStreakLostModal = function(title, subtitle, options = {}) {
+    const overlay = document.getElementById('sensCongratsOverlay');
+    const titleEl = document.getElementById('sensCongratsTitle');
+    const subtitleEl = document.getElementById('sensCongratsSubtitle');
+    const levelPillEl = document.getElementById('sensCongratsLevelPill');
+    const bumpNumEl = document.getElementById('sensBumpNumber');
+    const bumpLabelEl = document.getElementById('sensBumpLabel');
+    const ringFillEl = document.getElementById('sensCongratsRingFill');
+    const weekStripEl = document.getElementById('sensCongratsWeekStrip');
+    const pillarsRowEl = document.getElementById('sensCongratsPillarsRow');
+    const milestoneTextEl = document.getElementById('sensCongratsMilestoneText');
+    const continueBtn = document.getElementById('btnSensCongratsContinue');
+
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const today = new Date();
+    const dayRec = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.getDayRecord(athId, today) : { completedCount: 0, workout: {}, nutrition: {}, cardio: {} };
+    const lostPillar = options.lostPillar || 'nutrition'; // 'workout' | 'nutrition' | 'cardio'
+
+    if (overlay) {
+        const cardEl = overlay.querySelector('.sens-congrats-card');
+        if (cardEl) {
+            cardEl.classList.remove('is-perfect-day');
+            cardEl.classList.add('is-streak-lost');
+            cardEl.style.animation = 'none';
+            void cardEl.offsetWidth;
+            cardEl.style.animation = '';
+        }
+    }
+
+    if (levelPillEl) levelPillEl.textContent = options.eyebrow || 'RACHA PERDIDA';
+    if (titleEl) titleEl.textContent = title || 'Perdiste el objetivo';
+    if (subtitleEl) subtitleEl.textContent = subtitle || 'Cortaste la racha de este pilar hoy.';
+    if (bumpNumEl) bumpNumEl.textContent = options.centerValue !== undefined ? options.centerValue : '0';
+    if (bumpLabelEl) bumpLabelEl.textContent = options.centerLabel || 'RACHA CORTADA';
+
+    if (ringFillEl) {
+        const circumference = 2 * Math.PI * 50;
+        const ratio = options.ringRatio !== undefined ? options.ringRatio : 1;
+        ringFillEl.style.stroke = 'url(#sensLostRingGrad)';
+        ringFillEl.style.strokeDasharray = `${circumference}`;
+        ringFillEl.style.strokeDashoffset = `${circumference}`;
+        setTimeout(() => {
+            ringFillEl.style.strokeDashoffset = `${circumference * (1 - ratio)}`;
+        }, 60);
+    }
+
+    if (weekStripEl && typeof getMonday === 'function' && typeof SensDailyStreakManager !== 'undefined') {
+        const mon = getMonday(today);
+        const letters = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+        const todayIso = SensDailyStreakManager.getDateKey(today);
+        weekStripEl.innerHTML = letters.map((lbl, idx) => {
+            const d = new Date(mon);
+            d.setDate(mon.getDate() + idx);
+            const dIso = SensDailyStreakManager.getDateKey(d);
+            const rec = SensDailyStreakManager.getDayRecord(athId, d);
+            const isToday = dIso === todayIso;
+            const isDone = !isToday && rec.completedCount > 0;
+            return `
+                <div class="sens-celeb-day ${isDone ? 'is-done' : ''} ${isToday ? 'is-today' : ''}">
+                    <span class="sens-celeb-day-lbl">${lbl}</span>
+                    <span class="sens-celeb-day-dot"></span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    if (pillarsRowEl) {
+        const pList = [
+            { key: 'workout', label: 'Entreno', done: Boolean(dayRec.workout?.done) },
+            { key: 'nutrition', label: 'Nutrición', done: Boolean(dayRec.nutrition?.done) },
+            { key: 'cardio', label: 'Movimiento', done: Boolean(dayRec.cardio?.done) }
+        ];
+        pillarsRowEl.innerHTML = pList.map(p => {
+            const isLost = p.key === lostPillar;
+            return `
+                <div class="sens-celeb-pillar-seg ${isLost ? 'is-lost' : (p.done ? 'is-done' : '')}">
+                    <div class="sens-celeb-pillar-bar"></div>
+                    <span class="sens-celeb-pillar-name">${p.label}</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    if (milestoneTextEl) {
+        milestoneTextEl.textContent = options.footerText || 'Cuidá el cierre del día para no perder más terreno.';
+    }
+    if (continueBtn) continueBtn.textContent = 'Entendido';
+
+    SensGamification.playStreakLostTone();
+    SensGamification.playLossHaptic();
+    if (typeof SensConfetti !== 'undefined' && SensConfetti.canvas) {
+        if (SensConfetti.animationId) cancelAnimationFrame(SensConfetti.animationId);
+        SensConfetti.animationId = null;
+        SensConfetti.canvas.style.display = 'none';
+    }
+
+    if (overlay) {
+        overlay.style.display = 'flex';
+        const dismiss = () => {
+            if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
+            overlay.style.display = 'none';
+        };
+        if (continueBtn) continueBtn.onclick = (e) => { e.stopPropagation(); dismiss(); };
+        overlay.onclick = dismiss;
+        if (window._sensCelebrationTimer) clearTimeout(window._sensCelebrationTimer);
+    } else if (typeof showSensToast === 'function') {
+        showSensToast(`${title}: ${subtitle}`, 'warning', 4500);
     }
 };
 
@@ -18410,12 +18570,38 @@ window.handleNutritionStreakTransition = function(streakEval) {
         if (typeof window.showSensCelebrationToast === 'function') {
             window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`);
         }
-    } else if (nutriStatus === 'exceeded' && prevStatus !== 'exceeded') {
-        if (typeof showSensToast === 'function') {
+    } else if (nutriStatus === 'exceeded') {
+        const maxTarget = Math.round(targetKcal * 1.10);
+        const excessKcal = Math.max(1, consumedKcal - maxTarget);
+        if (typeof window.showSensStreakLostModal === 'function') {
+            window.showSensStreakLostModal(
+                'Te pasaste del rango',
+                `Llevás ${consumedKcal.toLocaleString('es-AR')} kcal (+${excessKcal.toLocaleString('es-AR')} kcal sobre tu tope de ${maxTarget.toLocaleString('es-AR')} kcal).`,
+                {
+                    eyebrow: 'RACHA PERDIDA · EXCESO CALÓRICO',
+                    lostPillar: 'nutrition',
+                    centerValue: `+${excessKcal.toLocaleString('es-AR')}`,
+                    centerLabel: 'KCAL DE EXCESO',
+                    footerText: 'Frená acá para no seguir sumando. Mañana arrancás de nuevo.'
+                }
+            );
+        } else if (typeof showSensToast === 'function') {
             showSensToast(`Superaste el rango óptimo de hoy: ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 4500);
         }
     } else if (prevStatus === 'on_track' && nutriStatus === 'pending') {
-        if (typeof showSensToast === 'function') {
+        if (typeof window.showSensStreakLostModal === 'function') {
+            window.showSensStreakLostModal(
+                'Saliste del rango',
+                `Bajaste a ${consumedKcal.toLocaleString('es-AR')} kcal. Te falta sumar comida para volver al rango.`,
+                {
+                    eyebrow: 'RACHA EN PAUSA · NUTRICIÓN',
+                    lostPillar: 'nutrition',
+                    centerValue: '!',
+                    centerLabel: 'BAJO EL MÍNIMO',
+                    footerText: 'Registrá tu próxima comida para recuperar la racha de hoy.'
+                }
+            );
+        } else if (typeof showSensToast === 'function') {
             showSensToast(`Saliste del rango óptimo de hoy: ${consumedKcal.toLocaleString('es-AR')} kcal (debajo del mínimo).`, 'warning', 4000);
         }
     }
@@ -20041,11 +20227,37 @@ function initUserCustomMealModal(athId) {
                         window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`);
                     }
                 } else if (nutriStatus === 'exceeded') {
-                    if (typeof showSensToast === 'function') {
+                    const maxTarget = Math.round(targetKcal * 1.10);
+                    const excessKcal = Math.max(1, consumedKcal - maxTarget);
+                    if (typeof window.showSensStreakLostModal === 'function') {
+                        window.showSensStreakLostModal(
+                            'Te pasaste del rango',
+                            `Llevás ${consumedKcal.toLocaleString('es-AR')} kcal (+${excessKcal.toLocaleString('es-AR')} kcal sobre tu tope de ${maxTarget.toLocaleString('es-AR')} kcal).`,
+                            {
+                                eyebrow: 'RACHA PERDIDA · EXCESO CALÓRICO',
+                                lostPillar: 'nutrition',
+                                centerValue: `+${excessKcal.toLocaleString('es-AR')}`,
+                                centerLabel: 'KCAL DE EXCESO',
+                                footerText: 'Frená acá para no seguir sumando. Mañana arrancás de nuevo.'
+                            }
+                        );
+                    } else if (typeof showSensToast === 'function') {
                         showSensToast(`Perdiste el objetivo de racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
                     }
                 } else if (prevStatus === 'on_track' && nutriStatus === 'pending') {
-                    if (typeof showSensToast === 'function') {
+                    if (typeof window.showSensStreakLostModal === 'function') {
+                        window.showSensStreakLostModal(
+                            'Saliste del rango',
+                            `Bajaste a ${consumedKcal.toLocaleString('es-AR')} kcal. Te falta sumar comida para volver al rango.`,
+                            {
+                                eyebrow: 'RACHA EN PAUSA · NUTRICIÓN',
+                                lostPillar: 'nutrition',
+                                centerValue: '!',
+                                centerLabel: 'BAJO EL MÍNIMO',
+                                footerText: 'Registrá tu próxima comida para recuperar la racha de hoy.'
+                            }
+                        );
+                    } else if (typeof showSensToast === 'function') {
                         showSensToast(`Perdiste el objetivo de racha nutricional de hoy: calorías consumidas (${consumedKcal.toLocaleString('es-AR')} kcal) quedaron debajo del mínimo óptimo.`, 'warning', 4500);
                     }
                 }
@@ -24402,7 +24614,19 @@ window.saveActivityChanges = function(isExplicitSave = false, isAutoSave = false
             }
         } else if (!isAutoSave && !qualifies) {
             if (wasCardioDone) {
-                if (typeof showSensToast === 'function') {
+                if (typeof window.showSensStreakLostModal === 'function') {
+                    window.showSensStreakLostModal(
+                        'Movimiento insuficiente',
+                        `Quedaste en ${totalBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} kcal activas.`,
+                        {
+                            eyebrow: 'RACHA EN PAUSA · MOVIMIENTO',
+                            lostPillar: 'cardio',
+                            centerValue: `${totalBurn}`,
+                            centerLabel: `DE ${targetBurn} KCAL`,
+                            footerText: 'Sumá pasos o cardio para recuperar la meta de movimiento.'
+                        }
+                    );
+                } else if (typeof showSensToast === 'function') {
                     showSensToast(`Movimiento debajo de la meta (${totalBurn.toLocaleString('es-AR')}/${targetBurn.toLocaleString('es-AR')} cal).`, 'warning', 4200);
                 }
             } else {

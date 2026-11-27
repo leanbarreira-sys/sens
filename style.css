@@ -38178,6 +38178,62 @@ body.in-portal #dashWeeklyBalanceCard .sens-weekly-balance-totals .week-tot-col.
     -webkit-text-fill-color: #FFFFFF !important;
 }
 
+/* Estado Racha Perdida / Exceso (Alerta Firme Quiet Luxury) */
+@keyframes sensLossShake {
+    0% { opacity: 0; transform: translateY(16px) scale(0.95); }
+    35% { opacity: 1; transform: translateX(-6px) scale(1); }
+    55% { transform: translateX(5px); }
+    75% { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost {
+    background: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.22) 0%, #121215 58%) !important;
+    border-color: rgba(239, 68, 68, 0.38) !important;
+    animation: sensLossShake 0.48s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-congrats-level-pill {
+    color: #F87171 !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-celeb-halo {
+    border-color: rgba(239, 68, 68, 0.55) !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-celeb-ring-svg {
+    filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.28)) !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-bump-number {
+    font-size: 30px !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-celeb-pillar-seg.is-lost .sens-celeb-pillar-bar {
+    background: #EF4444 !important;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.45) !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-celeb-pillar-seg.is-lost .sens-celeb-pillar-name {
+    color: #FCA5A5 !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-celeb-day.is-today .sens-celeb-day-lbl {
+    color: #F87171 !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-celeb-day.is-today .sens-celeb-day-dot {
+    background: #EF4444 !important;
+    transform: scale(1.35);
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.20) !important;
+}
+
+#sensCongratsOverlay .sens-congrats-card.is-streak-lost .sens-btn-congrats-continue {
+    background: #EF4444 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
 /* Fix de contraste para Tooltips de Reglas SENS (.sens-streak-rule-popover) */
 body.in-portal #sensNutriHeroCard {
     overflow: visible !important;
