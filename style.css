@@ -31214,23 +31214,38 @@ body.in-portal #userAvatarBtn .avatar-online-dot,
     pointer-events: none !important;
 }
 
-/* Dropdown de Usuario — Fijo en Viewport para cero recortes en Mobile */
+/* Dropdown de Usuario — iOS 26 Liquid Glass Quiet Luxury */
 body.in-portal #userAvatarDropdown,
 #userAvatarDropdown {
     position: fixed !important;
     top: 60px !important;
     right: 12px !important;
     left: auto !important;
-    width: 320px !important;
+    width: 316px !important;
     max-width: calc(100vw - 24px) !important;
-    background: #FFFFFF !important;
-    border: 1px solid rgba(18, 18, 20, 0.08) !important;
-    border-radius: 22px !important;
-    padding: 16px !important;
-    box-shadow: 0 24px 60px rgba(18, 18, 20, 0.18), 0 4px 16px rgba(18, 18, 20, 0.06) !important;
+    background: rgba(255, 255, 255, 0.72) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.34) !important;
+    border-radius: 26px !important;
+    padding: 15px !important;
+    box-shadow: 0 24px 60px -12px rgba(18, 18, 20, 0.20), 0 4px 16px rgba(18, 18, 20, 0.06) !important;
     z-index: 999999 !important;
     display: none !important;
     color: #121214 !important;
+}
+
+body.in-portal #userAvatarDropdown .avatar-dropdown-item,
+#userAvatarDropdown .avatar-dropdown-item {
+    border-radius: 14px !important;
+    padding: 8px 10px !important;
+    border: none !important;
+    transition: background 0.18s ease !important;
+}
+
+body.in-portal #userAvatarDropdown .avatar-dropdown-item:hover,
+#userAvatarDropdown .avatar-dropdown-item:hover {
+    background: rgba(18, 18, 20, 0.05) !important;
 }
 
 body.in-portal #userAvatarDropdown.active,

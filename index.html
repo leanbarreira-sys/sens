@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=117.0">
+    <link rel="stylesheet" href="style.css?v=118.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '233.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '233.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '234.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '234.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -923,20 +923,19 @@
                         <span id="userAvatarInitials">LB</span>
                         <span class="avatar-online-dot"></span>
                     </button>
-                    <!-- Dropdown flotante estilo Apple Quiet Luxury (sens_men_de_acceso_perfil_light_quiet_luxury) -->
-                    <div class="user-avatar-dropdown sens-quiet-avatar-dropdown" id="userAvatarDropdown"
-                        style="background: #FFFFFF !important; border: 1px solid rgba(18, 18, 20, 0.08) !important; color: #121214 !important; box-shadow: 0 24px 60px -12px rgba(18, 18, 20, 0.14), 0 4px 16px rgba(18, 18, 20, 0.04) !important;">
+                    <!-- Dropdown flotante estilo Apple Liquid Glass Quiet Luxury -->
+                    <div class="user-avatar-dropdown sens-quiet-avatar-dropdown" id="userAvatarDropdown">
                         <div class="sens-avatar-card-head">
                             <div class="sens-avatar-user-badge" style="justify-content: space-between;">
                                 <div style="display: flex; align-items: center; gap: 11px; min-width: 0; flex: 1;">
                                     <div style="position: relative; flex-shrink: 0;">
                                         <span class="sens-avatar-initials-pill" id="dropdownAvatarInitials"
-                                            style="width: 42px; height: 42px; background: #121214; color: #FFFFFF; border: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 10px rgba(18,18,20,0.12);">LB</span>
-                                        <span style="position: absolute; bottom: -1px; right: -1px; width: 11px; height: 11px; border-radius: 50%; background: #1E7B42; border: 2px solid #FFFFFF;"></span>
+                                            style="width: 40px; height: 40px; background: #121214; color: #FFFFFF; border: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 10px rgba(18,18,20,0.12);">LB</span>
+                                        <span style="position: absolute; bottom: -1px; right: -1px; width: 11px; height: 11px; border-radius: 50%; background: #16A34A; border: 2px solid #FFFFFF;"></span>
                                     </div>
                                     <div class="sens-avatar-user-meta">
                                         <div style="display: flex; align-items: center; gap: 5px;">
-                                            <strong class="sens-avatar-name" id="dropdownUserName" style="font-size: 14.5px; font-weight: 700; color: #121214 !important;">Leandro Barreira</strong>
+                                            <strong class="sens-avatar-name" id="dropdownUserName" style="font-size: 14px; font-weight: 700; color: #121214 !important;">Leandro Barreira</strong>
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="#705B3E" stroke="#FFFFFF" stroke-width="2" style="flex-shrink: 0;">
                                                 <circle cx="12" cy="12" r="10"></circle>
                                                 <polyline points="9 12 11 14 15 10"></polyline>
@@ -947,26 +946,26 @@
                                 </div>
                                 <button type="button" aria-label="Cerrar menú"
                                     onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active');"
-                                    style="width: 28px; height: 28px; border-radius: 50%; background: #F4F3F1; border: 1px solid rgba(18,18,20,0.06); color: #575659; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; font-weight: 700; flex-shrink: 0;">✕</button>
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: rgba(18, 18, 20, 0.06); border: none; color: #52525B; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; font-weight: 700; flex-shrink: 0;">✕</button>
                             </div>
 
                             <div id="dropdownPlanSummaryBox" class="sens-avatar-plan-box"
-                                style="background: #F4F3F1 !important; border: 1px solid rgba(18, 18, 20, 0.05) !important; border-radius: 16px; padding: 14px;">
+                                style="background: rgba(244, 243, 241, 0.72) !important; border: none !important; border-radius: 18px; padding: 13px 14px;">
                                 <div class="sens-avatar-plan-top">
                                     <span class="sens-avatar-plan-tag" style="color: #705B3E;">TU PLAN ACTUAL</span>
-                                    <span style="display: inline-flex; align-items: center; gap: 5px; background: #9CF6B0; color: #00210C; padding: 2px 8px; border-radius: 999px; font-size: 9.5px; font-weight: 800;">
-                                        <span style="width: 5px; height: 5px; border-radius: 50%; background: #00210C;"></span>
-                                        <span id="dropdownPlanStatusDot" class="sens-avatar-plan-status" style="color: #00210C !important;">Activo</span>
+                                    <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(22, 163, 74, 0.14); color: #15803D; padding: 2px 8px; border-radius: 999px; font-size: 9.5px; font-weight: 800;">
+                                        <span style="width: 5px; height: 5px; border-radius: 50%; background: #16A34A;"></span>
+                                        <span id="dropdownPlanStatusDot" class="sens-avatar-plan-status" style="color: #15803D !important;">Activo</span>
                                     </span>
                                 </div>
                                 <div id="dropdownUserPlan" class="sens-avatar-plan-title" style="font-size: 14px; font-weight: 800; color: #121214 !important; margin-top: 2px;">Seguimiento con Nico</div>
-                                <div id="dropdownPlanNextStepHint" class="sens-avatar-plan-hint" style="font-size: 11px; color: #575659 !important; line-height: 1.4; margin: 2px 0 8px 0;">
+                                <div id="dropdownPlanNextStepHint" class="sens-avatar-plan-hint" style="font-size: 11px; color: #52525B !important; line-height: 1.4; margin: 2px 0 10px 0;">
                                     Modalidades oficiales: Presencial en CABA (Individual o Grupal) u Online 1:1 con Nico.
                                 </div>
                                 <button type="button" id="dropdownOpenUpgradeBtn"
                                     onclick="event.stopPropagation(); document.getElementById('userAvatarDropdown')?.classList.remove('active'); window.openSensPlansUpgradeModal && window.openSensPlansUpgradeModal();"
                                     class="sens-avatar-upgrade-btn"
-                                    style="background: #FBDEB9 !important; color: #271903 !important; border: 1px solid rgba(112, 91, 62, 0.25) !important; font-weight: 800; padding: 10px 14px; border-radius: 999px; box-shadow: 0 2px 8px rgba(112, 91, 62, 0.12);">
+                                    style="background: #121214 !important; color: #FFFFFF !important; border: none !important; font-weight: 700; padding: 10px 14px; border-radius: 999px; box-shadow: 0 4px 12px rgba(18, 18, 20, 0.14);">
                                     <span>Ver Modalidades y Planes →</span>
                                 </button>
                             </div>
