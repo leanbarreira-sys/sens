@@ -18745,10 +18745,6 @@ function openCustomMealModalForSlot(slot) {
         p.classList.toggle('active', p.getAttribute('data-filter') === 'all');
     });
 
-    modal.classList.add('active');
-    document.body.classList.add('sens-modal-open');
-    document.body.style.overflow = 'hidden';
-
     const searchInput = document.getElementById('customFoodSearchInput');
     if (searchInput) {
         searchInput.value = '';
@@ -18760,6 +18756,10 @@ function openCustomMealModalForSlot(slot) {
     if (typeof window.renderCustomTray === 'function') {
         window.renderCustomTray();
     }
+
+    document.body.classList.add('sens-modal-open');
+    document.body.style.overflow = 'hidden';
+    modal.classList.add('active');
 }
 
 window.openCustomMealModalForSlot = openCustomMealModalForSlot;
@@ -20048,7 +20048,7 @@ function initUserCustomMealModal(athId) {
             return `
                 <div class="sens-search-result-card" data-food-id="${fid}">
                     <div class="sens-search-card-click-trigger" data-food-id="${fid}" title="Toca para ver detalle y porción">
-                        <img src="${img}" class="sens-search-row-thumb" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
+                        <img src="${img}" class="sens-search-row-thumb" loading="lazy" decoding="async" onerror="this.src='Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'">
                         <div class="sens-search-row-info">
                             <div class="sens-search-row-title">${foodName}</div>
                             <div class="sens-search-row-meta">
