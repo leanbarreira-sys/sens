@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=124.0">
+    <link rel="stylesheet" href="style.css?v=125.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '244.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '244.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '245.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '245.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -4634,7 +4634,10 @@
             <section class="portal-view subtab-paneAthletes" id="coachHubView">
                 <div class="coach-hub-header">
                     <div class="coach-hub-title-row">
-                        <h2 class="coach-hub-title">Centro de Mando <span class="text-champagne">Nico</span></h2>
+                        <div>
+                            <h2 class="coach-hub-title">Centro de Mando <span class="text-champagne">Nico</span></h2>
+                            <div class="coach-hub-kicker">COACH OS · MAKES SENS.</div>
+                        </div>
                         <button type="button" class="btn-coach-refresh-circle" id="btnCoachHubRefreshTable"
                             title="Actualizar datos" aria-label="Actualizar">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -5926,14 +5929,14 @@
                             <div
                                 style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
                                 <div>
-                                    <span class="pill pill-champagne"
+                                    <span class="pill pill-champagne coach-nutri-eyebrow"
                                         style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.5px;">PRESCRIPCIÓN
                                         NUTRICIONAL &amp; PERIODIZACIÓN</span>
-                                    <h3
+                                    <h3 class="coach-nutri-title"
                                         style="font-size: 1.25rem; font-weight: 800; margin: 4px 0 0 0; color: #121214;">
-                                        Planificador Nutricional de Precisión
+                                        Planificador Nutricional
                                     </h3>
-                                    <p style="font-size: 11.5px; color: #52525B; margin: 2px 0 0 0;">
+                                    <p class="coach-nutri-subtitle" style="font-size: 11.5px; color: #52525B; margin: 2px 0 0 0;">
                                         Cargá masivamente la semana, gestioná el mes completo o explorá los 500
                                         alimentos.
                                     </p>
@@ -6048,12 +6051,12 @@
                         <div
                             style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
                             <div>
-                                <span class="pill pill-champagne" style="font-size: 10px;">CATÁLOGO CIENTÍFICO &amp;
+                                <span class="pill pill-champagne coach-lib-eyebrow" style="font-size: 10px;">CATÁLOGO CIENTÍFICO &amp;
                                     BASE DE DATOS SENS</span>
-                                <h3 style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">
-                                    Biblioteca Maestra de Ejercicios &amp; Nutrición
+                                <h3 class="coach-lib-title" style="font-size: 1.3rem; font-weight: 800; margin-top: 6px;">
+                                    Biblioteca Maestra
                                 </h3>
-                                <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">
+                                <p class="coach-lib-subtitle" style="font-size: 12.5px; color: var(--text-secondary); margin-top: 2px;">
                                     Explorá el árbol completo de entrenamiento y alimentos. Podés editar cualquier ficha
                                     para un alumno puntual o actualizar la Base Maestra para todos los usuarios.
                                 </p>

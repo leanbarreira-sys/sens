@@ -39346,3 +39346,251 @@ body.in-portal #paneAthletes .coach-clean-filter-row::-webkit-scrollbar {
         padding: 8px 6px !important;
     }
 }
+
+/* =========================================================================
+   COACH HUB — UNIFICACION TOTAL CON UI DE USUARIO (QUIET LUXURY)
+   ========================================================================= */
+
+/* A. Floating Dock Liquid Glass idéntico al del Usuario */
+@media (max-width: 900px) {
+    body.in-portal #sensCoachFloatingDock {
+        background: rgba(255, 255, 255, 0.56) !important;
+        backdrop-filter: blur(22px) saturate(190%) !important;
+        -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.34) !important;
+        border-radius: 9999px !important;
+        box-shadow: 0 12px 32px rgba(18, 18, 20, 0.14) !important;
+        padding: 4px 5px !important;
+        gap: 2px !important;
+        width: calc(100% - 28px) !important;
+        max-width: 376px !important;
+    }
+
+    body.in-portal #sensCoachFloatingDock .sens-dock-item {
+        background: transparent !important;
+        color: rgba(18, 18, 20, 0.68) !important;
+        border: none !important;
+        border-radius: 9999px !important;
+        padding: 5px 2px !important;
+        gap: 2px !important;
+        text-transform: none !important;
+        letter-spacing: 0 !important;
+        font-size: 9px !important;
+        font-weight: 600 !important;
+        min-height: 44px !important;
+    }
+
+    body.in-portal #sensCoachFloatingDock .sens-dock-item.active {
+        background: rgba(255, 255, 255, 0.82) !important;
+        color: #121214 !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 8px rgba(18, 18, 20, 0.08) !important;
+    }
+
+    body.in-portal #sensCoachFloatingDock .sens-dock-item svg {
+        width: 16px !important;
+        height: 16px !important;
+        stroke: currentColor !important;
+        stroke-width: 1.75 !important;
+    }
+
+    body.in-portal #sensCoachFloatingDock .sens-dock-item.active svg {
+        stroke: #121214 !important;
+        stroke-width: 2.1 !important;
+    }
+
+    body.in-portal #sensCoachFloatingDock .sens-dock-item span {
+        text-transform: none !important;
+        letter-spacing: 0 !important;
+        font-size: 9px !important;
+        color: inherit !important;
+    }
+}
+
+/* B. Header Editorial Limpio (igual a "Lean, ¿cómo venimos hoy? / MAKES SENS.") */
+body.in-portal #coachHubView .coach-hub-header {
+    border-bottom: none !important;
+    padding-bottom: 4px !important;
+    margin-bottom: 12px !important;
+}
+
+body.in-portal #coachHubView .coach-hub-title {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.025em !important;
+    color: #121214 !important;
+    line-height: 1.18 !important;
+    margin: 0 !important;
+}
+
+body.in-portal #coachHubView .coach-hub-kicker {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.14em !important;
+    color: #6E6E73 !important;
+    margin-top: 3px !important;
+    text-transform: uppercase !important;
+}
+
+body.in-portal #coachHubView .btn-coach-refresh-circle {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.03) !important;
+    color: #575659 !important;
+}
+
+/* C. Eliminar "Matryoshka de Cajas" en mobile */
+@media (max-width: 900px) {
+    body.in-portal #coachHubView .coach-surface-card,
+    body.in-portal #coachHubView .coach-surface-card-light,
+    body.in-portal #paneAthletes .coach-clean-card {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+
+    /* Ocultar eyebrow pills y párrafos largos estilo "AI slop" */
+    body.in-portal #coachHubView .coach-workouts-eyebrow,
+    body.in-portal #coachHubView .coach-workouts-subtitle,
+    body.in-portal #coachHubView .coach-nutri-eyebrow,
+    body.in-portal #coachHubView .coach-nutri-subtitle,
+    body.in-portal #coachHubView .coach-lib-eyebrow,
+    body.in-portal #coachHubView .coach-lib-subtitle {
+        display: none !important;
+    }
+
+    /* Títulos de sección coherentes y sobrios */
+    body.in-portal #coachHubView .coach-workouts-title,
+    body.in-portal #coachHubView .coach-nutri-title,
+    body.in-portal #coachHubView .coach-lib-title {
+        font-size: 19px !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em !important;
+        color: #121214 !important;
+        margin: 0 0 2px 0 !important;
+    }
+
+    /* Ocultar selector duplicado de atleta en Nutrición cuando la card maestra ya está arriba */
+    body.in-portal #coachHubView.subtab-paneNutrition #btnCoachNutriAthletePicker {
+        display: none !important;
+    }
+}
+
+/* D. Botones en Sentence Case (sin ALL CAPS agresivos) */
+body.in-portal #coachHubView .coach-workouts-btn-auto,
+body.in-portal #coachHubView .coach-workouts-btn-templates,
+body.in-portal #coachHubView #btnQuickAssignStarterNutrition,
+body.in-portal #coachHubView #btnCoachCreateNewExercise,
+body.in-portal #coachHubView .coach-cycle-template-btn,
+body.in-portal #coachHubView .btn-coach-action-primary,
+body.in-portal #coachHubView .btn-coach-action-manage,
+body.in-portal #coachHubView .btn-coach-action-dossier,
+body.in-portal #coachHubView .btn-coach-action-portal {
+    text-transform: none !important;
+    letter-spacing: -0.01em !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+}
+
+body.in-portal #coachHubView .coach-workouts-btn-templates,
+body.in-portal #coachHubView .coach-cycle-template-btn {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.1) !important;
+    color: #121214 !important;
+}
+
+/* E. Tarjetas unificadas con las del Usuario (18px, hairline border, sombra sutil) */
+body.in-portal #coachHubView .coach-master-active-athlete-card,
+body.in-portal #paneAthletes .coach-stat-card,
+body.in-portal #paneAthletes .coach-athlete-card-clean,
+body.in-portal #paneAthletes .coach-tiers-toggle-btn {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.06) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 2px 10px rgba(18, 18, 20, 0.025) !important;
+}
+
+body.in-portal #coachHubView .coach-active-athlete-avatar,
+body.in-portal #paneAthletes .coach-ath-avatar-circle {
+    background: #FAF7F2 !important;
+    color: #9E7D4B !important;
+    border: 1px solid rgba(229, 203, 167, 0.45) !important;
+}
+
+/* F. Buscador y Filtros High-Class (idénticos a Entrenar/Nutrición del Usuario) */
+body.in-portal #paneAthletes .coach-clean-search-wrap,
+body.in-portal #paneLibrary #coachMasterExSearchInput {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 2px 8px rgba(18, 18, 20, 0.02) !important;
+}
+
+body.in-portal #paneAthletes .coach-clean-search-wrap input {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #paneAthletes .coach-clean-filter-label,
+body.in-portal #paneLibrary .taxonomy-level-label {
+    display: none !important;
+}
+
+body.in-portal #paneLibrary .coach-taxonomy-level-box {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-bottom: 8px !important;
+}
+
+body.in-portal #paneAthletes .coach-clean-chip,
+body.in-portal #paneLibrary .lib-quick-btn,
+body.in-portal #paneLibrary .tax-l1-btn,
+body.in-portal #paneLibrary .tax-l2-btn,
+body.in-portal #paneLibrary .tax-l3-btn {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(18, 18, 20, 0.08) !important;
+    color: #575659 !important;
+    border-radius: 999px !important;
+    padding: 7px 14px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    min-height: 34px !important;
+    box-shadow: none !important;
+}
+
+body.in-portal #paneAthletes .coach-clean-chip.active,
+body.in-portal #paneLibrary .lib-quick-btn.active,
+body.in-portal #paneLibrary .tax-l1-btn.active,
+body.in-portal #paneLibrary .tax-l2-btn.active,
+body.in-portal #paneLibrary .tax-l3-btn.active {
+    background: #FAF7F2 !important;
+    border: 1px solid #E5CBA7 !important;
+    color: #705B3E !important;
+    font-weight: 700 !important;
+}
+
+/* G. Segmented Controls estilo Apple iOS */
+body.in-portal #coachHubView .coach-subview-switcher,
+body.in-portal #coachHubView .coach-vision-toggle-strip,
+body.in-portal #coachHubView .coach-lib-domain-switcher {
+    background: #EFECE6 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 3px !important;
+}
+
+body.in-portal #coachHubView .coach-subview-tab.active,
+body.in-portal #coachHubView .coach-vision-tab-btn.active,
+body.in-portal #coachHubView .coach-domain-switch-btn.active {
+    background: #FFFFFF !important;
+    color: #121214 !important;
+    border-radius: 999px !important;
+    box-shadow: 0 2px 6px rgba(18, 18, 20, 0.07) !important;
+    font-weight: 700 !important;
+}
