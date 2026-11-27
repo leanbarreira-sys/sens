@@ -9727,9 +9727,32 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
 
 function triggerCongratsCelebration(customTitle = null, customSubtitle = null) {
     const total = modalExerciseState.setsData ? modalExerciseState.setsData.length : 0;
-    const subtitle = customSubtitle || (total > 0 ? `${total} de ${total} Series Registradas • Racha SENS Activa` : 'Racha SENS Activa');
-    const title = customTitle || '¡EJERCICIO COMPLETADO!';
-    window.showSensCelebrationToast(title, subtitle);
+    const athId = (typeof getActiveAthleteId === 'function') ? getActiveAthleteId() : 'mock_vip';
+    const effectiveDate = AppState.selectedDate || new Date();
+    const dayRec = (typeof SensDailyStreakManager !== 'undefined' && typeof SensDailyStreakManager.getDayRecord === 'function')
+        ? SensDailyStreakManager.getDayRecord(athId, effectiveDate)
+        : null;
+
+    // La landing full-screen se reserva exclusivamente para cuando se gana alguna de las 3 rachas
+    if (dayRec && dayRec.workout && dayRec.workout.done) {
+        const title = customTitle || 'Entrenamiento completado';
+        const subtitle = customSubtitle || 'Completaste el 100% de la sesión de hoy. Racha de entreno activa.';
+        window.showSensCelebrationToast(title, subtitle);
+        return;
+    }
+
+    // Por ejercicio individual: notificación destacada (toast champagne + háptico), sin invadir la pantalla
+    const exName = modalExerciseState.exName || 'Ejercicio';
+    const compEx = dayRec?.workout?.completedExercises || 0;
+    const totEx = dayRec?.workout?.totalExercises || 0;
+    const progressPart = (totEx > 0) ? ` · ${compEx}/${totEx} del día` : '';
+    const setsPart = total > 0 ? ` (${total} ${total === 1 ? 'serie' : 'series'})` : '';
+    if (typeof SensGamification !== 'undefined' && typeof SensGamification.playHapticFeedback === 'function') {
+        SensGamification.playHapticFeedback();
+    }
+    if (typeof showSensToast === 'function') {
+        showSensToast(`✓ ${exName} completado${progressPart}${setsPart}`, 'champagne', 3800);
+    }
 }
 
 /**
@@ -10008,9 +10031,8 @@ function initMasterTimerListeners() {
                 masterTimerState.restEndAtMs = null;
                 persistMasterTimerState();
                 updateMasterTimerUI();
-                if (typeof triggerCongratsCelebration === 'function') triggerCongratsCelebration();
                 if (typeof syncAllStreakAndPillTelemetry === 'function') syncAllStreakAndPillTelemetry();
-                showSensToast('✓ ¡Todas las series completadas y guardadas!', 'champagne', 2600);
+                if (typeof triggerCongratsCelebration === 'function') triggerCongratsCelebration();
                 return;
             }
             showSensToast(`Serie ${nextSet.setNumber} guardada · Iniciando descanso`, 'champagne', 2200);
