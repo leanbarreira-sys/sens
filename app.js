@@ -18759,7 +18759,9 @@ function openCustomMealModalForSlot(slot) {
 
     document.body.classList.add('sens-modal-open');
     document.body.style.overflow = 'hidden';
-    modal.classList.add('active');
+    requestAnimationFrame(() => {
+        modal.classList.add('active');
+    });
 }
 
 window.openCustomMealModalForSlot = openCustomMealModalForSlot;

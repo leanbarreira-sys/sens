@@ -34349,15 +34349,22 @@ body.in-portal .sens-tracking-seg-pill,
 /* =============================================================================
    STICKY FOOTER EN BOTTOM SHEET DE COMIDA PERSONALIZADA (#userCustomMealModal)
    ============================================================================= */
-@keyframes sensCustomSheetIn {
-    0% { opacity: 0; transform: translate3d(0, 24px, 0); }
-    100% { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-
 #userCustomMealModal.sens-modal-sheet-wrap {
+    display: flex !important;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
     background: rgba(12, 12, 14, 0.56) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    transition: opacity 0.18s ease, visibility 0s linear 0.18s;
+}
+
+#userCustomMealModal.sens-modal-sheet-wrap.active {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.18s ease, visibility 0s linear 0s;
 }
 
 #userCustomMealModal .sens-custom-meal-sheet-box {
@@ -34370,9 +34377,15 @@ body.in-portal .sens-tracking-seg-pill,
     background: #FFFFFF !important;
     color: #121214 !important;
     border: none !important;
-    animation: sensCustomSheetIn 0.20s cubic-bezier(0.16, 1, 0.3, 1) both !important;
-    will-change: transform, opacity;
+    animation: none !important;
+    transform: translate3d(0, 28px, 0);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
     backface-visibility: hidden;
+}
+
+#userCustomMealModal.active .sens-custom-meal-sheet-box {
+    transform: translate3d(0, 0, 0);
 }
 
 .sens-custom-meal-sheet-header {
