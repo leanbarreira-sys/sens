@@ -28252,7 +28252,7 @@ body.in-portal #sensFloatingDock {
     box-sizing: border-box !important;
 }
 
-body.in-portal .sens-dock-item {
+body.in-portal #sensFloatingDock .sens-dock-item {
     background: transparent !important;
     color: #3F3F46 !important;
     border: none !important;
@@ -28274,14 +28274,14 @@ body.in-portal .sens-dock-item {
     box-sizing: border-box !important;
 }
 
-body.in-portal .sens-dock-item.active {
+body.in-portal #sensFloatingDock .sens-dock-item.active {
     background: rgba(18, 18, 20, 0.84) !important;
     color: #FFFFFF !important;
     font-weight: 700 !important;
     box-shadow: 0 3px 10px rgba(18, 18, 20, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
-body.in-portal .sens-dock-item svg {
+body.in-portal #sensFloatingDock .sens-dock-item svg {
     width: 16px !important;
     height: 16px !important;
     stroke: currentColor !important;
@@ -28290,11 +28290,11 @@ body.in-portal .sens-dock-item svg {
     flex-shrink: 0 !important;
 }
 
-body.in-portal .sens-dock-item.active svg {
+body.in-portal #sensFloatingDock .sens-dock-item.active svg {
     stroke: #FFFFFF !important;
 }
 
-body.in-portal .sens-dock-item span {
+body.in-portal #sensFloatingDock .sens-dock-item span {
     font-size: 9px !important;
     font-weight: 600 !important;
     letter-spacing: 0 !important;

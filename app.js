@@ -22276,8 +22276,15 @@ function renderDynamicWeekStrip() {
             if (!sRec) {
                 sRec = SensDailyStreakManager.evaluateDay(dayDateStart, athId).current;
             }
-            if (sRec && sRec.isQualified) {
-                streakBadge = `<span class="sens-day-streak-flame is-qualified" title="Racha del día cumplida"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg></span>`;
+            const hasScheduledWorkout = Boolean(hasRoutine && hasExercises);
+            const isFullStreak = Boolean(
+                sRec &&
+                sRec.nutrition && sRec.nutrition.done &&
+                sRec.cardio && sRec.cardio.done &&
+                (!hasScheduledWorkout || (sRec.workout && sRec.workout.done))
+            );
+            if (isFullStreak) {
+                streakBadge = `<span class="sens-day-streak-flame is-qualified" title="Todos los objetivos del día cumplidos"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg></span>`;
             } else if (isPast) {
                 streakBadge = `<span class="sens-day-streak-flame is-missed" title="Racha no alcanzada"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>`;
             }
