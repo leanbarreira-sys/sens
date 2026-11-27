@@ -18470,6 +18470,10 @@ function renderNutriDaysNav() {
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(dayDate);
             }
+            const detailWrap = document.getElementById('sensStreakDetailWrap');
+            if (detailWrap && detailWrap.style.display !== 'none' && typeof window.showStreakMissedDetail === 'function') {
+                window.showStreakMissedDetail(formatDateKey(dayDate));
+            }
         });
     });
 }
@@ -22218,6 +22222,7 @@ function renderDynamicWeekStrip() {
     const userCreatedRaw = AppState.profile?.created_at || (AppState.user && AppState.user.created_at) || null;
     const userCreatedDate = userCreatedRaw ? new Date(userCreatedRaw) : new Date();
     userCreatedDate.setHours(0, 0, 0, 0);
+    const streakRecords = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.getAllRecords(athId) : {};
 
     for (let i = 0; i < 7; i++) {
         const dayDate = new Date(AppState.activeWeekStart);
@@ -22265,10 +22270,24 @@ function renderDynamicWeekStrip() {
             statusBadge = `<span class="sens-day-badge rest" title="Sin asignar / Descanso">–</span>`;
         }
 
+        let streakBadge = '';
+        if (!isBeforeRegistration && dayDateStart <= todayStart && typeof SensDailyStreakManager !== 'undefined') {
+            let sRec = streakRecords[dateKey];
+            if (!sRec) {
+                sRec = SensDailyStreakManager.evaluateDay(dayDateStart, athId).current;
+            }
+            if (sRec && sRec.isQualified) {
+                streakBadge = `<span class="sens-day-streak-flame is-qualified" title="Racha del día cumplida"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg></span>`;
+            } else if (isPast) {
+                streakBadge = `<span class="sens-day-streak-flame is-missed" title="Racha no alcanzada"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>`;
+            }
+        }
+
         const heroNum = dayDate.getDate();
 
         html += `
             <button type="button" class="sens-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
+                ${streakBadge}
                 <span class="sens-day-name">${dayNames[i]}</span>
                 <span class="sens-day-hero-num">${heroNum}</span>
                 <div class="sens-day-modality-indicator">${statusBadge}</div>
@@ -22299,6 +22318,10 @@ function renderDynamicWeekStrip() {
             if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(dayDate);
+            }
+            const detailWrap = document.getElementById('sensStreakDetailWrap');
+            if (detailWrap && detailWrap.style.display !== 'none' && typeof window.showStreakMissedDetail === 'function') {
+                window.showStreakMissedDetail(formatDateKey(dayDate));
             }
         });
     });
@@ -22419,6 +22442,7 @@ function renderWorkoutDaysNav() {
     const userCreatedRaw = AppState.profile?.created_at || (AppState.user && AppState.user.created_at) || null;
     const userCreatedDate = userCreatedRaw ? new Date(userCreatedRaw) : new Date();
     userCreatedDate.setHours(0, 0, 0, 0);
+    const streakRecords = (typeof SensDailyStreakManager !== 'undefined') ? SensDailyStreakManager.getAllRecords(athId) : {};
 
     for (let i = 0; i < 7; i++) {
         const dayDate = new Date(AppState.activeWeekStart);
@@ -22493,6 +22517,10 @@ function renderWorkoutDaysNav() {
             if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(dayDate);
             if (typeof syncAllStreakAndPillTelemetry === 'function') {
                 syncAllStreakAndPillTelemetry(dayDate);
+            }
+            const detailWrap = document.getElementById('sensStreakDetailWrap');
+            if (detailWrap && detailWrap.style.display !== 'none' && typeof window.showStreakMissedDetail === 'function') {
+                window.showStreakMissedDetail(formatDateKey(dayDate));
             }
         });
     });

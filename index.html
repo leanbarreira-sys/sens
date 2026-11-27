@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=110.0">
+    <link rel="stylesheet" href="style.css?v=111.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '225.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '225.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '226.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '226.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -2772,22 +2772,14 @@
                         <span id="sensStreakChevron" style="display: inline-block; transition: transform 0.2s ease;">▾</span>
                     </div>
 
-                    <!-- Detalle Expandible de Racha (Semana en curso + 3 Pilares) -->
+                    <!-- Detalle Expandible de Racha (3 Pilares + Detalle Contextual del Día) -->
                     <div id="sensStreakDetailWrap" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(18, 18, 20, 0.07);">
                     <!-- Fila 2: Subtítulo con ancho completo (Zero Overlap) -->
                     <div class="sens-streak-sub-row">
                         <div class="sens-streak-sub" id="sensStreakSubText">Seguimiento diario de tus 3 pilares biológicos (Entrenamiento, Nutrición y Pasos/Cardio).</div>
                     </div>
 
-                    <!-- Fila 3: Tira Semanal de 7 Días Independiente y Distribuida (Lun - Dom) -->
-                    <div class="sens-streak-weekly-row">
-                        <span class="sens-streak-weekly-label">Semana en Curso:</span>
-                        <div class="sens-streak-dots-wrap" id="sensStreakDotsWrap">
-                            <!-- Inyectado dinámicamente: 7 micro-anillos Lun-Dom con ✓ y ✕ -->
-                        </div>
-                    </div>
-
-                    <!-- Fila 4: Detalle Desplegable de Racha no alcanzada / Motivos (Item 2) -->
+                    <!-- Fila 3: Detalle Desplegable de Racha del día seleccionado -->
                     <div class="sens-streak-missed-detail-box" id="sensStreakMissedDetailBox" style="display: none;">
                         <div class="sens-streak-missed-header">
                             <span class="sens-missed-title" id="sensStreakMissedDateTitle">Racha no alcanzada • Detalle
@@ -9076,7 +9068,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=151.0"></script>
+    <script defer src="app.js?v=152.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
