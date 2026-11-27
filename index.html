@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=98.0">
+    <link rel="stylesheet" href="style.css?v=99.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '209.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '209.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '210.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '210.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -8554,11 +8554,24 @@
         <div class="sens-congrats-card" onclick="event.stopPropagation();">
             <div class="sens-congrats-level-pill" id="sensCongratsLevelPill">Nivel 1 · Inicio del Hábito</div>
 
-            <!-- Anillo SVG de Progreso Concéntrico -->
+            <!-- Anillo SVG de Progreso Concéntrico con Halo Expansivo -->
             <div class="sens-celeb-ring-box">
-                <svg class="sens-celeb-ring-svg" viewBox="0 0 112 112">
-                    <circle class="sens-celeb-ring-track" cx="56" cy="56" r="48" />
-                    <circle class="sens-celeb-ring-fill" id="sensCongratsRingFill" cx="56" cy="56" r="48" />
+                <div class="sens-celeb-halo"></div>
+                <svg class="sens-celeb-ring-svg" viewBox="0 0 120 120">
+                    <defs>
+                        <linearGradient id="sensChampagneRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#F7E8D0" />
+                            <stop offset="55%" stop-color="#E5CBA7" />
+                            <stop offset="100%" stop-color="#B8925A" />
+                        </linearGradient>
+                        <linearGradient id="sensPerfectRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#6EE7B7" />
+                            <stop offset="55%" stop-color="#34D399" />
+                            <stop offset="100%" stop-color="#10B981" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="sens-celeb-ring-track" cx="60" cy="60" r="50" />
+                    <circle class="sens-celeb-ring-fill" id="sensCongratsRingFill" cx="60" cy="60" r="50" />
                 </svg>
                 <div class="sens-celeb-ring-center">
                     <span class="sens-bump-number" id="sensBumpNumber">1</span>
@@ -8569,11 +8582,11 @@
             <h3 class="sens-congrats-title" id="sensCongratsTitle">Objetivo cumplido</h3>
             <p class="sens-congrats-subtitle" id="sensCongratsSubtitle">Racha diaria activa</p>
 
-            <!-- Mini Strip Semanal de Gamification (L M M J V S D) -->
-            <div class="sens-celeb-week-strip" id="sensCongratsWeekStrip"></div>
-
-            <!-- Estado de los 3 Pilares de Hoy -->
+            <!-- Barras Minimalistas de los 3 Pilares de Hoy -->
             <div class="sens-celeb-pillars-row" id="sensCongratsPillarsRow"></div>
+
+            <!-- Mini Strip Semanal Ultra-Limpio (L M M J V S D) -->
+            <div class="sens-celeb-week-strip" id="sensCongratsWeekStrip"></div>
 
             <p class="sens-celeb-milestone-text" id="sensCongratsMilestoneText">Faltan 2 días para tu hito de 3 días</p>
 
@@ -9058,7 +9071,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=138.0"></script>
+    <script defer src="app.js?v=139.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

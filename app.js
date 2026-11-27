@@ -9399,23 +9399,96 @@ const SensConfetti = {
     },
 
     createParticle(x, y, vx, vy, colors) {
-        const types = ['ribbon', 'ribbon', 'star', 'circle'];
+        const types = ['ribbon', 'circle', 'circle', 'circle'];
         return {
             x,
             y,
             vx,
             vy,
-            size: 6 + Math.random() * 9,
+            size: 3.5 + Math.random() * 5.5,
             color: colors[Math.floor(Math.random() * colors.length)],
             rotation: Math.random() * 360,
-            rotationSpeed: (Math.random() - 0.5) * 12,
+            rotationSpeed: (Math.random() - 0.5) * 10,
             wobble: Math.random() * 10,
-            wobbleSpeed: 0.08 + Math.random() * 0.12,
-            opacity: 1,
-            drag: 0.982,
-            gravity: 0.38,
+            wobbleSpeed: 0.06 + Math.random() * 0.1,
+            opacity: 0.95,
+            drag: 0.968,
+            gravity: 0.16,
             type: types[Math.floor(Math.random() * types.length)]
         };
+    },
+
+    burstQuietLuxury(particleCount = 68) {
+        this.init();
+        if (!this.canvas || !this.ctx) return;
+
+        const w = (this.canvas.width = window.innerWidth);
+        const h = (this.canvas.height = window.innerHeight);
+        this.canvas.style.display = 'block';
+
+        const colors = ['#F7E8D0', '#E5CBA7', '#D4B07A', '#FFFFFF', '#C8A87A'];
+        this.particles = [];
+
+        const cx = w * 0.5;
+        const cy = h * 0.36;
+        for (let i = 0; i < particleCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 3.5 + Math.random() * 11.5;
+            this.particles.push(this.createParticle(cx, cy, Math.cos(angle) * speed, Math.sin(angle) * speed - 2.5, colors));
+        }
+
+        if (this.animationId) cancelAnimationFrame(this.animationId);
+        const startTime = Date.now();
+
+        const render = () => {
+            const elapsed = Date.now() - startTime;
+            this.ctx.clearRect(0, 0, w, h);
+
+            let activeCount = 0;
+            this.particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vx *= p.drag;
+                p.vy *= p.drag;
+                p.vy += p.gravity;
+                p.rotation += p.rotationSpeed;
+                p.wobble += p.wobbleSpeed;
+                p.x += Math.sin(p.wobble) * 0.55;
+
+                if (elapsed > 900) {
+                    p.opacity = Math.max(0, p.opacity - 0.018);
+                }
+
+                if (p.opacity > 0 && p.y < h + 40) {
+                    activeCount++;
+                    this.ctx.save();
+                    this.ctx.globalAlpha = p.opacity;
+                    this.ctx.translate(p.x, p.y);
+                    this.ctx.rotate((p.rotation * Math.PI) / 180);
+                    this.ctx.fillStyle = p.color;
+
+                    if (p.type === 'circle') {
+                        this.ctx.beginPath();
+                        this.ctx.arc(0, 0, p.size * 0.42, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    } else {
+                        const tilt = Math.cos(p.wobble);
+                        this.ctx.fillRect(-p.size * 0.65, -p.size * 0.22 * tilt, p.size * 1.3, p.size * 0.45 * Math.abs(tilt) + 0.8);
+                    }
+                    this.ctx.restore();
+                }
+            });
+
+            if (activeCount > 0 && elapsed < 2600) {
+                this.animationId = requestAnimationFrame(render);
+            } else {
+                this.ctx.clearRect(0, 0, w, h);
+                this.canvas.style.display = 'none';
+                this.animationId = null;
+            }
+        };
+
+        this.animationId = requestAnimationFrame(render);
     }
 };
 
@@ -9439,30 +9512,70 @@ const SensGamification = {
             if (!ctx) return;
             const now = ctx.currentTime;
 
+            // Master warm filter + subtle spatial echo tail (Apple / Oura organic chime)
+            const masterGain = ctx.createGain();
+            masterGain.gain.setValueAtTime(0.85, now);
+            masterGain.connect(ctx.destination);
+
             const filter = ctx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(1600, now);
-            filter.connect(ctx.destination);
+            filter.frequency.setValueAtTime(2800, now);
+            filter.frequency.exponentialRampToValueAtTime(950, now + 1.4);
+            filter.connect(masterGain);
 
-            // Chime cálido minimalista (intervalo de quinta justa C5 -> G5, estilo Apple/Oura)
+            const delay = ctx.createDelay(0.5);
+            delay.delayTime.setValueAtTime(0.14, now);
+            const feedback = ctx.createGain();
+            feedback.gain.setValueAtTime(0.22, now);
+            const wetGain = ctx.createGain();
+            wetGain.gain.setValueAtTime(0.24, now);
+            filter.connect(delay);
+            delay.connect(feedback);
+            feedback.connect(delay);
+            delay.connect(wetGain);
+            wetGain.connect(masterGain);
+
+            // Arpegio orgánico Fmaj9 (F4 -> A4 -> C5 -> E5 -> G5) + calidez sub F3
             const notes = [
-                { f: 523.25, start: 0.00, dur: 0.45, gain: 0.10 }, // C5
-                { f: 783.99, start: 0.11, dur: 0.65, gain: 0.11 }  // G5
+                { f: 174.61, start: 0.00, dur: 1.25, gain: 0.05, type: 'sine' },     // F3 calidez
+                { f: 349.23, start: 0.00, dur: 0.95, gain: 0.065, type: 'triangle' }, // F4
+                { f: 440.00, start: 0.055, dur: 1.00, gain: 0.06, type: 'triangle' }, // A4
+                { f: 523.25, start: 0.11, dur: 1.15, gain: 0.065, type: 'triangle' }, // C5
+                { f: 659.25, start: 0.165, dur: 1.30, gain: 0.055, type: 'sine' },    // E5
+                { f: 783.99, start: 0.22, dur: 1.45, gain: 0.05, type: 'sine' }       // G5 aire
             ];
 
             notes.forEach(note => {
                 const t = now + note.start;
                 const osc = ctx.createOscillator();
+                const oscOct = ctx.createOscillator();
                 const gain = ctx.createGain();
-                osc.type = 'sine';
+                const octGain = ctx.createGain();
+
+                osc.type = note.type;
                 osc.frequency.setValueAtTime(note.f, t);
+
+                oscOct.type = 'sine';
+                oscOct.frequency.setValueAtTime(note.f * 2, t);
+                oscOct.detune.setValueAtTime(4, t);
+
                 gain.gain.setValueAtTime(0.0001, t);
-                gain.gain.linearRampToValueAtTime(note.gain, t + 0.015);
+                gain.gain.linearRampToValueAtTime(note.gain, t + 0.018);
                 gain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur);
+
+                octGain.gain.setValueAtTime(0.0001, t);
+                octGain.gain.linearRampToValueAtTime(note.gain * 0.18, t + 0.015);
+                octGain.gain.exponentialRampToValueAtTime(0.0001, t + note.dur * 0.55);
+
                 osc.connect(gain);
+                oscOct.connect(octGain);
                 gain.connect(filter);
+                octGain.connect(filter);
+
                 osc.start(t);
-                osc.stop(t + note.dur + 0.04);
+                oscOct.start(t);
+                osc.stop(t + note.dur + 0.05);
+                oscOct.stop(t + note.dur + 0.05);
             });
         } catch (e) {}
     },
@@ -9514,25 +9627,30 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
 
     if (overlay) {
         const cardEl = overlay.querySelector('.sens-congrats-card');
-        if (cardEl) cardEl.classList.toggle('is-perfect-day', isPerfectDay);
+        if (cardEl) {
+            cardEl.classList.toggle('is-perfect-day', isPerfectDay);
+            cardEl.style.animation = 'none';
+            void cardEl.offsetWidth;
+            cardEl.style.animation = '';
+        }
     }
 
     if (titleEl) titleEl.textContent = isPerfectDay ? 'Día perfecto completado' : (title || 'Objetivo cumplido');
     if (subtitleEl) subtitleEl.textContent = isPerfectDay ? 'Entreno, nutrición y movimiento al 100% hoy' : (subtitle || 'Racha diaria activa');
-    if (levelPillEl) levelPillEl.textContent = isPerfectDay ? '3 DE 3 PILARES · MÁXIMA RACHA' : `Nivel ${levelInfo.level} · ${levelInfo.title}`;
+    if (levelPillEl) levelPillEl.textContent = isPerfectDay ? 'DÍA PERFECTO · 3 DE 3 PILARES' : `RACHA ACTIVA · NIVEL ${levelInfo.level}`;
     if (bumpNumEl) bumpNumEl.textContent = streakDays;
     if (bumpLabelEl) bumpLabelEl.textContent = streakDays === 1 ? 'DÍA EN RACHA' : 'DÍAS EN RACHA';
 
     // Anillo SVG animado proporcional a los pilares completados hoy (1/3, 2/3, 3/3)
     if (ringFillEl) {
-        const circumference = 2 * Math.PI * 48; // r=48 -> ~301.59
+        const circumference = 2 * Math.PI * 50; // r=50 -> ~314.16
         const ratio = Math.max(0.33, Math.min(1, (dayRec.completedCount || 1) / 3));
-        ringFillEl.style.stroke = isPerfectDay ? '#22C55E' : '#E5CBA7';
+        ringFillEl.style.stroke = isPerfectDay ? 'url(#sensPerfectRingGrad)' : 'url(#sensChampagneRingGrad)';
         ringFillEl.style.strokeDasharray = `${circumference}`;
         ringFillEl.style.strokeDashoffset = `${circumference}`;
         setTimeout(() => {
             ringFillEl.style.strokeDashoffset = `${circumference * (1 - ratio)}`;
-        }, 40);
+        }, 60);
     }
 
     // Mini strip semanal de 7 días (L M M J V S D) para reforzar racha
@@ -9550,13 +9668,13 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
             return `
                 <div class="sens-celeb-day ${isDone ? 'is-done' : ''} ${isToday ? 'is-today' : ''}">
                     <span class="sens-celeb-day-lbl">${lbl}</span>
-                    <span class="sens-celeb-day-dot">${isDone ? '✓' : ''}</span>
+                    <span class="sens-celeb-day-dot"></span>
                 </div>
             `;
         }).join('');
     }
 
-    // Pilares de hoy (Entreno / Nutrición / Movimiento)
+    // Barras minimalistas de los 3 pilares de hoy (Entreno / Nutrición / Movimiento)
     if (pillarsRowEl) {
         const pList = [
             { label: 'Entreno', done: Boolean(dayRec.workout?.done) },
@@ -9564,10 +9682,10 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
             { label: 'Movimiento', done: Boolean(dayRec.cardio?.done) }
         ];
         pillarsRowEl.innerHTML = pList.map(p => `
-            <span class="sens-celeb-pillar ${p.done ? 'is-done' : ''}">
-                <span class="sens-celeb-pillar-dot"></span>
-                <span>${p.label}</span>
-            </span>
+            <div class="sens-celeb-pillar-seg ${p.done ? 'is-done' : ''}">
+                <div class="sens-celeb-pillar-bar"></div>
+                <span class="sens-celeb-pillar-name">${p.label}</span>
+            </div>
         `).join('');
     }
 
@@ -9581,6 +9699,9 @@ window.showSensCelebrationToast = function(title, subtitle, quote) {
 
     SensGamification.playCelebrationFanfare();
     SensGamification.playHapticFeedback();
+    if (typeof SensConfetti !== 'undefined' && typeof SensConfetti.burstQuietLuxury === 'function') {
+        SensConfetti.burstQuietLuxury(68);
+    }
 
     if (overlay) {
         overlay.style.display = 'flex';
