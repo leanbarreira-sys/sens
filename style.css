@@ -38634,19 +38634,21 @@ body.in-portal .sens-week-day-pill.active .sens-day-badge.missed {
     -webkit-text-fill-color: #FFFFFF !important;
 }
 
-body.in-portal .sens-week-day-pill {
-    position: relative !important;
+body.in-portal .sens-day-modality-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3.5px;
+    min-height: 16px;
 }
 
 body.in-portal .sens-day-streak-flame {
-    position: absolute;
-    top: 4px;
-    right: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
     pointer-events: none;
+    flex-shrink: 0;
 }
 
 body.in-portal .sens-day-streak-flame.is-qualified {
@@ -38665,6 +38667,23 @@ body.in-portal .sens-day-streak-flame.is-missed {
 body.in-portal .sens-week-day-pill.active .sens-day-streak-flame.is-missed {
     color: #F87171;
     opacity: 0.9;
+}
+
+body.in-portal #sensStreakDetailWrap .sens-streak-sub-row {
+    margin: 0 0 10px 0 !important;
+    padding: 0 !important;
+}
+
+body.in-portal #sensStreakDetailWrap .sens-streak-sub {
+    margin: 0 !important;
+    line-height: 1.4 !important;
+}
+
+body.in-portal #sensStreakDetailWrap .sens-pillars-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px !important;
+    margin: 0 !important;
 }
 
 /* Quiet Luxury Redesign: Detalle de Entrenamiento (#sensExerciseModalSheet) */

@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=111.0">
+    <link rel="stylesheet" href="style.css?v=112.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '226.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '226.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '227.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '227.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -2766,14 +2766,24 @@
                         </div>
                     </div>
 
+                    <!-- Barra de Progreso Diaria (1 / 2 / 3 hábitos) -->
+                    <div class="sens-nutri-progress-track-wrap" style="margin-top: 12px; margin-bottom: 0;">
+                        <div class="sens-nutri-progress-track">
+                            <div class="sens-nutri-progress-fill" id="sensStreakProgressFill" style="width: 0%; background: #D4D4D8 !important;"></div>
+                        </div>
+                        <div class="sens-nutri-progress-labels" style="justify-content: center;">
+                            <span id="sensStreakProgressLabel">0 de 3 hábitos del día</span>
+                        </div>
+                    </div>
+
                     <!-- CTA Inferior Limpio (Thumb-Friendly) -->
-                    <div role="button" tabindex="0" onclick="var d=document.getElementById('sensStreakDetailWrap'); var c=document.getElementById('sensStreakChevron'); var l=document.getElementById('sensStreakCtaLabel'); if(d){ var open=d.style.display!=='none'; d.style.display=open?'none':'block'; if(c) c.style.transform=open?'rotate(0deg)':'rotate(180deg)'; if(l) l.textContent=open?'Ver detalle':'Ocultar'; }" style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.06); display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; font-size: 11.5px; font-weight: 700; color: #705B3E;">
+                    <div role="button" tabindex="0" onclick="var d=document.getElementById('sensStreakDetailWrap'); var c=document.getElementById('sensStreakChevron'); var l=document.getElementById('sensStreakCtaLabel'); if(d){ var open=d.style.display!=='none'; d.style.display=open?'none':'block'; if(c) c.style.transform=open?'rotate(0deg)':'rotate(180deg)'; if(l) l.textContent=open?'Ver detalle':'Ocultar'; }" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(18, 18, 20, 0.06); display: flex; align-items: center; justify-content: center; gap: 5px; cursor: pointer; font-size: 11.5px; font-weight: 700; color: #705B3E;">
                         <span id="sensStreakCtaLabel">Ver detalle</span>
                         <span id="sensStreakChevron" style="display: inline-block; transition: transform 0.2s ease;">▾</span>
                     </div>
 
                     <!-- Detalle Expandible de Racha (3 Pilares + Detalle Contextual del Día) -->
-                    <div id="sensStreakDetailWrap" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(18, 18, 20, 0.07);">
+                    <div id="sensStreakDetailWrap" style="display: none; margin-top: 10px; padding-top: 0; border-top: none;">
                     <!-- Fila 2: Subtítulo con ancho completo (Zero Overlap) -->
                     <div class="sens-streak-sub-row">
                         <div class="sens-streak-sub" id="sensStreakSubText">Seguimiento diario de tus 3 pilares biológicos (Entrenamiento, Nutrición y Pasos/Cardio).</div>
@@ -9068,7 +9078,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=152.0"></script>
+    <script defer src="app.js?v=153.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

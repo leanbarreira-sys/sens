@@ -22287,10 +22287,9 @@ function renderDynamicWeekStrip() {
 
         html += `
             <button type="button" class="sens-week-day-pill ${isSelected ? 'active' : ''} ${isToday ? 'is-today' : ''}" data-day-key="${dayKey}" data-date="${formatDateKey(dayDate)}">
-                ${streakBadge}
                 <span class="sens-day-name">${dayNames[i]}</span>
                 <span class="sens-day-hero-num">${heroNum}</span>
-                <div class="sens-day-modality-indicator">${statusBadge}</div>
+                <div class="sens-day-modality-indicator">${statusBadge}${streakBadge}</div>
             </button>
         `;
     }
@@ -24397,9 +24396,21 @@ function updateSensStreakCard(targetDate = null) {
         metricAct.textContent = dayRec.cardio.metric;
     }
 
-    // Ratio
+    // Ratio & Barra de progreso 0/1/2/3
     const ratioEl = document.getElementById('sensPillarsRatio');
     if (ratioEl) ratioEl.textContent = `${dayRec.completedCount} de 3 completados`;
+
+    const streakFill = document.getElementById('sensStreakProgressFill');
+    const streakProgLabel = document.getElementById('sensStreakProgressLabel');
+    if (streakFill) {
+        const pct = Math.min(100, Math.max(0, Math.round((dayRec.completedCount / 3) * 100)));
+        const barColor = dayRec.completedCount >= 3 ? '#16A34A' : (dayRec.completedCount >= 2 ? '#22C55E' : (dayRec.completedCount === 1 ? '#B08D57' : '#D4D4D8'));
+        streakFill.style.width = `${pct}%`;
+        streakFill.style.setProperty('background', barColor, 'important');
+    }
+    if (streakProgLabel) {
+        streakProgLabel.textContent = `${dayRec.completedCount} de 3 hábitos del día`;
+    }
 
     // Racha Hero, Nivel & Status Pill
     const streakNum = document.getElementById('sensStreakHeroNum');
