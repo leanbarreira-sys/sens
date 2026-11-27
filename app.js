@@ -4761,6 +4761,14 @@ function switchPortalView(viewId) {
         }
     });
 
+    if (viewId === 'dashView') {
+        if (window.scrollY > 0) window.scrollTo(0, 0);
+        if (typeof refreshAthletePrescribedWorkouts === 'function') refreshAthletePrescribedWorkouts();
+        if (typeof renderDashboardData === 'function') renderDashboardData();
+    } else if (window.scrollY > 80) {
+        window.scrollTo(0, 0);
+    }
+
     views.forEach(v => {
         if (v.id === viewId) {
             v.classList.add('active');
@@ -4828,8 +4836,6 @@ function switchPortalView(viewId) {
         }
     }
     if (viewId === 'dashView') {
-        if (typeof refreshAthletePrescribedWorkouts === 'function') refreshAthletePrescribedWorkouts();
-        if (typeof renderDashboardData === 'function') renderDashboardData();
         if (typeof syncAllStreakAndPillTelemetry === 'function') {
             syncAllStreakAndPillTelemetry(AppState.selectedDate || new Date());
         } else {
