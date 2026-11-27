@@ -4800,6 +4800,16 @@ function switchPortalView(viewId) {
         return;
     }
 
+    if (viewId !== 'nutritionView' && window._sensNutriEditState && window._sensNutriEditState.active) {
+        window._sensNutriEditState.active = false;
+        window._sensNutriEditState.selectedKeys.clear();
+        window._sensNutriEditState.showMoveSlots = false;
+        const staleEditBar = document.getElementById('sensNutriEditBar');
+        if (staleEditBar) staleEditBar.remove();
+        const fl = document.getElementById('memberNutriFoodList');
+        if (fl) fl.classList.remove('sens-nutri-edit-mode');
+    }
+
     if (viewId !== 'dashView' && typeof window.stopDashNutriCarousel === 'function') {
         window.stopDashNutriCarousel();
     }
@@ -19108,9 +19118,15 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
 
         // Listener: Card de alimento (Long-press -> modo edición jiggle/multi-select, Tap normal -> Inspector)
         if (!window._sensNutriEditState) {
-            window._sensNutriEditState = { active: false, selectedKeys: new Set(), showMoveSlots: false };
+            window._sensNutriEditState = { active: false, selectedKeys: new Set(), showMoveSlots: false, dateIso: null };
         }
         const editState = window._sensNutriEditState;
+        if (editState.dateIso && editState.dateIso !== dateIso) {
+            editState.active = false;
+            editState.selectedKeys.clear();
+            editState.showMoveSlots = false;
+        }
+        editState.dateIso = dateIso;
 
         const exitNutriEditMode = () => {
             editState.active = false;
@@ -19128,6 +19144,17 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
                 if (bar) bar.remove();
                 return;
             }
+            // Sincronizar siempre selectedKeys con las tarjetas visibles en el DOM para 100% paridad visual
+            const visibleCards = Array.from(foodListEl.querySelectorAll('.sens-nutri-food-card'));
+            const visibleKeySet = new Set(visibleCards.map(c => c.getAttribute('data-food-id')).filter(Boolean));
+            Array.from(editState.selectedKeys).forEach(k => {
+                if (!visibleKeySet.has(k)) editState.selectedKeys.delete(k);
+            });
+            visibleCards.forEach(c => {
+                const k = c.getAttribute('data-food-id');
+                c.classList.toggle('is-edit-selected', Boolean(k && editState.selectedKeys.has(k)));
+            });
+
             if (!bar) {
                 bar = document.createElement('div');
                 bar.id = 'sensNutriEditBar';
