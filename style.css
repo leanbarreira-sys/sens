@@ -24483,8 +24483,7 @@ body.sens-power-save *::after {
 
 /* 6. Reducción de carga de sombreado gaussiano (backdrop-filter) en pantallas móviles de alta densidad (3x Retina) */
 @media (max-width: 768px) {
-    .glass-panel,
-    .portal-topbar {
+    .glass-panel {
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
     }
@@ -27694,15 +27693,15 @@ body.in-portal .sens-empty-state-desc {
    SENS QUIET VITALITY LIGHT LUXURY — MOBILE-FIRST PARITY (IMAGE 1 EXACT FIDELITY)
    ============================================================================= */
 
-/* 1. Barra Superior / Topbar (Blanco Puro & Frosted Glass) */
+/* 1. Barra Superior / Topbar (iOS 26 Liquid Glass) */
 body.in-portal .portal-topbar,
 .portal-topbar {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border-bottom: 1px solid rgba(18, 18, 20, 0.06) !important;
+    background: rgba(255, 255, 255, 0.68) !important;
+    backdrop-filter: blur(24px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+    border-bottom: 1px solid rgba(18, 18, 20, 0.05) !important;
     color: #121214 !important;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.03) !important;
+    box-shadow: 0 2px 12px rgba(18, 18, 20, 0.04) !important;
 }
 
 body.in-portal .portal-topbar .brand-logo-img-portal,
@@ -36183,6 +36182,7 @@ body.in-portal #nutriCalendarStickyWrapper,
 body.in-portal #sensCalendarStickyWrapper.is-stuck,
 body.in-portal #workoutCalendarStickyWrapper.is-stuck,
 body.in-portal #nutriCalendarStickyWrapper.is-stuck {
+    top: 68px !important;
     background: rgba(255, 255, 255, 0.56) !important;
     backdrop-filter: blur(28px) saturate(190%) !important;
     -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
