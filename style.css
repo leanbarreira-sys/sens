@@ -34529,7 +34529,7 @@ body.in-portal .sens-tracking-seg-pill,
    STICKY FOOTER EN BOTTOM SHEET DE COMIDA PERSONALIZADA (#userCustomMealModal)
    ============================================================================= */
 #userCustomMealModal.sens-modal-sheet-wrap {
-    display: flex !important;
+    display: none !important;
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
@@ -34540,9 +34540,10 @@ body.in-portal .sens-tracking-seg-pill,
 }
 
 #userCustomMealModal.sens-modal-sheet-wrap.active {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
     transition: opacity 0.18s ease, visibility 0s linear 0s;
 }
 
@@ -34882,11 +34883,24 @@ body.in-portal .sens-tracking-seg-pill,
 
 .sens-custom-meal-sheet-footer {
     flex-shrink: 0 !important;
-    padding: 12px 20px max(18px, calc(env(safe-area-inset-bottom, 0px) + 12px)) !important;
+    padding: 12px 20px max(28px, calc(env(safe-area-inset-bottom, 0px) + 20px)) !important;
     background: #FFFFFF !important;
     border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
     box-shadow: 0 -8px 24px rgba(18, 18, 20, 0.06) !important;
-    z-index: 5 !important;
+    z-index: 100 !important;
+    position: relative !important;
+    pointer-events: auto !important;
+}
+
+#btnSaveCustomMealToDay {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 101 !important;
 }
 
 /* =============================================================================

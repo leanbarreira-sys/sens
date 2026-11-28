@@ -18881,6 +18881,8 @@ function openCustomMealModalForSlot(slot) {
 
     document.body.classList.add('sens-modal-open');
     document.body.style.overflow = 'hidden';
+    modal.style.removeProperty('display');
+    modal.style.display = 'flex';
     modal.style.visibility = '';
     modal.style.opacity = '';
     modal.style.pointerEvents = '';
@@ -20188,6 +20190,14 @@ function initUserCustomMealModal(athId) {
         });
     }
 
+    if (saveBtn) {
+        saveBtn.onclick = function (e) {
+            if (typeof window.saveCustomMealToDay === 'function') {
+                return window.saveCustomMealToDay(e);
+            }
+        };
+    }
+
     if (modal._hasCustomLogicBound) {
         window.renderCustomSearchResults = window.renderCustomSearchResults || renderSearchResults;
         window.renderCustomTray = window.renderCustomTray || renderCustomTray;
@@ -20197,12 +20207,14 @@ function initUserCustomMealModal(athId) {
 
     const closeModal = () => {
         modal.classList.remove('active');
+        modal.style.setProperty('display', 'none', 'important');
         modal.style.visibility = 'hidden';
         modal.style.opacity = '0';
         modal.style.pointerEvents = 'none';
         document.body.style.overflow = '';
         document.body.classList.remove('sens-modal-open');
         userCustomTrayItems = [];
+        window.userCustomTrayItems = [];
         if (tray) tray.style.display = 'none';
         if (trayList) trayList.innerHTML = '';
         if (trayTotalKcal) trayTotalKcal.textContent = '0 kcal';
@@ -20523,209 +20535,253 @@ function initUserCustomMealModal(athId) {
 
     // Botón Guardar Comida en el Día
     if (saveBtn) {
-        saveBtn.addEventListener('click', (e) => {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
+        saveBtn.onclick = function (e) {
+            if (typeof window.saveCustomMealToDay === 'function') {
+                return window.saveCustomMealToDay(e);
             }
-            if (saveBtn._isSaving) return;
-            saveBtn._isSaving = true;
-
-            try {
-                // 1. Resolver fecha de forma robusta y a prueba de cualquier formato
-                let rawDate = AppState.nutriSelectedDate || AppState.selectedDate || new Date();
-                let sDate = (rawDate instanceof Date && !isNaN(rawDate.getTime())) ? rawDate : new Date(rawDate);
-                if (isNaN(sDate.getTime())) sDate = new Date();
-                AppState.nutriSelectedDate = sDate;
-
-                // 2. Resolver atleta activo dinámicamente
-                const activeAthId = (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || athId || 'mock_vip';
-                const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
-                const customStorageKey = `sens_user_logged_meals_${activeAthId}_${dateIso}`;
-
-                let userCustomMeals = [];
-                try {
-                    userCustomMeals = JSON.parse(localStorage.getItem(customStorageKey) || '[]');
-                    if (!Array.isArray(userCustomMeals)) userCustomMeals = [];
-                } catch (e) {
-                    userCustomMeals = [];
-                }
-
-                const isManualActive = paneManual && paneManual.style.display === 'block';
-
-                if (isManualActive) {
-                    const nameInp = document.getElementById('manualMealNameInput');
-                    const kcalInp = document.getElementById('manualMealKcalInput');
-                    const protInp = document.getElementById('manualMealProtInput');
-                    const carbsInp = document.getElementById('manualMealCarbsInput');
-                    const fatsInp = document.getElementById('manualMealFatsInput');
-
-                    const mealName = nameInp?.value.trim() || 'Comida Personalizada';
-                    const kcal = parseInt(kcalInp?.value, 10) || 450;
-                    const prot = parseFloat(protInp?.value) || 30;
-                    const carbs = parseFloat(carbsInp?.value) || 40;
-                    const fats = parseFloat(fatsInp?.value) || 12;
-
-                    const newCustomMeal = {
-                        id: `custom-manual-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                        name: mealName,
-                        calories: kcal,
-                        protein: prot,
-                        carbs: carbs,
-                        fats: fats,
-                        grams: 100,
-                        isCustom: true,
-                        mealSlot: userActiveNutriMealSlot || 'almuerzo'
-                    };
-                    userCustomMeals.push(newCustomMeal);
-
-                    if (nameInp) nameInp.value = '';
-                    if (kcalInp) kcalInp.value = '';
-                } else {
-                    // Modo Búsqueda con Tray Multi-ingrediente
-                    if (!Array.isArray(userCustomTrayItems) || userCustomTrayItems.length === 0) {
-                        if (typeof showSensToast === 'function') {
-                            showSensToast('Por favor seleccioná al menos un alimento o usá la carga rápida de calorías.', 'champagne');
-                        }
-                        saveBtn._isSaving = false;
-                        return;
-                    }
-
-                    userCustomTrayItems.forEach((item, idx) => {
-                        if (!item || !item.food) return;
-                        const macros = (typeof window.calculateFoodMacros === 'function')
-                            ? window.calculateFoodMacros(item.food, item.grams)
-                            : { calories: Math.round((item.grams || 100) * 1.5), protein: 20, carbs: 15, fats: 5 };
-
-                        const fid = item.food.codigo || item.food.id || `food_${idx}`;
-                        userCustomMeals.push({
-                            id: `custom-food-${fid}-${Date.now()}-${idx}`,
-                            foodId: item.food.id || fid,
-                            codigo: item.food.codigo || fid,
-                            name: item.food.nombre_alimento_o_plato || item.food.name || item.food.name_es || 'Alimento SENS',
-                            calories: Number(macros.calories) || 0,
-                            protein: Number(macros.protein) || 0,
-                            carbs: Number(macros.carbs) || 0,
-                            fats: Number(macros.fats) || 0,
-                            calorias_kcal: item.food.calorias_kcal,
-                            proteinas_g: item.food.proteinas_g,
-                            carbohidratos_g: item.food.carbohidratos_g,
-                            grasas_g: item.food.grasas_g,
-                            porcion_total_g_ml: item.food.porcion_total_g_ml || item.grams || 100,
-                            calPer100: item.food.calPer100,
-                            protPer100: item.food.protPer100,
-                            carbsPer100: item.food.carbsPer100,
-                            fatsPer100: item.food.fatsPer100,
-                            grams: item.grams || 100,
-                            isCustom: true,
-                            mealSlot: userActiveNutriMealSlot || 'almuerzo',
-                            image: item.food.imagen_url || item.food.image_url || item.food.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'
-                        });
-                    });
-                    userCustomTrayItems = [];
-                }
-
-                localStorage.setItem(customStorageKey, JSON.stringify(userCustomMeals));
-
-                // Asegurar que las comidas registradas por el usuario queden marcadas como consumidas
-                const consumedStorageKey = `sens_user_consumed_foods_${activeAthId}_${dateIso}`;
-                let userConsumedFoods = {};
-                try {
-                    userConsumedFoods = JSON.parse(localStorage.getItem(consumedStorageKey) || '{}') || {};
-                } catch (e) {
-                    userConsumedFoods = {};
-                }
-                userCustomMeals.forEach((cm, cmIdx) => {
-                    if (cm.id) userConsumedFoods[cm.id] = true;
-                    if (cm.codigo) userConsumedFoods[cm.codigo] = true;
-                    const rk = `almuerzo__c${cmIdx}__${cm.codigo || cm.id}`;
-                    userConsumedFoods[rk] = true;
-                });
-                localStorage.setItem(consumedStorageKey, JSON.stringify(userConsumedFoods));
-
-                // Resetear estado visual de bandeja y footer
-                if (tray) tray.style.display = 'none';
-                if (trayList) trayList.innerHTML = '';
-                if (trayTotalKcal) trayTotalKcal.textContent = '0 kcal';
-                if (footerEl) footerEl.style.display = 'none';
-
-                // Cerrar modal garantizado
-                closeModal();
-
-                // Re-renderizar plan y telemetría de forma segura
-                try {
-                    if (typeof renderMemberNutritionPlan === 'function') {
-                        renderMemberNutritionPlan(activeAthId, sDate);
-                    }
-                } catch (renderErr) {
-                    console.error('Error rendering member nutrition plan:', renderErr);
-                }
-
-                try {
-                    if (typeof renderNutriDaysNav === 'function') {
-                        renderNutriDaysNav();
-                    }
-                } catch (navErr) {
-                    console.error('Error rendering nutri days nav:', navErr);
-                }
-
-                try {
-                    if (typeof syncAllStreakAndPillTelemetry === 'function') {
-                        const streakEval = syncAllStreakAndPillTelemetry(sDate);
-                        const nutriStatus = streakEval?.current?.nutrition?.status;
-                        const prevStatus = streakEval?.previous?.nutrition?.status;
-                        const consumedKcal = streakEval?.current?.nutrition?.consumed || 0;
-                        const targetKcal = streakEval?.current?.nutrition?.target || 1950;
-
-                        if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
-                            if (typeof window.showSensCelebrationToast === 'function') {
-                                window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`, 'nutrition');
-                            }
-                        } else if (nutriStatus === 'exceeded') {
-                            const maxTarget = Math.round(targetKcal * 1.10);
-                            const excessKcal = Math.max(1, consumedKcal - maxTarget);
-                            if (typeof window.showSensStreakLostModal === 'function') {
-                                window.showSensStreakLostModal(
-                                    'Te pasaste del rango',
-                                    `Llevás ${consumedKcal.toLocaleString('es-AR')} kcal (+${excessKcal.toLocaleString('es-AR')} kcal sobre tu tope de ${maxTarget.toLocaleString('es-AR')} kcal).`,
-                                    {
-                                        eyebrow: 'RACHA PERDIDA · EXCESO CALÓRICO',
-                                        lostPillar: 'nutrition',
-                                        centerValue: `+${excessKcal.toLocaleString('es-AR')}`,
-                                        centerLabel: 'KCAL DE EXCESO',
-                                        footerText: 'Frená acá para no seguir sumando. Mañana arrancás de nuevo.'
-                                    }
-                                );
-                            } else if (typeof showSensToast === 'function') {
-                                showSensToast(`Perdiste el objetivo de racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
-                            }
-                        }
-                    } else {
-                        if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(sDate);
-                        if (typeof SensDailyStreakManager !== 'undefined') {
-                            SensDailyStreakManager.evaluateDay(sDate, activeAthId);
-                        }
-                        if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
-                    }
-                } catch (telemetryErr) {
-                    console.error('Error syncing streak telemetry:', telemetryErr);
-                }
-
-                if (typeof showSensToast === 'function') {
-                    showSensToast('Alimento sumado a tu día', 'success', 2200);
-                }
-            } catch (err) {
-                console.error('Error in saveCustomMeal:', err);
-                closeModal();
-                if (typeof showSensToast === 'function') {
-                    showSensToast('Alimento guardado', 'success', 2000);
-                }
-            } finally {
-                saveBtn._isSaving = false;
+        };
+        saveBtn.addEventListener('click', function (e) {
+            if (typeof window.saveCustomMealToDay === 'function') {
+                return window.saveCustomMealToDay(e);
             }
         });
     }
 }
+
+/**
+ * Función Maestra Global: Guarda los alimentos personalizados en el día seleccionado
+ */
+function saveCustomMealToDay(e) {
+    if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
+    const modal = document.getElementById('userCustomMealModal');
+    const saveBtn = document.getElementById('btnSaveCustomMealToDay');
+    if (saveBtn && saveBtn._isSaving) return;
+    if (saveBtn) saveBtn._isSaving = true;
+
+    try {
+        // 1. Resolver fecha de forma robusta y a prueba de cualquier formato
+        let rawDate = AppState.nutriSelectedDate || AppState.selectedDate || new Date();
+        let sDate = (rawDate instanceof Date && !isNaN(rawDate.getTime())) ? rawDate : new Date(rawDate);
+        if (isNaN(sDate.getTime())) sDate = new Date();
+        AppState.nutriSelectedDate = sDate;
+
+        // 2. Resolver atleta activo dinámicamente
+        const activeAthId = (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || (AppState.currentUser && AppState.currentUser.id) || 'mock_vip';
+        const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+        const customStorageKey = `sens_user_logged_meals_${activeAthId}_${dateIso}`;
+
+        let userCustomMeals = [];
+        try {
+            userCustomMeals = JSON.parse(localStorage.getItem(customStorageKey) || '[]');
+            if (!Array.isArray(userCustomMeals)) userCustomMeals = [];
+        } catch (parseErr) {
+            userCustomMeals = [];
+        }
+
+        const paneManual = document.getElementById('paneCustomManual');
+        const isManualActive = paneManual && (paneManual.style.display === 'block' || (window.getComputedStyle && window.getComputedStyle(paneManual).display === 'block'));
+        const currentSlot = userActiveNutriMealSlot || 'almuerzo';
+
+        if (isManualActive) {
+            const nameInp = document.getElementById('manualMealNameInput');
+            const kcalInp = document.getElementById('manualMealKcalInput');
+            const protInp = document.getElementById('manualMealProtInput');
+            const carbsInp = document.getElementById('manualMealCarbsInput');
+            const fatsInp = document.getElementById('manualMealFatsInput');
+
+            const mealName = nameInp?.value.trim() || 'Comida Personalizada';
+            const kcal = parseInt(kcalInp?.value, 10) || 450;
+            const prot = parseFloat(protInp?.value) || 30;
+            const carbs = parseFloat(carbsInp?.value) || 40;
+            const fats = parseFloat(fatsInp?.value) || 12;
+
+            const newCustomMeal = {
+                id: `custom-manual-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                name: mealName,
+                calories: kcal,
+                protein: prot,
+                carbs: carbs,
+                fats: fats,
+                grams: 100,
+                isCustom: true,
+                mealSlot: currentSlot
+            };
+            userCustomMeals.push(newCustomMeal);
+
+            if (nameInp) nameInp.value = '';
+            if (kcalInp) kcalInp.value = '';
+        } else {
+            // Modo Búsqueda con Tray Multi-ingrediente
+            const trayItems = (Array.isArray(userCustomTrayItems) && userCustomTrayItems.length > 0)
+                ? userCustomTrayItems
+                : (Array.isArray(window.userCustomTrayItems) ? window.userCustomTrayItems : []);
+
+            if (!trayItems || trayItems.length === 0) {
+                if (typeof showSensToast === 'function') {
+                    showSensToast('Por favor seleccioná al menos un alimento o usá la carga rápida de calorías.', 'champagne');
+                }
+                if (saveBtn) saveBtn._isSaving = false;
+                return;
+            }
+
+            trayItems.forEach((item, idx) => {
+                if (!item || !item.food) return;
+                const macros = (typeof window.calculateFoodMacros === 'function')
+                    ? window.calculateFoodMacros(item.food, item.grams)
+                    : { calories: Math.round((item.grams || 100) * 1.5), protein: 20, carbs: 15, fats: 5 };
+
+                const fid = item.food.codigo || item.food.id || `food_${idx}`;
+                userCustomMeals.push({
+                    id: `custom-food-${fid}-${Date.now()}-${idx}`,
+                    foodId: item.food.id || fid,
+                    codigo: item.food.codigo || fid,
+                    name: item.food.nombre_alimento_o_plato || item.food.name || item.food.name_es || 'Alimento SENS',
+                    calories: Number(macros.calories) || 0,
+                    protein: Number(macros.protein) || 0,
+                    carbs: Number(macros.carbs) || 0,
+                    fats: Number(macros.fats) || 0,
+                    calorias_kcal: item.food.calorias_kcal,
+                    proteinas_g: item.food.proteinas_g,
+                    carbohidratos_g: item.food.carbohidratos_g,
+                    grasas_g: item.food.grasas_g,
+                    porcion_total_g_ml: item.food.porcion_total_g_ml || item.grams || 100,
+                    calPer100: item.food.calPer100,
+                    protPer100: item.food.protPer100,
+                    carbsPer100: item.food.carbsPer100,
+                    fatsPer100: item.food.fatsPer100,
+                    grams: item.grams || 100,
+                    isCustom: true,
+                    mealSlot: currentSlot,
+                    image: item.food.imagen_url || item.food.image_url || item.food.image || 'Nutricion/images/nut-001-pechuga-de-pollo-a-la-plancha.webp'
+                });
+            });
+            userCustomTrayItems = [];
+            window.userCustomTrayItems = [];
+        }
+
+        localStorage.setItem(customStorageKey, JSON.stringify(userCustomMeals));
+
+        // Asegurar que las comidas registradas por el usuario queden marcadas como consumidas
+        const consumedStorageKey = `sens_user_consumed_foods_${activeAthId}_${dateIso}`;
+        let userConsumedFoods = {};
+        try {
+            userConsumedFoods = JSON.parse(localStorage.getItem(consumedStorageKey) || '{}') || {};
+        } catch (err) {
+            userConsumedFoods = {};
+        }
+        userCustomMeals.forEach((cm, cmIdx) => {
+            if (cm.id) userConsumedFoods[cm.id] = true;
+            if (cm.codigo) userConsumedFoods[cm.codigo] = true;
+            const rk = `${cm.mealSlot || currentSlot}__c${cmIdx}__${cm.codigo || cm.id}`;
+            userConsumedFoods[rk] = true;
+        });
+        localStorage.setItem(consumedStorageKey, JSON.stringify(userConsumedFoods));
+
+        // Resetear estado visual de bandeja y footer
+        const tray = document.getElementById('customSelectedIngredientsTray');
+        const trayList = document.getElementById('customTrayItemsList');
+        const trayTotalKcal = document.getElementById('customTrayTotalKcal');
+        const footerEl = modal ? modal.querySelector('.sens-custom-meal-sheet-footer') : null;
+
+        if (tray) tray.style.display = 'none';
+        if (trayList) trayList.innerHTML = '';
+        if (trayTotalKcal) trayTotalKcal.textContent = '0 kcal';
+        if (footerEl) footerEl.style.display = 'none';
+
+        // Cerrar modal garantizado
+        if (typeof window.closeCustomMealModal === 'function') {
+            window.closeCustomMealModal();
+        } else if (modal) {
+            modal.classList.remove('active');
+            modal.style.setProperty('display', 'none', 'important');
+            modal.style.visibility = 'hidden';
+            modal.style.opacity = '0';
+            modal.style.pointerEvents = 'none';
+            document.body.style.overflow = '';
+            document.body.classList.remove('sens-modal-open');
+        }
+
+        // Re-renderizar plan y telemetría de forma segura
+        try {
+            if (typeof renderMemberNutritionPlan === 'function') {
+                renderMemberNutritionPlan(activeAthId, sDate);
+            }
+        } catch (renderErr) {
+            console.error('Error rendering member nutrition plan:', renderErr);
+        }
+
+        try {
+            if (typeof renderNutriDaysNav === 'function') {
+                renderNutriDaysNav();
+            }
+        } catch (navErr) {
+            console.error('Error rendering nutri days nav:', navErr);
+        }
+
+        try {
+            if (typeof syncAllStreakAndPillTelemetry === 'function') {
+                const streakEval = syncAllStreakAndPillTelemetry(sDate);
+                const nutriStatus = streakEval?.current?.nutrition?.status;
+                const prevStatus = streakEval?.previous?.nutrition?.status;
+                const consumedKcal = streakEval?.current?.nutrition?.consumed || 0;
+                const targetKcal = streakEval?.current?.nutrition?.target || 1950;
+
+                if (nutriStatus === 'on_track' && prevStatus !== 'on_track') {
+                    if (typeof window.showSensCelebrationToast === 'function') {
+                        window.showSensCelebrationToast('¡Nutrición en foco!', `${consumedKcal.toLocaleString('es-AR')} kcal en tu rango hoy`, 'nutrition');
+                    }
+                } else if (nutriStatus === 'exceeded') {
+                    const maxTarget = Math.round(targetKcal * 1.10);
+                    const excessKcal = Math.max(1, consumedKcal - maxTarget);
+                    if (typeof window.showSensStreakLostModal === 'function') {
+                        window.showSensStreakLostModal(
+                            'Te pasaste del rango',
+                            `Llevás ${consumedKcal.toLocaleString('es-AR')} kcal (+${excessKcal.toLocaleString('es-AR')} kcal sobre tu tope de ${maxTarget.toLocaleString('es-AR')} kcal).`,
+                            {
+                                eyebrow: 'RACHA PERDIDA · EXCESO CALÓRICO',
+                                lostPillar: 'nutrition',
+                                centerValue: `+${excessKcal.toLocaleString('es-AR')}`,
+                                centerLabel: 'KCAL DE EXCESO',
+                                footerText: 'Frená acá para no seguir sumando. Mañana arrancás de nuevo.'
+                            }
+                        );
+                    } else if (typeof showSensToast === 'function') {
+                        showSensToast(`Perdiste el objetivo de racha nutricional de hoy: consumiste ${consumedKcal.toLocaleString('es-AR')} kcal (+10% del objetivo de ${targetKcal.toLocaleString('es-AR')} kcal).`, 'warning', 5000);
+                    }
+                }
+            } else {
+                if (typeof updateObjectiveCardData === 'function') updateObjectiveCardData(sDate);
+                if (typeof SensDailyStreakManager !== 'undefined') {
+                    SensDailyStreakManager.evaluateDay(sDate, activeAthId);
+                }
+                if (typeof updateSensStreakCard === 'function') updateSensStreakCard(sDate);
+            }
+        } catch (telemetryErr) {
+            console.error('Error syncing streak telemetry:', telemetryErr);
+        }
+
+        if (typeof showSensToast === 'function') {
+            showSensToast('Alimento sumado a tu día', 'success', 2200);
+        }
+    } catch (err) {
+        console.error('Error in saveCustomMealToDay:', err);
+        if (typeof window.closeCustomMealModal === 'function') {
+            window.closeCustomMealModal();
+        } else if (modal) {
+            modal.classList.remove('active');
+            modal.style.setProperty('display', 'none', 'important');
+        }
+        if (typeof showSensToast === 'function') {
+            showSensToast('Alimento guardado', 'success', 2000);
+        }
+    } finally {
+        if (saveBtn) saveBtn._isSaving = false;
+    }
+}
+window.saveCustomMealToDay = saveCustomMealToDay;
 
 /**
  * Event Listeners de Filtro por Comida y Navegador Semanal en Vista de Nutrición (Item 3)
