@@ -16585,7 +16585,7 @@ async function persistPrescribedWorkoutsToSupabase(athId, data, extraFields = {}
         }
         if (!rows || rows.length === 0) {
             console.warn('[SENS Supabase] Update retornó 0 filas. Verificá RLS en profiles o que el alumno exista en Supabase.');
-            return { ok: true, unconfirmedRow: true };
+            return { ok: false, unconfirmedRow: true, error: { message: 'No se actualizó la fila del alumno en Supabase (RLS o ID inexistente).' } };
         }
         return { ok: true };
     } catch (err) {
@@ -16663,13 +16663,7 @@ function getCoachAthleteWorkoutData(athId) {
     if (!athId) athId = getActiveAthleteId();
 
     const isAutoStarter = (pw) => {
-        if (!pw || typeof pw !== 'object') return false;
-        if (pw.is_auto_starter) return true;
-        const d1 = pw.day1;
-        const d3 = pw.day3;
-        if (d1 && (d1.title?.includes('Empuje') || d1.title?.includes('Postura') || d1.title?.includes('Tren Superior'))) return true;
-        if (d3 && (d3.title?.includes('Tracción') || d3.title?.includes('Cadena Posterior'))) return true;
-        return false;
+        return Boolean(pw && typeof pw === 'object' && pw.is_auto_starter === true);
     };
 
     // 1. Revisar primero en localStorage (fuente de verdad inmediata y sin lag de red)
@@ -29710,14 +29704,21 @@ const CoachRoutineTemplatesManager = {
             }
         }
 
-        // Sincronizar próximos 7 días en calendar_schedule para que el alumno lo vea hoy mismo
+        // Limpiar fechas futuras no completadas de rutinas viejas y proyectar 28 días (4 semanas)
         const today = new Date();
-        for (let offset = 0; offset < 7; offset++) {
+        const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        Object.keys(workoutData.calendar_schedule).forEach(dKey => {
+            if (dKey >= todayIso && !workoutData.calendar_schedule[dKey]?.completed) {
+                delete workoutData.calendar_schedule[dKey];
+            }
+        });
+        for (let offset = 0; offset < 28; offset++) {
             const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset);
             const y = d.getFullYear();
             const m = String(d.getMonth() + 1).padStart(2, '0');
             const dd = String(d.getDate()).padStart(2, '0');
             const dateStr = `${y}-${m}-${dd}`;
+            if (workoutData.calendar_schedule[dateStr]?.completed) continue;
             const tDay = dowMap[d.getDay()];
             if (tDay) {
                 workoutData.calendar_schedule[dateStr] = {
