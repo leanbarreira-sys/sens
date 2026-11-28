@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '248.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '248.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '249.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '249.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -9111,7 +9111,7 @@
     <div class="native-sheet-backdrop" id="coachTemplateEditorBackdrop" style="display: none; z-index: 100025;"
         onclick="window.closeCoachTemplateSheet && window.closeCoachTemplateSheet();"></div>
     <div class="coach-ex-editor-sheet" id="coachTemplateEditorSheet" role="dialog" aria-modal="true"
-        aria-labelledby="coachTemplateSheetTitle" style="z-index: 100026;">
+        aria-labelledby="coachTemplateSheetTitle" style="display: none; z-index: 100026;">
         <div class="coach-ex-sheet-handle-wrap" onclick="window.closeCoachTemplateSheet && window.closeCoachTemplateSheet();">
             <div class="coach-ex-sheet-handle"></div>
         </div>
