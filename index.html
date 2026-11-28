@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '247.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '247.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '248.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '248.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -9123,7 +9123,7 @@
                 onclick="window.closeCoachTemplateSheet && window.closeCoachTemplateSheet();">✕</button>
         </div>
 
-        <form id="coachTemplateEditorForm" class="coach-ex-sheet-body" style="padding-bottom: 16px;">
+        <form id="coachTemplateEditorForm" novalidate class="coach-ex-sheet-body" style="padding-bottom: 16px;">
             <input type="hidden" id="ctSheetEditId" value="">
             <input type="hidden" id="ctSheetDomain" value="workout">
 
@@ -9176,7 +9176,7 @@
                     </div>
                     <div>
                         <label class="input-label" for="ctNutriWater" style="color: #575659; font-weight: 600;">Agua (Litros)</label>
-                        <input type="number" id="ctNutriWater" min="1" max="8" step="0.2" value="2.5" class="input-control"
+                        <input type="number" id="ctNutriWater" min="0.5" max="8" step="0.1" value="2.5" class="input-control"
                             style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
                     </div>
                 </div>
@@ -9229,12 +9229,12 @@
         <div class="coach-ex-sheet-footer" style="border-top: 1px solid rgba(18,18,20,0.08); background: #FAF9F6;">
             <button type="button" class="coach-ex-btn-delete" id="btnCoachTemplateDelete" style="display: none;">Eliminar</button>
             <button type="button" class="coach-ex-btn-cancel" onclick="window.closeCoachTemplateSheet && window.closeCoachTemplateSheet();">Cancelar</button>
-            <button type="submit" form="coachTemplateEditorForm" class="coach-ex-btn-save" id="btnCoachTemplateSubmit">Guardar plantilla</button>
+            <button type="button" class="coach-ex-btn-save" id="btnCoachTemplateSubmit">Guardar plantilla</button>
         </div>
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=162.0"></script>
+    <script defer src="app.js?v=163.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

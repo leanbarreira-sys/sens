@@ -30069,14 +30069,16 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
             });
         }
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
+        const handleTemplateFormSubmit = (e) => {
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
             const editId = (document.getElementById('ctSheetEditId')?.value || '').trim();
             const domain = (document.getElementById('ctSheetDomain')?.value || 'workout').trim();
-            const title = (document.getElementById('ctSheetTitle')?.value || '').trim();
+            const titleEl = document.getElementById('ctSheetTitle');
+            const title = (titleEl?.value || '').trim();
             const description = (document.getElementById('ctSheetDesc')?.value || '').trim();
             if (!title) {
                 if (typeof showSensToast === 'function') showSensToast('Ingresá un nombre para la plantilla.', 'warning');
+                if (titleEl) titleEl.focus();
                 return;
             }
 
@@ -30135,7 +30137,13 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
             if (typeof showSensToast === 'function') {
                 showSensToast(`✓ Plantilla "${title}" guardada.`, 'champagne');
             }
-        });
+        };
+
+        form.addEventListener('submit', handleTemplateFormSubmit);
+        const submitBtn = document.getElementById('btnCoachTemplateSubmit');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', handleTemplateFormSubmit);
+        }
 
         state.sheetBound = true;
     }
