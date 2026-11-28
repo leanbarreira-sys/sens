@@ -12307,6 +12307,9 @@ function initCoachOS() {
         }
 
         if (resolvedPaneId === 'paneWorkouts') {
+            if (typeof CoachWorkoutsMaster !== 'undefined' && typeof CoachWorkoutsMaster.syncActiveAthlete === 'function' && AppState.activeAthleteId && CoachWorkoutsMaster.activeAthleteId !== AppState.activeAthleteId) {
+                CoachWorkoutsMaster.syncActiveAthlete(AppState.activeAthleteId);
+            }
             if (typeof renderCoachDynamicWeekStrip === 'function') renderCoachDynamicWeekStrip();
             if (typeof renderCoachAssignedExercises === 'function') renderCoachAssignedExercises();
         }
@@ -12931,19 +12934,63 @@ function syncCoachMasterCard(athId) {
 }
 
 let coachAthletesTierFilter = 'all';
+let coachAthletesStatusFilter = 'all';
+let coachAthletesSearchTerm = '';
+
+function saveCoachAthletesFilterState() {
+    try {
+        sessionStorage.setItem('sens_coach_athletes_filters_v1', JSON.stringify({
+            status: coachAthletesStatusFilter,
+            tier: coachAthletesTierFilter,
+            search: coachAthletesSearchTerm
+        }));
+    } catch (_) {}
+}
+
+function restoreCoachAthletesFilterState() {
+    try {
+        const raw = sessionStorage.getItem('sens_coach_athletes_filters_v1');
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (parsed.status) coachAthletesStatusFilter = parsed.status;
+        if (parsed.tier) coachAthletesTierFilter = parsed.tier;
+        if (typeof parsed.search === 'string') coachAthletesSearchTerm = parsed.search;
+    } catch (_) {}
+}
 
 function initCoachAthletesHub() {
+    restoreCoachAthletesFilterState();
     const searchInput = document.getElementById('coachSearchAthleteInput');
     const filterBtns = document.querySelectorAll('.coach-filter-status');
     const tierBtns = document.querySelectorAll('#coachFilterTierBar .coach-filter-tier');
     const btnMasterInspect = document.getElementById('btnCoachMasterInspectAthlete');
     const btnHubViewStudent = document.getElementById('btnCoachHubViewActiveStudent');
 
+    if (searchInput && coachAthletesSearchTerm) {
+        searchInput.value = coachAthletesSearchTerm;
+    }
+    filterBtns.forEach(b => {
+        const isAct = (b.getAttribute('data-status') || 'all') === coachAthletesStatusFilter;
+        b.classList.toggle('active', isAct);
+        if (b.classList.contains('pill')) {
+            b.classList.toggle('pill-champagne', isAct);
+            b.classList.toggle('pill-dark', !isAct);
+        }
+    });
+    tierBtns.forEach(b => {
+        const isAct = (b.getAttribute('data-tier') || 'all') === coachAthletesTierFilter;
+        b.classList.toggle('active', isAct);
+        if (b.classList.contains('pill')) {
+            b.classList.toggle('pill-champagne', isAct);
+            b.classList.toggle('pill-dark', !isAct);
+        }
+    });
+
     if (searchInput) {
         searchInput.addEventListener('input', () => {
-            const term = searchInput.value.trim().toLowerCase();
-            const activeFilter = document.querySelector('.coach-filter-status.active, .coach-filter-status.pill-champagne')?.getAttribute('data-status') || 'all';
-            renderCoachAthletesHub(activeFilter, term);
+            coachAthletesSearchTerm = searchInput.value.trim().toLowerCase();
+            saveCoachAthletesFilterState();
+            renderCoachAthletesHub(coachAthletesStatusFilter, coachAthletesSearchTerm);
         });
     }
 
@@ -12955,9 +13002,10 @@ function initCoachAthletesHub() {
             });
             btn.classList.remove('pill-dark');
             btn.classList.add('active');
-            const status = btn.getAttribute('data-status') || 'all';
-            const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
-            renderCoachAthletesHub(status, term);
+            coachAthletesStatusFilter = btn.getAttribute('data-status') || 'all';
+            coachAthletesSearchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            saveCoachAthletesFilterState();
+            renderCoachAthletesHub(coachAthletesStatusFilter, coachAthletesSearchTerm);
         });
     });
 
@@ -12970,9 +13018,9 @@ function initCoachAthletesHub() {
             btn.classList.remove('pill-dark');
             btn.classList.add('active');
             coachAthletesTierFilter = btn.getAttribute('data-tier') || 'all';
-            const activeStatus = document.querySelector('.coach-filter-status.active, .coach-filter-status.pill-champagne')?.getAttribute('data-status') || 'all';
-            const term = searchInput ? searchInput.value.trim().toLowerCase() : '';
-            renderCoachAthletesHub(activeStatus, term);
+            coachAthletesSearchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            saveCoachAthletesFilterState();
+            renderCoachAthletesHub(coachAthletesStatusFilter, coachAthletesSearchTerm);
         });
     });
 
@@ -13005,7 +13053,9 @@ function initCoachAthletesHub() {
     if (typeof initCoachPaymentsHub === 'function') initCoachPaymentsHub();
 }
 
-function renderCoachAthletesHub(statusFilter = 'all', searchTerm = '') {
+function renderCoachAthletesHub(statusFilter = coachAthletesStatusFilter, searchTerm = coachAthletesSearchTerm) {
+    if (statusFilter !== undefined) coachAthletesStatusFilter = statusFilter;
+    if (searchTerm !== undefined) coachAthletesSearchTerm = searchTerm;
     const container = document.getElementById('coachAthletesListContainer');
     if (!container) return;
 
@@ -13217,6 +13267,9 @@ window.currentActionAthleteId = null;
 window.openCoachAthleteActionsSheet = function(athId) {
     if (!isCurrentUserAdmin()) return;
     window.currentActionAthleteId = athId;
+    if (typeof selectAthleteFromSheet === 'function') {
+        selectAthleteFromSheet(athId);
+    }
     const athletes = getConsolidatedCoachAthletes();
     const ath = athletes.find(a => a.id === athId);
     if (!ath) return;
