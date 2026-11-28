@@ -1145,6 +1145,15 @@ window.ensurePortalBundlesLoaded = function() {
         } catch (_) {}
         try { if (typeof updateDashboardRings === 'function') updateDashboardRings(); } catch (_) {}
         try { if (typeof updateMetabolicEquation === 'function') updateMetabolicEquation(); } catch (_) {}
+        try {
+            const customModal = document.getElementById('userCustomMealModal');
+            if (customModal && (customModal.classList.contains('active') || customModal.style.display === 'flex')) {
+                const qInp = document.getElementById('customFoodSearchInput');
+                if (typeof window.renderCustomSearchResults === 'function') {
+                    window.renderCustomSearchResults(qInp ? qInp.value : '');
+                }
+            }
+        } catch (_) {}
     }).catch((err) => {
         console.warn('[SENS Lazy] Portal bundle load warning:', err);
         window._sensPortalBundlesPromise = null;
@@ -20290,6 +20299,26 @@ function initUserCustomMealModal(athId) {
                     Cargando biblioteca de alimentos...
                 </div>
             `;
+            if (typeof window.ensurePortalBundlesLoaded === 'function' && !window._sensCustomFoodRetryPending) {
+                window._sensCustomFoodRetryPending = true;
+                window.ensurePortalBundlesLoaded().then(() => {
+                    window._sensCustomFoodRetryPending = false;
+                    const retryLib = (typeof getGlobalFoodCatalog === 'function') ? getGlobalFoodCatalog() : (window.SENS_FOOD_LIBRARY || []);
+                    if (retryLib && retryLib.length > 0) {
+                        const qInp = document.getElementById('customFoodSearchInput');
+                        renderSearchResults(qInp ? qInp.value : query);
+                    } else {
+                        searchResults.innerHTML = `
+                            <div style="text-align: center; padding: 28px 16px; color: #6F6E73; font-size: 13px; background: #FAF9F6; border-radius: 14px;">
+                                No se pudo cargar la biblioteca de alimentos.<br>
+                                <button type="button" onclick="window.renderCustomSearchResults && window.renderCustomSearchResults('')" style="margin-top: 10px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(18,18,20,0.12); background: #FFFFFF; color: #121214; font-size: 12px; font-weight: 700; cursor: pointer;">Reintentar</button>
+                            </div>
+                        `;
+                    }
+                }).catch(() => {
+                    window._sensCustomFoodRetryPending = false;
+                });
+            }
             return;
         }
         const norm = (str) => (typeof normalizeSensString === 'function') ? normalizeSensString(str) : (str ? str.toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim() : '');
