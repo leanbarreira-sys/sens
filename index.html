@@ -140,8 +140,8 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '254.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '254.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '255.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '255.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -7384,10 +7384,11 @@
             </div>
 
             <!-- Footer Sticky Inteligente -->
-            <div class="sens-custom-meal-sheet-footer" style="display: none;">
+            <div class="sens-custom-meal-sheet-footer" style="display: none; z-index: 100065 !important;">
                 <button type="button" class="btn btn-primary" id="btnSaveCustomMealToDay"
                     onclick="window.saveCustomMealToDay ? window.saveCustomMealToDay(event) : null"
-                    style="width: 100%; padding: 14px; font-size: 14px; font-weight: 700; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none; border-radius: 999px; cursor: pointer; pointer-events: auto !important; touch-action: manipulation !important; position: relative; z-index: 101 !important;">
+                    ontouchend="window.saveCustomMealToDay ? window.saveCustomMealToDay(event) : null"
+                    style="width: 100%; padding: 14px; font-size: 14px; font-weight: 700; background: #121214 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; border: none; border-radius: 999px; cursor: pointer; pointer-events: auto !important; touch-action: manipulation !important; position: relative; z-index: 100070 !important;">
                     Guardar en tu día
                 </button>
             </div>
@@ -9289,7 +9290,7 @@
     </div>
 
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=168.0"></script>
+    <script defer src="app.js?v=169.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>

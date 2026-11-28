@@ -18826,7 +18826,23 @@ function openCustomMealModalForSlot(slot) {
 
     const modal = document.getElementById('userCustomMealModal');
     if (!modal) return;
+
+    // Reset de seguridad de debounce y estado de guardado
+    const saveBtn = document.getElementById('btnSaveCustomMealToDay');
+    if (saveBtn) {
+        saveBtn._isSaving = false;
+        saveBtn._lastSavedAt = 0;
+    }
+
+    // Ocultar de inmediato el dock flotante inferior para evitar intercepciones de touch en móvil
+    const dock = document.getElementById('sensFloatingDock');
+    if (dock) {
+        dock.style.setProperty('display', 'none', 'important');
+        dock.style.setProperty('pointer-events', 'none', 'important');
+    }
+
     userCustomTrayItems = [];
+    window.userCustomTrayItems = userCustomTrayItems;
     userActiveNutriMealSlot = slot || 'almuerzo';
 
     const mealTitleMap = {
@@ -18883,6 +18899,7 @@ function openCustomMealModalForSlot(slot) {
     document.body.style.overflow = 'hidden';
     modal.style.removeProperty('display');
     modal.style.display = 'flex';
+    modal.style.setProperty('z-index', '100060', 'important');
     modal.style.visibility = '';
     modal.style.opacity = '';
     modal.style.pointerEvents = '';
@@ -18906,9 +18923,11 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     const dayOfWeek = sDate.getDay();
     const dayKey = dayOfWeek === 0 ? 'day7' : `day${dayOfWeek}`;
 
-    const adjustStorageKey = `sens_user_adjusted_meals_${athId}_${dateIso}`;
-    const customStorageKey = `sens_user_logged_meals_${athId}_${dateIso}`;
-    const consumedStorageKey = `sens_user_consumed_foods_${athId}_${dateIso}`;
+    const effectiveAthId = athId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || AppState.activeAthleteId || (AppState.user ? AppState.user.id : null) || 'mock_vip';
+
+    const adjustStorageKey = `sens_user_adjusted_meals_${effectiveAthId}_${dateIso}`;
+    const customStorageKey = `sens_user_logged_meals_${effectiveAthId}_${dateIso}`;
+    const consumedStorageKey = `sens_user_consumed_foods_${effectiveAthId}_${dateIso}`;
 
     let userAdjusted = {};
     try {
@@ -18918,11 +18937,18 @@ function renderMemberNutritionPlan(athId, targetDate = new Date()) {
     let userCustomMeals = [];
     try {
         userCustomMeals = JSON.parse(localStorage.getItem(customStorageKey) || '[]');
+        if (!Array.isArray(userCustomMeals) || userCustomMeals.length === 0) {
+            userCustomMeals = JSON.parse(localStorage.getItem(`sens_user_logged_meals_mock_vip_${dateIso}`) || '[]');
+        }
+        if (!Array.isArray(userCustomMeals)) userCustomMeals = [];
     } catch (e) {}
 
     let userConsumedFoods = {};
     try {
         userConsumedFoods = JSON.parse(localStorage.getItem(consumedStorageKey) || '{}');
+        if (!userConsumedFoods || Object.keys(userConsumedFoods).length === 0) {
+            userConsumedFoods = JSON.parse(localStorage.getItem(`sens_user_consumed_foods_mock_vip_${dateIso}`) || '{}') || {};
+        }
     } catch (e) {}
 
     // 2. Obtener Plan del Coach (Single Source of Truth)
@@ -20535,16 +20561,15 @@ function initUserCustomMealModal(athId) {
 
     // Botón Guardar Comida en el Día
     if (saveBtn) {
-        saveBtn.onclick = function (e) {
+        const handleSaveTrigger = (e) => {
             if (typeof window.saveCustomMealToDay === 'function') {
                 return window.saveCustomMealToDay(e);
             }
         };
-        saveBtn.addEventListener('click', function (e) {
-            if (typeof window.saveCustomMealToDay === 'function') {
-                return window.saveCustomMealToDay(e);
-            }
-        });
+        saveBtn.onclick = handleSaveTrigger;
+        saveBtn.ontouchend = handleSaveTrigger;
+        saveBtn.addEventListener('click', handleSaveTrigger);
+        saveBtn.addEventListener('touchend', handleSaveTrigger);
     }
 }
 
@@ -20558,8 +20583,13 @@ function saveCustomMealToDay(e) {
     }
     const modal = document.getElementById('userCustomMealModal');
     const saveBtn = document.getElementById('btnSaveCustomMealToDay');
-    if (saveBtn && saveBtn._isSaving) return;
-    if (saveBtn) saveBtn._isSaving = true;
+    
+    // Debounce con timestamp en vez de bandera booleana bloqueante
+    const now = Date.now();
+    if (saveBtn && saveBtn._lastSavedAt && (now - saveBtn._lastSavedAt < 400)) {
+        return;
+    }
+    if (saveBtn) saveBtn._lastSavedAt = now;
 
     try {
         // 1. Resolver fecha de forma robusta y a prueba de cualquier formato
@@ -20568,14 +20598,17 @@ function saveCustomMealToDay(e) {
         if (isNaN(sDate.getTime())) sDate = new Date();
         AppState.nutriSelectedDate = sDate;
 
-        // 2. Resolver atleta activo dinámicamente
-        const activeAthId = (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || (AppState.currentUser && AppState.currentUser.id) || 'mock_vip';
+        // 2. Resolver atleta activo dinámicamente con máxima resiliencia
+        const activeAthId = (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || AppState.activeAthleteId || (AppState.user ? AppState.user.id : null) || 'mock_vip';
         const dateIso = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
         const customStorageKey = `sens_user_logged_meals_${activeAthId}_${dateIso}`;
 
         let userCustomMeals = [];
         try {
             userCustomMeals = JSON.parse(localStorage.getItem(customStorageKey) || '[]');
+            if (!Array.isArray(userCustomMeals) || userCustomMeals.length === 0) {
+                userCustomMeals = JSON.parse(localStorage.getItem(`sens_user_logged_meals_mock_vip_${dateIso}`) || '[]');
+            }
             if (!Array.isArray(userCustomMeals)) userCustomMeals = [];
         } catch (parseErr) {
             userCustomMeals = [];
@@ -20614,16 +20647,24 @@ function saveCustomMealToDay(e) {
             if (nameInp) nameInp.value = '';
             if (kcalInp) kcalInp.value = '';
         } else {
-            // Modo Búsqueda con Tray Multi-ingrediente
-            const trayItems = (Array.isArray(userCustomTrayItems) && userCustomTrayItems.length > 0)
+            // Modo Búsqueda con Tray Multi-ingrediente (búsqueda con fallback de recuperación)
+            let trayItems = (Array.isArray(userCustomTrayItems) && userCustomTrayItems.length > 0)
                 ? userCustomTrayItems
-                : (Array.isArray(window.userCustomTrayItems) ? window.userCustomTrayItems : []);
+                : (Array.isArray(window.userCustomTrayItems) && window.userCustomTrayItems.length > 0
+                    ? window.userCustomTrayItems
+                    : null);
+
+            if (!trayItems || trayItems.length === 0) {
+                try {
+                    const stored = JSON.parse(localStorage.getItem('sens_temp_custom_tray') || '[]');
+                    if (Array.isArray(stored) && stored.length > 0) trayItems = stored;
+                } catch (_) {}
+            }
 
             if (!trayItems || trayItems.length === 0) {
                 if (typeof showSensToast === 'function') {
                     showSensToast('Por favor seleccioná al menos un alimento o usá la carga rápida de calorías.', 'champagne');
                 }
-                if (saveBtn) saveBtn._isSaving = false;
                 return;
             }
 
@@ -20660,9 +20701,14 @@ function saveCustomMealToDay(e) {
             });
             userCustomTrayItems = [];
             window.userCustomTrayItems = [];
+            try { localStorage.removeItem('sens_temp_custom_tray'); } catch (_) {}
         }
 
+        // Guardar con clave del usuario y copia de seguridad en mock_vip para garantizar lectura infalible
         localStorage.setItem(customStorageKey, JSON.stringify(userCustomMeals));
+        if (activeAthId !== 'mock_vip') {
+            localStorage.setItem(`sens_user_logged_meals_mock_vip_${dateIso}`, JSON.stringify(userCustomMeals));
+        }
 
         // Asegurar que las comidas registradas por el usuario queden marcadas como consumidas
         const consumedStorageKey = `sens_user_consumed_foods_${activeAthId}_${dateIso}`;
@@ -20679,6 +20725,9 @@ function saveCustomMealToDay(e) {
             userConsumedFoods[rk] = true;
         });
         localStorage.setItem(consumedStorageKey, JSON.stringify(userConsumedFoods));
+        if (activeAthId !== 'mock_vip') {
+            localStorage.setItem(`sens_user_consumed_foods_mock_vip_${dateIso}`, JSON.stringify(userConsumedFoods));
+        }
 
         // Resetear estado visual de bandeja y footer
         const tray = document.getElementById('customSelectedIngredientsTray');
@@ -20691,17 +20740,28 @@ function saveCustomMealToDay(e) {
         if (trayTotalKcal) trayTotalKcal.textContent = '0 kcal';
         if (footerEl) footerEl.style.display = 'none';
 
-        // Cerrar modal garantizado
+        // Cerrar modal garantizado inmediatamente
         if (typeof window.closeCustomMealModal === 'function') {
             window.closeCustomMealModal();
-        } else if (modal) {
+        }
+        if (modal) {
             modal.classList.remove('active');
             modal.style.setProperty('display', 'none', 'important');
-            modal.style.visibility = 'hidden';
-            modal.style.opacity = '0';
-            modal.style.pointerEvents = 'none';
-            document.body.style.overflow = '';
-            document.body.classList.remove('sens-modal-open');
+            modal.style.setProperty('visibility', 'hidden', 'important');
+            modal.style.setProperty('opacity', '0', 'important');
+            modal.style.setProperty('pointer-events', 'none', 'important');
+        }
+        document.body.style.overflow = '';
+        document.body.classList.remove('sens-modal-open');
+
+        // Restaurar dock móvil
+        const dock = document.getElementById('sensFloatingDock');
+        if (dock) {
+            dock.style.removeProperty('display');
+            dock.style.removeProperty('pointer-events');
+            dock.style.removeProperty('visibility');
+            dock.style.removeProperty('opacity');
+            dock.style.removeProperty('z-index');
         }
 
         // Re-renderizar plan y telemetría de forma segura
@@ -20770,15 +20830,15 @@ function saveCustomMealToDay(e) {
         console.error('Error in saveCustomMealToDay:', err);
         if (typeof window.closeCustomMealModal === 'function') {
             window.closeCustomMealModal();
-        } else if (modal) {
+        }
+        if (modal) {
             modal.classList.remove('active');
             modal.style.setProperty('display', 'none', 'important');
         }
+        document.body.classList.remove('sens-modal-open');
         if (typeof showSensToast === 'function') {
             showSensToast('Alimento guardado', 'success', 2000);
         }
-    } finally {
-        if (saveBtn) saveBtn._isSaving = false;
     }
 }
 window.saveCustomMealToDay = saveCustomMealToDay;

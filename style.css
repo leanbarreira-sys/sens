@@ -34536,6 +34536,7 @@ body.in-portal .sens-tracking-seg-pill,
     background: rgba(12, 12, 14, 0.56) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    z-index: 100060 !important;
     transition: opacity 0.18s ease, visibility 0s linear 0.18s;
 }
 
@@ -34544,7 +34545,23 @@ body.in-portal .sens-tracking-seg-pill,
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: auto !important;
+    z-index: 100060 !important;
     transition: opacity 0.18s ease, visibility 0s linear 0s;
+}
+
+/* Ocultamiento absoluto del Floating Dock cuando el modal de comida está abierto */
+body.sens-modal-open #sensFloatingDock,
+body.in-portal.sens-modal-open #sensFloatingDock,
+body:has(#userCustomMealModal.active) #sensFloatingDock,
+body.in-portal:has(#userCustomMealModal.active) #sensFloatingDock,
+html.in-portal-mode body:has(#userCustomMealModal.active) #sensFloatingDock,
+body.sens-modal-open #sensCoachFloatingDock,
+body:has(#userCustomMealModal.active) #sensCoachFloatingDock {
+    display: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    z-index: -9999 !important;
 }
 
 #userCustomMealModal .sens-custom-meal-sheet-box {
@@ -34887,7 +34904,7 @@ body.in-portal .sens-tracking-seg-pill,
     background: #FFFFFF !important;
     border-top: 1px solid rgba(18, 18, 20, 0.08) !important;
     box-shadow: 0 -8px 24px rgba(18, 18, 20, 0.06) !important;
-    z-index: 100 !important;
+    z-index: 100065 !important;
     position: relative !important;
     pointer-events: auto !important;
 }
@@ -34900,7 +34917,7 @@ body.in-portal .sens-tracking-seg-pill,
     cursor: pointer !important;
     pointer-events: auto !important;
     position: relative !important;
-    z-index: 101 !important;
+    z-index: 100070 !important;
 }
 
 /* =============================================================================
