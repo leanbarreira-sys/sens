@@ -8539,14 +8539,8 @@ function renderWorkoutDay(dayKey, targetDate = null) {
         return;
     }
 
-    // 6. Agrupación Jerárquica: Tipo de Ejercicio -> Grupo Muscular -> Carrusel Horizontal
-    const typeGroups = {
-        muscular: { key: 'muscular', label: 'TRABAJO MUSCULAR & FUERZA', icon: SENS_TYPE_ICONS.muscular.svg, muscles: {} },
-        cardio: { key: 'cardio', label: 'CARDIO & RESISTENCIA', icon: SENS_TYPE_ICONS.cardio.svg, muscles: {} },
-        movilidad: { key: 'movilidad', label: 'MOVILIDAD & RANGO ARTICULAR', icon: SENS_TYPE_ICONS.movilidad.svg, muscles: {} },
-        yoga: { key: 'yoga', label: 'YOGA & DESCOMPRESIÓN', icon: SENS_TYPE_ICONS.yoga.svg, muscles: {} }
-    };
-
+    // 6. Orden exacto del Coach (agrupando solo bloques contiguos del mismo grupo muscular, sin alterar secuencia)
+    const sequentialBlocks = [];
     exercisesToShow.forEach(ex => {
         const rawMatch = sourceLib.find(c => c.id === ex.id || c.name.toLowerCase() === ex.name.toLowerCase()) || ex;
         const catalogMatch = (typeof window.getResolvedExercise === 'function')
@@ -8558,48 +8552,32 @@ function renderWorkoutDay(dayKey, targetDate = null) {
 
         const typeKey = ['muscular', 'cardio', 'movilidad', 'yoga'].includes(tax.type) ? tax.type : 'muscular';
         const muscleLabel = tax.muscleLabel || 'General';
+        const lastBlock = sequentialBlocks[sequentialBlocks.length - 1];
 
-        if (!typeGroups[typeKey].muscles[muscleLabel]) {
-            typeGroups[typeKey].muscles[muscleLabel] = [];
+        if (lastBlock && lastBlock.typeKey === typeKey && lastBlock.muscleLabel === muscleLabel) {
+            lastBlock.items.push({ ex, catalogMatch, tax });
+        } else {
+            sequentialBlocks.push({
+                typeKey,
+                muscleLabel,
+                items: [{ ex, catalogMatch, tax }]
+            });
         }
-        typeGroups[typeKey].muscles[muscleLabel].push({
-            ex,
-            catalogMatch,
-            tax
-        });
     });
 
     let groupedHtml = '';
     const activeLang = 'es';
     try { if (typeof localStorage !== 'undefined') localStorage.removeItem('sens_lang'); } catch (_) {}
+    const isFuture = isFutureDate(effectiveDate);
 
-    Object.values(typeGroups).forEach(tg => {
-        const muscleKeys = Object.keys(tg.muscles);
-        if (muscleKeys.length === 0) return;
-
-        let totalTypeExercises = 0;
-        muscleKeys.forEach(mk => totalTypeExercises += tg.muscles[mk].length);
-
+    sequentialBlocks.forEach(block => {
+        const list = block.items;
         groupedHtml += `
-            <div class="sens-workout-type-section" data-type="${tg.key}">
-                <div class="sens-workout-type-header">
-                    <div class="sens-workout-type-title">
-                        ${tg.icon}
-                        <span>${tg.label}</span>
-                    </div>
-                    <span class="sens-workout-type-badge" style="white-space: nowrap; flex-shrink: 0;">${totalTypeExercises} ejercicio${totalTypeExercises > 1 ? 's' : ''}</span>
-                </div>
-        `;
-
-        const isFuture = isFutureDate(effectiveDate);
-
-        muscleKeys.forEach(mKey => {
-            const list = tg.muscles[mKey];
-            groupedHtml += `
+            <div class="sens-workout-type-section" data-type="${block.typeKey}">
                 <div class="sens-workout-muscle-group-block">
                     <div class="sens-workout-muscle-label-row">
                         <div class="sens-workout-muscle-label-info">
-                            <span class="sens-workout-muscle-label">${mKey}</span>
+                            <span class="sens-workout-muscle-label">${block.muscleLabel}</span>
                             <span class="sens-workout-muscle-count">${list.length} ejercicio${list.length > 1 ? 's' : ''}</span>
                         </div>
                         <div class="sens-carousel-nav-controls">
@@ -8609,64 +8587,62 @@ function renderWorkoutDay(dayKey, targetDate = null) {
                     </div>
                     <div class="sens-carousel-wrap">
                         <div class="sens-workout-carousel">
-            `;
+        `;
 
-            list.forEach(item => {
-                const ex = item.ex;
-                const cat = item.catalogMatch;
-                const isExDone = Boolean(execution.completedExercises && execution.completedExercises[ex.id]);
-                const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Cuerpo';
-                const media = (typeof resolveExerciseMediaUrl === 'function')
-                    ? resolveExerciseMediaUrl(cat?.video_local_path || cat?.video_url || cat?.video || ex.video)
-                    : { url: ex.video || SENS_EXERCISE_MOCKUP_VIDEO, isVideo: true, isGif: false };
-                const exTitle = (cat && (cat['name_' + activeLang] || cat.name_es || cat.name)) || ex.name;
-
-                groupedHtml += `
-                    <div class="sens-ex-compact-card ${isExDone ? 'completed' : ''}" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}', '${dateIso}')">
-                        <div class="sens-video-skeleton compact">
-                            <div class="sens-skeleton-shimmer"></div>
-                        </div>
-                        ${media.isYouTube ? `
-                            <img src="${media.thumbUrl}" alt="${exTitle}" loading="lazy" decoding="async" class="sens-ex-compact-video" onload="this.previousElementSibling?.classList.add('is-hidden')" style="object-fit: cover; width: 100%; height: 100%;" />
-                        ` : (media.isVideo ? `
-                            <video muted loop playsinline preload="none" class="sens-ex-compact-video" oncanplay="this.previousElementSibling?.classList.add('is-hidden')">
-                                <source src="${media.url}" type="video/mp4">
-                            </video>
-                        ` : `
-                            <img src="${media.url}" alt="${exTitle}" loading="lazy" class="sens-ex-compact-video" onload="this.previousElementSibling?.classList.add('is-hidden')" style="object-fit: cover; width: 100%; height: 100%;" />
-                        `)}
-                        <div class="sens-ex-compact-overlay"></div>
-                        <div class="sens-ex-compact-top">
-                            <span class="ex-compact-sets-badge">${ex.sets || 3} × ${ex.reps || 10}</span>
-                            ${isFuture ? `
-                                <span class="ex-compact-check-btn is-future" title="Disponible a partir del ${dayName}">
-                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                                </span>
-                            ` : (isExDone ? `
-                                <span class="ex-compact-check-btn completed" title="Ejercicio completado">✓</span>
-                            ` : '')}
-                        </div>
-                        <div class="sens-ex-compact-bottom">
-                            <div class="ex-compact-title" title="${exTitle}">${exTitle}</div>
-                            <div class="ex-compact-meta">
-                                <span>${weightLabel}</span> • <span>RIR ${ex.rir !== undefined ? ex.rir : 2}</span> • <span>${ex.rest || 75}s</span>
-                            </div>
-                            <div class="ex-compact-cue">
-                                Ver técnica &amp; video →
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
+        list.forEach(item => {
+            const ex = item.ex;
+            const cat = item.catalogMatch;
+            const isExDone = Boolean(execution.completedExercises && execution.completedExercises[ex.id]);
+            const weightLabel = ex.defaultWeight > 0 ? `${ex.defaultWeight} kg` : 'Cuerpo';
+            const media = (typeof resolveExerciseMediaUrl === 'function')
+                ? resolveExerciseMediaUrl(cat?.video_local_path || cat?.video_url || cat?.video || ex.video)
+                : { url: ex.video || SENS_EXERCISE_MOCKUP_VIDEO, isVideo: true, isGif: false };
+            const exTitle = (cat && (cat['name_' + activeLang] || cat.name_es || cat.name)) || ex.name;
 
             groupedHtml += `
+                <div class="sens-ex-compact-card ${isExDone ? 'completed' : ''}" data-ex-id="${ex.id}" onclick="openExerciseExecutionModal('${ex.id}', '${dayKey}', '${dateIso}')">
+                    <div class="sens-video-skeleton compact">
+                        <div class="sens-skeleton-shimmer"></div>
+                    </div>
+                    ${media.isYouTube ? `
+                        <img src="${media.thumbUrl}" alt="${exTitle}" loading="lazy" decoding="async" class="sens-ex-compact-video" onload="this.previousElementSibling?.classList.add('is-hidden')" style="object-fit: cover; width: 100%; height: 100%;" />
+                    ` : (media.isVideo ? `
+                        <video muted loop playsinline preload="none" class="sens-ex-compact-video" oncanplay="this.previousElementSibling?.classList.add('is-hidden')">
+                            <source src="${media.url}" type="video/mp4">
+                        </video>
+                    ` : `
+                        <img src="${media.url}" alt="${exTitle}" loading="lazy" class="sens-ex-compact-video" onload="this.previousElementSibling?.classList.add('is-hidden')" style="object-fit: cover; width: 100%; height: 100%;" />
+                    `)}
+                    <div class="sens-ex-compact-overlay"></div>
+                    <div class="sens-ex-compact-top">
+                        <span class="ex-compact-sets-badge">${ex.sets || 3} × ${ex.reps || 10}</span>
+                        ${isFuture ? `
+                            <span class="ex-compact-check-btn is-future" title="Disponible a partir del ${dayName}">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </span>
+                        ` : (isExDone ? `
+                            <span class="ex-compact-check-btn completed" title="Ejercicio completado">✓</span>
+                        ` : '')}
+                    </div>
+                    <div class="sens-ex-compact-bottom">
+                        <div class="ex-compact-title" title="${exTitle}">${exTitle}</div>
+                        <div class="ex-compact-meta">
+                            <span>${weightLabel}</span> • <span>RIR ${ex.rir !== undefined ? ex.rir : 2}</span> • <span>${ex.rest || 75}s</span>
+                        </div>
+                        <div class="ex-compact-cue">
+                            Ver técnica &amp; video →
                         </div>
                     </div>
                 </div>
             `;
         });
 
-        groupedHtml += `</div>`;
+        groupedHtml += `
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
     });
 
     let workoutBurnMiniHtml = '';
@@ -29932,6 +29908,70 @@ const CoachNutritionTemplatesManager = {
 window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
 
 // =============================================================================
+// REORDENAMIENTO POR ARRASTRE (DESKTOP + iOS TOUCH POINTER EVENTS)
+// =============================================================================
+window.attachSensDragReorder = function (containerEl, itemSelector, handleSelector, onReorder) {
+    if (!containerEl || typeof onReorder !== 'function') return;
+    const items = Array.from(containerEl.querySelectorAll(itemSelector));
+    if (items.length < 2) return;
+
+    items.forEach((item, fromIdx) => {
+        const handle = item.querySelector(handleSelector);
+        if (!handle || handle.dataset.dragBound === '1') return;
+        handle.dataset.dragBound = '1';
+
+        handle.addEventListener('pointerdown', (startEv) => {
+            if (startEv.button !== undefined && startEv.button !== 0) return;
+            startEv.preventDefault();
+            try { handle.setPointerCapture(startEv.pointerId); } catch (_) {}
+
+            let targetIdx = fromIdx;
+            item.classList.add('sens-dragging-row');
+
+            const clearOver = () => {
+                items.forEach(el => el.classList.remove('sens-drag-over-row', 'sens-drag-over-bottom'));
+            };
+
+            const onMove = (moveEv) => {
+                const y = moveEv.clientY;
+                clearOver();
+                let nextIdx = fromIdx;
+                for (let i = 0; i < items.length; i++) {
+                    const rect = items[i].getBoundingClientRect();
+                    const mid = rect.top + rect.height / 2;
+                    if (y < mid) {
+                        nextIdx = i;
+                        break;
+                    }
+                    nextIdx = i + 1;
+                }
+                if (nextIdx > fromIdx) nextIdx = Math.min(items.length - 1, nextIdx - 1);
+                targetIdx = nextIdx;
+                if (targetIdx !== fromIdx && items[targetIdx]) {
+                    if (targetIdx < fromIdx) items[targetIdx].classList.add('sens-drag-over-row');
+                    else items[targetIdx].classList.add('sens-drag-over-bottom');
+                }
+            };
+
+            const onEnd = () => {
+                item.classList.remove('sens-dragging-row');
+                clearOver();
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onEnd);
+                window.removeEventListener('pointercancel', onEnd);
+                if (targetIdx !== fromIdx) {
+                    onReorder(fromIdx, targetIdx);
+                }
+            };
+
+            window.addEventListener('pointermove', onMove, { passive: true });
+            window.addEventListener('pointerup', onEnd, { once: true });
+            window.addEventListener('pointercancel', onEnd, { once: true });
+        });
+    });
+};
+
+// =============================================================================
 // BIBLIOTECA UNIFICADA DE PLANTILLAS (ENTRENO + NUTRICIÓN) & CONSTRUCTOR REAL
 // =============================================================================
 (function initCoachTemplatesLibraryModule() {
@@ -30136,9 +30176,12 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
         listEl.innerHTML = exercises.map((ex, idx) => `
             <div class="ct-ex-card" data-ex-idx="${idx}" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 12px; padding: 10px;">
                 <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
-                    <div style="min-width: 0;">
-                        <div style="font-size: 13px; font-weight: 700; color: #121214; line-height: 1.25;">${esc(ex.name)}</div>
-                        ${ex.muscle ? `<div style="font-size: 11px; color: #71717A;">${esc(ex.muscle)}</div>` : ''}
+                    <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                        <span class="ct-ex-drag-handle" title="Arrastrar para reordenar" aria-label="Reordenar">⋮⋮</span>
+                        <div style="min-width: 0;">
+                            <div style="font-size: 13px; font-weight: 700; color: #121214; line-height: 1.25;">${idx + 1}. ${esc(ex.name)}</div>
+                            ${ex.muscle ? `<div style="font-size: 11px; color: #71717A;">${esc(ex.muscle)}</div>` : ''}
+                        </div>
                     </div>
                     <button type="button" class="btn-ct-remove-ex" data-ex-idx="${idx}" aria-label="Quitar ejercicio"
                         style="background: transparent; border: none; color: #71717A; font-size: 14px; cursor: pointer; padding: 2px 6px;">✕</button>
@@ -30192,6 +30235,16 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
                 renderWorkoutBuilder();
             });
         });
+
+        if (typeof window.attachSensDragReorder === 'function') {
+            window.attachSensDragReorder(listEl, '.ct-ex-card', '.ct-ex-drag-handle', (fromIdx, toIdx) => {
+                const [moved] = activeDay.exercises.splice(fromIdx, 1);
+                if (moved) {
+                    activeDay.exercises.splice(toIdx, 0, moved);
+                    renderWorkoutBuilder();
+                }
+            });
+        }
     }
 
     function renderExerciseSearchResults(query) {
@@ -33265,6 +33318,7 @@ const CoachWorkoutsMaster = {
             html += `
                 <div class="wizard-worktable-row wizard-selected-ex-row" data-ex-index="${idx}">
                     <div class="wcol-ex" title="${ex.name} • ${category.toUpperCase()}">
+                        <span class="wrow-drag-handle" title="Arrastrar para reordenar" aria-label="Reordenar">⋮⋮</span>
                         <span class="wrow-num">${idx + 1}</span>
                         <span class="wrow-title">${ex.name}</span>
                     </div>
@@ -33360,6 +33414,17 @@ const CoachWorkoutsMaster = {
                 this.updateStep3DayPillsCounts();
             });
         });
+
+        if (typeof window.attachSensDragReorder === 'function') {
+            window.attachSensDragReorder(list, '.wizard-selected-ex-row', '.wrow-drag-handle', (fromIdx, toIdx) => {
+                const [moved] = exercises.splice(fromIdx, 1);
+                if (moved) {
+                    exercises.splice(toIdx, 0, moved);
+                    this.persistWizardDraft();
+                    this.renderStep3Worktable(activeDay);
+                }
+            });
+        }
     },
 
     addExerciseToActiveDay(activeDay, exObj) {

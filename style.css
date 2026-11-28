@@ -39643,3 +39643,41 @@ body.in-portal #coachHubView .coach-domain-switch-btn.active {
     color: #FAF9F6;
     font-weight: 700;
 }
+
+.ct-ex-drag-handle,
+.wrow-drag-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 28px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: #A1A1AA;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    flex-shrink: 0;
+}
+
+.ct-ex-drag-handle:active,
+.wrow-drag-handle:active {
+    cursor: grabbing;
+    color: #121214;
+}
+
+.sens-dragging-row {
+    opacity: 0.52;
+    transform: scale(0.99);
+    background: #FAF7F2 !important;
+}
+
+.sens-drag-over-row {
+    border-top: 2px solid #9E7D4B !important;
+}
+
+.sens-drag-over-bottom {
+    border-bottom: 2px solid #9E7D4B !important;
+}
