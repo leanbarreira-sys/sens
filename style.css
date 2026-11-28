@@ -39548,6 +39548,7 @@ body.in-portal #paneLibrary .coach-taxonomy-level-box {
 
 body.in-portal #paneAthletes .coach-clean-chip,
 body.in-portal #paneLibrary .lib-quick-btn,
+body.in-portal #paneLibrary .lib-tpl-filter-btn,
 body.in-portal #paneLibrary .tax-l1-btn,
 body.in-portal #paneLibrary .tax-l2-btn,
 body.in-portal #paneLibrary .tax-l3-btn {
@@ -39566,6 +39567,7 @@ body.in-portal #paneLibrary .tax-l3-btn {
 
 body.in-portal #paneAthletes .coach-clean-chip.active,
 body.in-portal #paneLibrary .lib-quick-btn.active,
+body.in-portal #paneLibrary .lib-tpl-filter-btn.active,
 body.in-portal #paneLibrary .tax-l1-btn.active,
 body.in-portal #paneLibrary .tax-l2-btn.active,
 body.in-portal #paneLibrary .tax-l3-btn.active {
@@ -39593,4 +39595,12 @@ body.in-portal #coachHubView .coach-domain-switch-btn.active {
     border-radius: 999px !important;
     box-shadow: 0 2px 6px rgba(18, 18, 20, 0.07) !important;
     font-weight: 700 !important;
+}
+
+@media (max-width: 900px) {
+    #coachTemplateEditorSheet input,
+    #coachTemplateEditorSheet textarea,
+    #coachTemplatesSearchInput {
+        font-size: 16px !important;
+    }
 }

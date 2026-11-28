@@ -26753,7 +26753,7 @@ window.initCoachDatabasesTab = function() {
         });
     });
 
-    // Switcher de dominio (Mapa de Ejercicios vs Catálogo de Nutrición)
+    // Switcher de dominio (Mapa de Ejercicios vs Catálogo de Nutrición vs Plantillas)
     document.querySelectorAll('#coachLibDomainSwitcher .coach-domain-switch-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('#coachLibDomainSwitcher .coach-domain-switch-btn').forEach(b => b.classList.remove('active'));
@@ -26761,9 +26761,15 @@ window.initCoachDatabasesTab = function() {
             coachMasterLibState.domain = btn.getAttribute('data-libdomain') || 'exercises';
             const exSec = document.getElementById('coachLibExercisesSection');
             const foodSec = document.getElementById('coachLibNutritionSection');
+            const tplSec = document.getElementById('coachLibTemplatesSection');
             if (exSec) exSec.style.display = coachMasterLibState.domain === 'exercises' ? 'block' : 'none';
             if (foodSec) foodSec.style.display = coachMasterLibState.domain === 'nutrition' ? 'block' : 'none';
-            window.renderCoachDatabasesTab();
+            if (tplSec) tplSec.style.display = coachMasterLibState.domain === 'templates' ? 'block' : 'none';
+            if (coachMasterLibState.domain === 'templates') {
+                if (typeof window.renderCoachTemplatesLibraryTab === 'function') window.renderCoachTemplatesLibraryTab();
+            } else {
+                window.renderCoachDatabasesTab();
+            }
         });
     });
 
@@ -26958,6 +26964,17 @@ window.renderCoachDatabasesTab = function(keepPageLimit = false) {
     if (typeof isCurrentUserAdmin === 'function' && !isCurrentUserAdmin()) return;
     if (!keepPageLimit) coachMasterLibState.pageLimit = 36;
     const athId = AppState.activeAthleteId || 'mock_vip';
+
+    if (coachMasterLibState.domain === 'templates') {
+        const exSec = document.getElementById('coachLibExercisesSection');
+        const foodSec = document.getElementById('coachLibNutritionSection');
+        const tplSec = document.getElementById('coachLibTemplatesSection');
+        if (exSec) exSec.style.display = 'none';
+        if (foodSec) foodSec.style.display = 'none';
+        if (tplSec) tplSec.style.display = 'block';
+        if (typeof window.renderCoachTemplatesLibraryTab === 'function') window.renderCoachTemplatesLibraryTab();
+        return;
+    }
 
     if (coachMasterLibState.domain === 'exercises') {
         const grid = document.getElementById('coachMasterExercisesGrid');
@@ -29548,6 +29565,9 @@ const CoachRoutineTemplatesManager = {
                     </div>
 
                     <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                        <button type="button" class="btn btn-outline btn-sm btn-edit-tpl" data-tpl-id="${tpl.id}" style="font-size: 11.5px; padding: 6px 12px; border-radius: 8px;">
+                            Editar
+                        </button>
                         <button type="button" class="btn btn-primary btn-sm btn-load-tpl" data-tpl-id="${tpl.id}" style="background: #9E7D4B; color: #FFFFFF; font-weight: 700; font-size: 11.5px; padding: 6px 14px; border-radius: 8px;">
                             Cargar en el Planificador Masivo →
                         </button>
@@ -29557,6 +29577,17 @@ const CoachRoutineTemplatesManager = {
         });
 
         container.innerHTML = html;
+
+        // Wiring editar plantilla
+        container.querySelectorAll('.btn-edit-tpl').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tplId = btn.getAttribute('data-tpl-id');
+                this.closeModal();
+                if (typeof window.openCoachTemplateSheet === 'function') {
+                    window.openCoachTemplateSheet('workout', tplId);
+                }
+            });
+        });
 
         // Wiring cargar plantilla
         container.querySelectorAll('.btn-load-tpl').forEach(btn => {
@@ -29580,6 +29611,11 @@ const CoachRoutineTemplatesManager = {
     loadTemplateIntoWizard(tplId) {
         const tpl = this.getTemplates().find(t => t.id === tplId);
         if (!tpl) return;
+
+        // Si se invoca desde Biblioteca, navegar a Entreno automáticamente
+        if (typeof window.switchCoachSubTab === 'function') {
+            window.switchCoachSubTab('paneWorkouts');
+        }
 
         // Asegurar que estamos en la vista de Wizard
         const btnWizard = document.getElementById('btnToggleCoachWorkoutsWizard');
@@ -29653,12 +29689,668 @@ const CoachRoutineTemplatesManager = {
         };
 
         this.saveTemplate(newTpl);
+        if (typeof window.renderCoachTemplatesLibraryTab === 'function') {
+            window.renderCoachTemplatesLibraryTab();
+        }
         if (typeof showSensToast === 'function') {
             showSensToast(`✓ Plantilla "${newTpl.title}" guardada con éxito en tu biblioteca.`, 'champagne');
         }
     }
 };
 window.CoachRoutineTemplatesManager = CoachRoutineTemplatesManager;
+
+const CoachNutritionTemplatesManager = {
+    STORAGE_KEY: 'sens_coach_nutrition_templates_v1',
+
+    getDefaultTemplates() {
+        return [
+            {
+                id: 'ntpl-deficit-1850',
+                title: 'Déficit Sostenible 1.850 kcal',
+                description: 'Pérdida de grasa con alta saciedad proteica y distribución equilibrada.',
+                target_calories: 1850,
+                target_protein: 155,
+                target_carbs: 170,
+                target_fats: 60,
+                target_water: 2.6,
+                meal_percentages: { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 }
+            },
+            {
+                id: 'ntpl-recomp-2150',
+                title: 'Recomposición Proteica 2.150 kcal',
+                description: 'Mantenimiento calórico inteligente para mejorar composición corporal.',
+                target_calories: 2150,
+                target_protein: 165,
+                target_carbs: 215,
+                target_fats: 70,
+                target_water: 2.8,
+                meal_percentages: { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 }
+            },
+            {
+                id: 'ntpl-surplus-2650',
+                title: 'Superávit Limpio 2.650 kcal',
+                description: 'Ganancia muscular magra con soporte glucogénico peri-entreno.',
+                target_calories: 2650,
+                target_protein: 180,
+                target_carbs: 315,
+                target_fats: 75,
+                target_water: 3.0,
+                meal_percentages: { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 }
+            }
+        ];
+    },
+
+    getTemplates() {
+        try {
+            const raw = localStorage.getItem(this.STORAGE_KEY);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+            }
+        } catch (_) {}
+        const defaults = this.getDefaultTemplates();
+        this.saveAllTemplates(defaults);
+        return defaults;
+    },
+
+    saveAllTemplates(list) {
+        try { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(list)); } catch (_) {}
+    },
+
+    saveTemplate(tpl) {
+        const all = this.getTemplates();
+        const idx = all.findIndex(t => t.id === tpl.id);
+        if (idx >= 0) all[idx] = tpl;
+        else all.unshift(tpl);
+        this.saveAllTemplates(all);
+    },
+
+    deleteTemplate(tplId) {
+        const all = this.getTemplates().filter(t => t.id !== tplId);
+        this.saveAllTemplates(all);
+    },
+
+    applyTemplateToAthlete(tplId, athleteId) {
+        const tpl = this.getTemplates().find(t => t.id === tplId);
+        if (!tpl) return false;
+        const athId = athleteId || (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || AppState.activeAthleteId || 'mock_vip';
+        const pcts = { ...(tpl.meal_percentages || { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 }) };
+
+        // 1. Construir plan actualizado preservando días/comidas existentes si los hay
+        let basePlan = {};
+        try {
+            if (typeof window.CoachNutritionMaster !== 'undefined' && window.CoachNutritionMaster.dayPlanCache && Object.keys(window.CoachNutritionMaster.dayPlanCache).length > 0) {
+                basePlan = JSON.parse(JSON.stringify(window.CoachNutritionMaster.dayPlanCache));
+            } else {
+                const raw = localStorage.getItem(`sens_prescribed_nutrition_${athId}`);
+                if (raw) basePlan = JSON.parse(raw);
+            }
+        } catch (_) {}
+
+        const updated = {
+            ...basePlan,
+            target_calories: tpl.target_calories,
+            target_protein: tpl.target_protein,
+            target_carbs: tpl.target_carbs,
+            target_fats: tpl.target_fats,
+            target_water: tpl.target_water,
+            meal_percentages: pcts,
+            template_title: tpl.title,
+            updated_at: new Date().toISOString()
+        };
+
+        if (updated.days && typeof updated.days === 'object') {
+            Object.keys(updated.days).forEach(dKey => {
+                if (updated.days[dKey] && typeof updated.days[dKey] === 'object') {
+                    updated.days[dKey].target_calories = tpl.target_calories;
+                }
+            });
+        }
+
+        // 2. Persistir en todas las claves canónicas de localStorage
+        try {
+            const serialized = JSON.stringify(updated);
+            localStorage.setItem(`sens_prescribed_nutrition_${athId}`, serialized);
+            localStorage.setItem(`sens_user_nutrition_plan_${athId}`, serialized);
+            localStorage.setItem(`sens_coach_assigned_nutrition_${athId}`, serialized);
+        } catch (_) {}
+
+        // 3. Sincronizar CoachNutritionMaster si ya está cargado en memoria
+        if (typeof window.CoachNutritionMaster !== 'undefined') {
+            window.CoachNutritionMaster.activeAthleteId = athId;
+            window.CoachNutritionMaster.dayPlanCache = updated;
+            if (typeof window.CoachNutritionMaster.savePlan === 'function') {
+                try { window.CoachNutritionMaster.savePlan(); } catch (_) {}
+            }
+            if (typeof window.CoachNutritionMaster.render === 'function') {
+                try { window.CoachNutritionMaster.render(); } catch (_) {}
+            }
+        }
+
+        if (typeof syncMemberNutritionPrescription === 'function') {
+            try { syncMemberNutritionPrescription(athId, updated); } catch (_) {}
+        }
+        if (typeof showSensToast === 'function') {
+            showSensToast(`✓ Plantilla "${tpl.title}" aplicada al alumno.`, 'champagne');
+        }
+        return true;
+    }
+};
+window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
+
+// =============================================================================
+// BIBLIOTECA UNIFICADA DE PLANTILLAS (ENTRENO + NUTRICIÓN) & BOTTOM SHEET NATIVO
+// =============================================================================
+(function initCoachTemplatesLibraryModule() {
+    const state = {
+        filter: 'all',
+        search: '',
+        draftWorkoutDays: [],
+        libraryBound: false,
+        sheetBound: false
+    };
+
+    const DEFAULT_DAY_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+    function esc(str) {
+        return typeof escapeHTML === 'function' ? escapeHTML(String(str ?? '')) : String(str ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    }
+
+    function bindLibraryControls() {
+        if (state.libraryBound) return;
+        const filterBar = document.getElementById('coachLibTemplatesFilterBar');
+        const searchInp = document.getElementById('coachTemplatesSearchInput');
+        const createBtn = document.getElementById('btnCoachCreateNewTemplate');
+        if (!filterBar && !searchInp && !createBtn) return;
+
+        if (filterBar) {
+            filterBar.querySelectorAll('.lib-tpl-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBar.querySelectorAll('.lib-tpl-filter-btn').forEach(b => {
+                        b.classList.remove('active', 'pill-champagne');
+                        b.classList.add('pill-dark');
+                    });
+                    btn.classList.remove('pill-dark');
+                    btn.classList.add('active', 'pill-champagne');
+                    state.filter = btn.getAttribute('data-tplfilter') || 'all';
+                    window.renderCoachTemplatesLibraryTab();
+                });
+            });
+        }
+
+        if (searchInp) {
+            searchInp.addEventListener('input', () => {
+                state.search = searchInp.value.trim().toLowerCase();
+                window.renderCoachTemplatesLibraryTab();
+            });
+        }
+
+        if (createBtn) {
+            createBtn.addEventListener('click', () => {
+                const defaultDomain = state.filter === 'nutrition' ? 'nutrition' : 'workout';
+                window.openCoachTemplateSheet(defaultDomain, null);
+            });
+        }
+        state.libraryBound = true;
+    }
+
+    function renderWorkoutDaysPreview() {
+        const container = document.getElementById('ctWorkoutDaysPreview');
+        if (!container) return;
+
+        if (!Array.isArray(state.draftWorkoutDays) || state.draftWorkoutDays.length === 0) {
+            container.innerHTML = `
+                <div style="padding: 12px; border-radius: 12px; background: #FAF9F6; border: 1px dashed rgba(18,18,20,0.16); text-align: center;">
+                    <div style="font-size: 12px; color: #71717A; margin-bottom: 8px;">Sin días configurados todavía.</div>
+                    <button type="button" id="btnCtAddWorkoutDay" style="background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 6px 14px; font-size: 11.5px; font-weight: 700; cursor: pointer;">+ Agregar día</button>
+                </div>
+            `;
+        } else {
+            let html = state.draftWorkoutDays.map((d, idx) => {
+                const exCount = Array.isArray(d.exercises) ? d.exercises.length : 0;
+                const musclesStr = Array.isArray(d.muscles) ? d.muscles.join(', ') : '';
+                return `
+                    <div class="ct-day-row" data-day-idx="${idx}" style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08);">
+                        <input type="text" class="input-control ct-day-name-inp" data-day-idx="${idx}" value="${esc(d.dayName || DEFAULT_DAY_NAMES[idx % 7])}" placeholder="Día" style="width: 96px; flex-shrink: 0; margin-bottom: 0; padding: 6px 8px; font-weight: 700; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.14);">
+                        <input type="text" class="input-control ct-day-muscles-inp" data-day-idx="${idx}" value="${esc(musclesStr)}" placeholder="Grupos musculares (ej: Pecho, Tríceps)" style="flex: 1; min-width: 0; margin-bottom: 0; padding: 6px 8px; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.14);">
+                        <span style="font-size: 11px; color: #71717A; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums;">${exCount} ej.</span>
+                        <button type="button" class="btn-ct-remove-day" data-day-idx="${idx}" aria-label="Quitar día" style="background: transparent; border: none; color: #71717A; font-size: 14px; cursor: pointer; padding: 4px 6px;">✕</button>
+                    </div>
+                `;
+            }).join('');
+            html += `
+                <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+                    <button type="button" id="btnCtAddWorkoutDay" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16); border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;">+ Agregar día</button>
+                </div>
+            `;
+            container.innerHTML = html;
+        }
+
+        container.querySelectorAll('.ct-day-name-inp').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const i = parseInt(inp.getAttribute('data-day-idx'), 10);
+                if (state.draftWorkoutDays[i]) state.draftWorkoutDays[i].dayName = inp.value;
+            });
+        });
+        container.querySelectorAll('.ct-day-muscles-inp').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const i = parseInt(inp.getAttribute('data-day-idx'), 10);
+                if (state.draftWorkoutDays[i]) {
+                    state.draftWorkoutDays[i].muscles = inp.value.split(',').map(s => s.trim()).filter(Boolean);
+                }
+            });
+        });
+        container.querySelectorAll('.btn-ct-remove-day').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const i = parseInt(btn.getAttribute('data-day-idx'), 10);
+                state.draftWorkoutDays.splice(i, 1);
+                renderWorkoutDaysPreview();
+            });
+        });
+        const addBtn = document.getElementById('btnCtAddWorkoutDay');
+        if (addBtn) {
+            addBtn.addEventListener('click', () => {
+                const nextIdx = state.draftWorkoutDays.length;
+                state.draftWorkoutDays.push({
+                    dayOfWeekIdx: (nextIdx + 1) % 7,
+                    dayName: DEFAULT_DAY_NAMES[nextIdx % 7],
+                    modality: 'presencial',
+                    muscles: ['Full Body'],
+                    exercises: []
+                });
+                renderWorkoutDaysPreview();
+            });
+        }
+    }
+
+    function updatePctTotalBadge() {
+        const ids = ['ctNutriPctDes', 'ctNutriPctAlm', 'ctNutriPctMer', 'ctNutriPctCen', 'ctNutriPctSnk'];
+        const total = ids.reduce((acc, id) => acc + (parseInt(document.getElementById(id)?.value || '0', 10) || 0), 0);
+        const badge = document.getElementById('ctNutriPctTotalBadge');
+        if (badge) {
+            badge.textContent = `Total: ${total}%`;
+            badge.style.color = total === 100 ? '#16A34A' : '#DC2626';
+        }
+        return total;
+    }
+
+    function setSheetDomain(domain) {
+        const d = domain === 'nutrition' ? 'nutrition' : 'workout';
+        const domainInput = document.getElementById('ctSheetDomain');
+        if (domainInput) domainInput.value = d;
+        document.querySelectorAll('#ctSheetTypePills .coach-domain-switch-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-cttype') === d);
+        });
+        const wkFields = document.getElementById('ctWorkoutFields');
+        const ntFields = document.getElementById('ctNutritionFields');
+        if (wkFields) wkFields.style.display = d === 'workout' ? 'block' : 'none';
+        if (ntFields) ntFields.style.display = d === 'nutrition' ? 'block' : 'none';
+    }
+
+    function importWorkoutFromPlanner() {
+        if (typeof CoachWorkoutsMaster === 'undefined') return [];
+        const selected = (CoachWorkoutsMaster.daysConfig || []).filter(d => d.selected);
+        return selected.map(d => {
+            const draft = (CoachWorkoutsMaster.wizardDraft || {})[d.dateStr] || {};
+            return {
+                dayOfWeekIdx: d.dayOfWeekIdx,
+                dayName: d.dayOfWeek,
+                modality: d.modality || 'presencial',
+                muscles: [...(d.muscles || [])],
+                exercises: JSON.parse(JSON.stringify(draft.exercises || []))
+            };
+        });
+    }
+
+    function bindSheetControls() {
+        if (state.sheetBound) return;
+        const form = document.getElementById('coachTemplateEditorForm');
+        if (!form) return;
+
+        document.querySelectorAll('#ctSheetTypePills .coach-domain-switch-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setSheetDomain(btn.getAttribute('data-cttype') || 'workout');
+            });
+        });
+
+        document.querySelectorAll('#coachTemplateEditorSheet .ct-pct-inp').forEach(inp => {
+            inp.addEventListener('input', updatePctTotalBadge);
+        });
+
+        const importWkBtn = document.getElementById('btnCtImportCurrentWorkout');
+        if (importWkBtn) {
+            importWkBtn.addEventListener('click', () => {
+                const imported = importWorkoutFromPlanner();
+                if (imported.length === 0) {
+                    if (typeof showSensToast === 'function') showSensToast('No hay días activos en el planificador de Entreno.', 'warning');
+                    return;
+                }
+                state.draftWorkoutDays = imported;
+                renderWorkoutDaysPreview();
+                if (typeof showSensToast === 'function') showSensToast(`✓ ${imported.length} días importados del planificador.`, 'champagne');
+            });
+        }
+
+        const importNtBtn = document.getElementById('btnCtImportCurrentNutrition');
+        if (importNtBtn) {
+            importNtBtn.addEventListener('click', () => {
+                const cache = (window.CoachNutritionMaster && window.CoachNutritionMaster.dayPlanCache) || {};
+                const pct = cache.meal_percentages || { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 };
+                const setVal = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
+                setVal('ctNutriKcal', cache.target_calories || 2150);
+                setVal('ctNutriWater', cache.target_water || 2.5);
+                setVal('ctNutriProt', cache.target_protein || 160);
+                setVal('ctNutriCarbs', cache.target_carbs || 220);
+                setVal('ctNutriFats', cache.target_fats || 70);
+                setVal('ctNutriPctDes', pct.desayuno ?? 25);
+                setVal('ctNutriPctAlm', pct.almuerzo ?? 30);
+                setVal('ctNutriPctMer', pct.merienda ?? 15);
+                setVal('ctNutriPctCen', pct.cena ?? 25);
+                setVal('ctNutriPctSnk', pct.snack ?? 5);
+                updatePctTotalBadge();
+                if (typeof showSensToast === 'function') showSensToast('✓ Metas nutricionales importadas del alumno activo.', 'champagne');
+            });
+        }
+
+        const delBtn = document.getElementById('btnCoachTemplateDelete');
+        if (delBtn) {
+            delBtn.addEventListener('click', () => {
+                const editId = document.getElementById('ctSheetEditId')?.value;
+                const domain = document.getElementById('ctSheetDomain')?.value || 'workout';
+                if (!editId) return;
+                if (domain === 'nutrition') {
+                    CoachNutritionTemplatesManager.deleteTemplate(editId);
+                } else {
+                    CoachRoutineTemplatesManager.deleteTemplate(editId);
+                }
+                window.closeCoachTemplateSheet();
+                window.renderCoachTemplatesLibraryTab();
+                if (typeof showSensToast === 'function') showSensToast('Plantilla eliminada.', 'info');
+            });
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const editId = (document.getElementById('ctSheetEditId')?.value || '').trim();
+            const domain = (document.getElementById('ctSheetDomain')?.value || 'workout').trim();
+            const title = (document.getElementById('ctSheetTitle')?.value || '').trim();
+            const description = (document.getElementById('ctSheetDesc')?.value || '').trim();
+            if (!title) {
+                if (typeof showSensToast === 'function') showSensToast('Ingresá un nombre para la plantilla.', 'warning');
+                return;
+            }
+
+            if (domain === 'nutrition') {
+                const totalPct = updatePctTotalBadge();
+                if (totalPct !== 100) {
+                    if (typeof showSensToast === 'function') showSensToast('La distribución por comida debe sumar exactamente 100%.', 'warning');
+                    return;
+                }
+                const tpl = {
+                    id: editId || ('ntpl-' + Date.now()),
+                    title,
+                    description: description || 'Protocolo nutricional personalizado.',
+                    target_calories: parseInt(document.getElementById('ctNutriKcal')?.value || '2150', 10) || 2150,
+                    target_protein: parseInt(document.getElementById('ctNutriProt')?.value || '160', 10) || 160,
+                    target_carbs: parseInt(document.getElementById('ctNutriCarbs')?.value || '220', 10) || 220,
+                    target_fats: parseInt(document.getElementById('ctNutriFats')?.value || '70', 10) || 70,
+                    target_water: parseFloat(document.getElementById('ctNutriWater')?.value || '2.5') || 2.5,
+                    meal_percentages: {
+                        desayuno: parseInt(document.getElementById('ctNutriPctDes')?.value || '25', 10) || 0,
+                        almuerzo: parseInt(document.getElementById('ctNutriPctAlm')?.value || '30', 10) || 0,
+                        merienda: parseInt(document.getElementById('ctNutriPctMer')?.value || '15', 10) || 0,
+                        cena: parseInt(document.getElementById('ctNutriPctCen')?.value || '25', 10) || 0,
+                        snack: parseInt(document.getElementById('ctNutriPctSnk')?.value || '5', 10) || 0
+                    }
+                };
+                CoachNutritionTemplatesManager.saveTemplate(tpl);
+            } else {
+                const days = state.draftWorkoutDays.map((d, idx) => ({
+                    dayOfWeekIdx: d.dayOfWeekIdx != null ? d.dayOfWeekIdx : ((idx + 1) % 7),
+                    dayName: (d.dayName || DEFAULT_DAY_NAMES[idx % 7]).trim(),
+                    modality: d.modality || 'presencial',
+                    muscles: Array.isArray(d.muscles) && d.muscles.length > 0 ? d.muscles : ['Full Body'],
+                    exercises: Array.isArray(d.exercises) ? d.exercises : []
+                }));
+                if (days.length === 0) {
+                    if (typeof showSensToast === 'function') showSensToast('Agregá al menos un día de entrenamiento.', 'warning');
+                    return;
+                }
+                const tpl = {
+                    id: editId || ('custom-' + Date.now()),
+                    title,
+                    description: description || `Plantilla de entrenamiento (${days.length} días).`,
+                    daysCount: days.length,
+                    days
+                };
+                CoachRoutineTemplatesManager.saveTemplate(tpl);
+            }
+
+            window.closeCoachTemplateSheet();
+            window.renderCoachTemplatesLibraryTab();
+            const modal = document.getElementById('modalCoachRoutineTemplates');
+            if (modal && modal.classList.contains('active')) {
+                CoachRoutineTemplatesManager.renderModal();
+            }
+            if (typeof showSensToast === 'function') {
+                showSensToast(`✓ Plantilla "${title}" guardada.`, 'champagne');
+            }
+        });
+
+        state.sheetBound = true;
+    }
+
+    window.renderCoachTemplatesLibraryTab = function () {
+        bindLibraryControls();
+        const grid = document.getElementById('coachMasterTemplatesGrid');
+        if (!grid) return;
+
+        const wkList = CoachRoutineTemplatesManager.getTemplates().map(t => ({ ...t, _domain: 'workout' }));
+        const ntList = CoachNutritionTemplatesManager.getTemplates().map(t => ({ ...t, _domain: 'nutrition' }));
+        let combined = [...wkList, ...ntList];
+
+        if (state.filter !== 'all') {
+            combined = combined.filter(t => t._domain === state.filter);
+        }
+        if (state.search) {
+            combined = combined.filter(t =>
+                (t.title || '').toLowerCase().includes(state.search) ||
+                (t.description || '').toLowerCase().includes(state.search)
+            );
+        }
+
+        if (combined.length === 0) {
+            grid.innerHTML = `
+                <div style="grid-column: 1 / -1; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 28px 18px; text-align: center;">
+                    <div style="font-size: 14px; font-weight: 700; color: #121214; margin-bottom: 4px;">No hay plantillas para mostrar</div>
+                    <div style="font-size: 12.5px; color: #71717A; margin-bottom: 14px;">Creá una nueva plantilla de entrenamiento o nutrición para reutilizarla con tus alumnos.</div>
+                    <button type="button" id="btnEmptyCreateTemplate" style="background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 9px 18px; font-size: 12.5px; font-weight: 700; cursor: pointer;">+ Nueva plantilla</button>
+                </div>
+            `;
+            document.getElementById('btnEmptyCreateTemplate')?.addEventListener('click', () => {
+                window.openCoachTemplateSheet(state.filter === 'nutrition' ? 'nutrition' : 'workout', null);
+            });
+            return;
+        }
+
+        grid.innerHTML = combined.map(tpl => {
+            const isNutri = tpl._domain === 'nutrition';
+            const badgeHtml = isNutri
+                ? `<span class="pill" style="font-size: 10px; font-weight: 800; background: #FAF7F2; color: #705B3E; border: 1px solid #E5CBA7; padding: 3px 9px;">Nutrición</span>`
+                : `<span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; padding: 3px 9px;">Entreno · ${tpl.daysCount || (tpl.days || []).length} días</span>`;
+
+            const metaHtml = isNutri
+                ? `
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; font-variant-numeric: tabular-nums;">
+                        <span style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; color: #121214;">${Number(tpl.target_calories || 0).toLocaleString('es-AR')} kcal</span>
+                        <span style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); padding: 4px 8px; border-radius: 8px; font-size: 11px; color: #575659;">P ${tpl.target_protein}g · C ${tpl.target_carbs}g · G ${tpl.target_fats}g</span>
+                        <span style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); padding: 4px 8px; border-radius: 8px; font-size: 11px; color: #575659;">${tpl.target_water || 2.5} L</span>
+                    </div>
+                `
+                : `
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                        ${(tpl.days || []).slice(0, 5).map(d => `
+                            <span style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); padding: 4px 8px; border-radius: 8px; font-size: 11px; color: #575659;">
+                                <strong style="color: #121214;">${esc(d.dayName)}:</strong> ${esc((d.muscles || []).slice(0, 2).join(', ') || 'Rutina')}
+                            </span>
+                        `).join('')}
+                    </div>
+                `;
+
+            return `
+                <article class="coach-tpl-card" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
+                    <div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+                            ${badgeHtml}
+                        </div>
+                        <h4 style="margin: 0 0 4px 0; font-size: 15px; font-weight: 800; color: #121214; letter-spacing: -0.01em;">${esc(tpl.title)}</h4>
+                        <p style="margin: 0; font-size: 12.5px; color: #71717A; line-height: 1.4;">${esc(tpl.description || '')}</p>
+                    </div>
+                    ${metaHtml}
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 8px; border-top: 1px solid rgba(18,18,20,0.06);">
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="btn-tpl-card-edit" data-domain="${tpl._domain}" data-tpl-id="${esc(tpl.id)}"
+                                style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.14); border-radius: 999px; padding: 6px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                Editar
+                            </button>
+                            <button type="button" class="btn-tpl-card-delete" data-domain="${tpl._domain}" data-tpl-id="${esc(tpl.id)}"
+                                style="background: #FFFFFF; color: #B91C1C; border: 1px solid rgba(185,28,28,0.22); border-radius: 999px; padding: 6px 11px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                Eliminar
+                            </button>
+                        </div>
+                        <button type="button" class="btn-tpl-card-apply" data-domain="${tpl._domain}" data-tpl-id="${esc(tpl.id)}"
+                            style="background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 7px 14px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                            Aplicar →
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join('');
+
+        grid.querySelectorAll('.btn-tpl-card-edit').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.openCoachTemplateSheet(btn.getAttribute('data-domain'), btn.getAttribute('data-tpl-id'));
+            });
+        });
+
+        grid.querySelectorAll('.btn-tpl-card-delete').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.dataset.confirmPending !== '1') {
+                    btn.dataset.confirmPending = '1';
+                    btn.textContent = 'Confirmar';
+                    btn.style.background = '#FEF2F2';
+                    setTimeout(() => {
+                        if (btn.isConnected && btn.dataset.confirmPending === '1') {
+                            delete btn.dataset.confirmPending;
+                            btn.textContent = 'Eliminar';
+                            btn.style.background = '#FFFFFF';
+                        }
+                    }, 3000);
+                    return;
+                }
+                const domain = btn.getAttribute('data-domain');
+                const tplId = btn.getAttribute('data-tpl-id');
+                if (domain === 'nutrition') {
+                    CoachNutritionTemplatesManager.deleteTemplate(tplId);
+                } else {
+                    CoachRoutineTemplatesManager.deleteTemplate(tplId);
+                }
+                window.renderCoachTemplatesLibraryTab();
+                if (typeof showSensToast === 'function') showSensToast('Plantilla eliminada.', 'info');
+            });
+        });
+
+        grid.querySelectorAll('.btn-tpl-card-apply').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const domain = btn.getAttribute('data-domain');
+                const tplId = btn.getAttribute('data-tpl-id');
+                if (domain === 'nutrition') {
+                    const ok = CoachNutritionTemplatesManager.applyTemplateToAthlete(tplId);
+                    if (ok && typeof window.switchCoachSubTab === 'function') {
+                        window.switchCoachSubTab('paneNutrition');
+                    }
+                } else {
+                    CoachRoutineTemplatesManager.loadTemplateIntoWizard(tplId);
+                }
+            });
+        });
+    };
+
+    window.openCoachTemplateSheet = function (domain = 'workout', tplId = null) {
+        bindSheetControls();
+        const sheet = document.getElementById('coachTemplateEditorSheet');
+        const backdrop = document.getElementById('coachTemplateEditorBackdrop');
+        if (!sheet || !backdrop) return;
+
+        const d = domain === 'nutrition' ? 'nutrition' : 'workout';
+        const existing = tplId
+            ? (d === 'nutrition'
+                ? CoachNutritionTemplatesManager.getTemplates().find(t => t.id === tplId)
+                : CoachRoutineTemplatesManager.getTemplates().find(t => t.id === tplId))
+            : null;
+
+        const titleEl = document.getElementById('coachTemplateSheetTitle');
+        const editIdInp = document.getElementById('ctSheetEditId');
+        const typeWrap = document.getElementById('ctSheetTypeWrap');
+        const delBtn = document.getElementById('btnCoachTemplateDelete');
+
+        if (titleEl) titleEl.textContent = existing ? 'Editar plantilla' : 'Nueva plantilla';
+        if (editIdInp) editIdInp.value = existing ? existing.id : '';
+        if (typeWrap) typeWrap.style.display = existing ? 'none' : 'block';
+        if (delBtn) delBtn.style.display = existing ? 'inline-flex' : 'none';
+
+        setSheetDomain(d);
+
+        const titleInp = document.getElementById('ctSheetTitle');
+        const descInp = document.getElementById('ctSheetDesc');
+        if (titleInp) titleInp.value = existing ? (existing.title || '') : '';
+        if (descInp) descInp.value = existing ? (existing.description || '') : '';
+
+        if (d === 'nutrition') {
+            const pct = (existing && existing.meal_percentages) || { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 };
+            const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+            setVal('ctNutriKcal', existing ? existing.target_calories : 2150);
+            setVal('ctNutriWater', existing ? (existing.target_water || 2.5) : 2.5);
+            setVal('ctNutriProt', existing ? existing.target_protein : 160);
+            setVal('ctNutriCarbs', existing ? existing.target_carbs : 220);
+            setVal('ctNutriFats', existing ? existing.target_fats : 70);
+            setVal('ctNutriPctDes', pct.desayuno ?? 25);
+            setVal('ctNutriPctAlm', pct.almuerzo ?? 30);
+            setVal('ctNutriPctMer', pct.merienda ?? 15);
+            setVal('ctNutriPctCen', pct.cena ?? 25);
+            setVal('ctNutriPctSnk', pct.snack ?? 5);
+            updatePctTotalBadge();
+        } else {
+            if (existing && Array.isArray(existing.days)) {
+                state.draftWorkoutDays = JSON.parse(JSON.stringify(existing.days));
+            } else {
+                const plannerDays = importWorkoutFromPlanner();
+                state.draftWorkoutDays = plannerDays.length > 0 ? plannerDays : [
+                    { dayOfWeekIdx: 1, dayName: 'Lunes', modality: 'presencial', muscles: ['Tren Superior'], exercises: [] },
+                    { dayOfWeekIdx: 3, dayName: 'Miércoles', modality: 'presencial', muscles: ['Tren Inferior'], exercises: [] },
+                    { dayOfWeekIdx: 5, dayName: 'Viernes', modality: 'presencial', muscles: ['Full Body'], exercises: [] }
+                ];
+            }
+            renderWorkoutDaysPreview();
+        }
+
+        backdrop.style.display = 'block';
+        sheet.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(() => {
+            if (titleInp && !existing) titleInp.focus();
+        }, 120);
+    };
+
+    window.closeCoachTemplateSheet = function () {
+        const sheet = document.getElementById('coachTemplateEditorSheet');
+        const backdrop = document.getElementById('coachTemplateEditorBackdrop');
+        if (sheet) sheet.style.display = 'none';
+        if (backdrop) backdrop.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+})();
 
 // =============================================================================
 // MODAL RÁPIDO PARA AGREGAR EJERCICIOS AD-HOC (CALENDARIO MENSUAL & MATRIZ)

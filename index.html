@@ -136,12 +136,12 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap">
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="style.css?v=125.0">
+    <link rel="stylesheet" href="style.css?v=126.0">
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sens_sw_cache_ver') !== '246.0') {
-                    localStorage.setItem('sens_sw_cache_ver', '246.0');
+                if (localStorage.getItem('sens_sw_cache_ver') !== '247.0') {
+                    localStorage.setItem('sens_sw_cache_ver', '247.0');
                     if ('caches' in window) {
                         caches.keys().then(function (names) {
                             return Promise.all(names.map(function (n) { return caches.delete(n); }));
@@ -6063,10 +6063,13 @@
                             </div>
                             <div class="coach-lib-domain-switcher" id="coachLibDomainSwitcher">
                                 <button type="button" class="coach-domain-switch-btn active" data-libdomain="exercises">
-                                    Mapa de Ejercicios
+                                    Ejercicios
                                 </button>
                                 <button type="button" class="coach-domain-switch-btn" data-libdomain="nutrition">
-                                    Catálogo de Nutrición
+                                    Nutrición
+                                </button>
+                                <button type="button" class="coach-domain-switch-btn" data-libdomain="templates">
+                                    Plantillas
                                 </button>
                             </div>
                         </div>
@@ -6218,6 +6221,31 @@
                             </div>
 
                             <div class="coach-master-lib-grid" id="coachMasterFoodsGrid" style="margin-top: 14px;">
+                                <!-- Inyectado dinámicamente por app.js -->
+                            </div>
+                        </div>
+
+                        <!-- SUB-VISTA 4C: PLANTILLAS DE ENTRENO Y NUTRICIÓN -->
+                        <div id="coachLibTemplatesSection" style="display: none;">
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; align-items: center;">
+                                <input type="text" id="coachTemplatesSearchInput" class="input-control"
+                                    placeholder="Buscar plantilla..."
+                                    style="flex: 1; min-width: 180px; margin-bottom: 0; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 999px;">
+                                <button type="button" class="btn btn-dark btn-sm" id="btnCoachCreateNewTemplate"
+                                    style="font-weight: 700; background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 8px 16px; white-space: nowrap; min-height: 38px;">
+                                    + Nueva plantilla
+                                </button>
+                            </div>
+
+                            <div class="coach-taxonomy-level-box" style="margin-bottom: 10px;">
+                                <div class="coach-horizontal-pills" id="coachLibTemplatesFilterBar">
+                                    <button type="button" class="pill pill-champagne lib-tpl-filter-btn active" data-tplfilter="all">Todas</button>
+                                    <button type="button" class="pill pill-dark lib-tpl-filter-btn" data-tplfilter="workout">Entreno</button>
+                                    <button type="button" class="pill pill-dark lib-tpl-filter-btn" data-tplfilter="nutrition">Nutrición</button>
+                                </div>
+                            </div>
+
+                            <div class="coach-master-lib-grid" id="coachMasterTemplatesGrid" style="margin-top: 12px;">
                                 <!-- Inyectado dinámicamente por app.js -->
                             </div>
                         </div>
@@ -9077,8 +9105,136 @@
         </div>
     </div>
 
+    <!-- =========================================================================
+         BOTTOM SHEET NATIVO DE CREACIÓN / EDICIÓN DE PLANTILLAS (ENTRENO & NUTRICIÓN)
+         ========================================================================= -->
+    <div class="native-sheet-backdrop" id="coachTemplateEditorBackdrop" style="display: none; z-index: 100025;"
+        onclick="window.closeCoachTemplateSheet && window.closeCoachTemplateSheet();"></div>
+    <div class="coach-ex-editor-sheet" id="coachTemplateEditorSheet" role="dialog" aria-modal="true"
+        aria-labelledby="coachTemplateSheetTitle" style="z-index: 100026;">
+        <div class="coach-ex-sheet-handle-wrap" onclick="window.closeCoachTemplateSheet && window.closeCoachTemplateSheet();">
+            <div class="coach-ex-sheet-handle"></div>
+        </div>
+        <div class="coach-ex-sheet-header" style="border-bottom: 1px solid rgba(18,18,20,0.08);">
+            <div>
+                <h3 class="coach-ex-sheet-title" id="coachTemplateSheetTitle">Nueva plantilla</h3>
+            </div>
+            <button type="button" class="sens-modal-close-btn" aria-label="Cerrar"
+                onclick="window.closeCoachTemplateSheet && window.closeCoachTemplateSheet();">✕</button>
+        </div>
+
+        <form id="coachTemplateEditorForm" class="coach-ex-sheet-body" style="padding-bottom: 16px;">
+            <input type="hidden" id="ctSheetEditId" value="">
+            <input type="hidden" id="ctSheetDomain" value="workout">
+
+            <div id="ctSheetTypeWrap" style="margin-bottom: 12px;">
+                <label class="input-label" style="color: #121214; font-weight: 700; margin-bottom: 6px; display: block;">Tipo de plantilla</label>
+                <div class="coach-lib-domain-switcher" id="ctSheetTypePills" style="width: 100%;">
+                    <button type="button" class="coach-domain-switch-btn active" data-cttype="workout" style="flex: 1;">Entreno</button>
+                    <button type="button" class="coach-domain-switch-btn" data-cttype="nutrition" style="flex: 1;">Nutrición</button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label class="input-label" for="ctSheetTitle" style="color: #121214; font-weight: 700;">Nombre *</label>
+                <input type="text" id="ctSheetTitle" required placeholder="Ej: Hipertrofia 3 días o Déficit 1900 kcal" class="input-control"
+                    style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label class="input-label" for="ctSheetDesc" style="color: #121214; font-weight: 700;">Enfoque / Descripción</label>
+                <textarea id="ctSheetDesc" rows="2" placeholder="Objetivo clínico o criterio de aplicación..." class="input-control"
+                    style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16); resize: vertical;"></textarea>
+            </div>
+
+            <!-- Campos de Entreno -->
+            <div id="ctWorkoutFields">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+                    <span style="font-size: 12px; font-weight: 700; color: #121214;">Días incluidos</span>
+                    <button type="button" id="btnCtImportCurrentWorkout"
+                        style="background: #FAF7F2; color: #705B3E; border: 1px solid #E5CBA7; border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                        Importar semana del planificador
+                    </button>
+                </div>
+                <div id="ctWorkoutDaysPreview" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+
+            <!-- Campos de Nutrición -->
+            <div id="ctNutritionFields" style="display: none;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+                    <span style="font-size: 12px; font-weight: 700; color: #121214;">Metas diarias</span>
+                    <button type="button" id="btnCtImportCurrentNutrition"
+                        style="background: #FAF7F2; color: #705B3E; border: 1px solid #E5CBA7; border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                        Importar del alumno activo
+                    </button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px;">
+                    <div>
+                        <label class="input-label" for="ctNutriKcal" style="color: #575659; font-weight: 600;">Calorías (kcal)</label>
+                        <input type="number" id="ctNutriKcal" min="800" max="6000" value="2150" class="input-control"
+                            style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                    <div>
+                        <label class="input-label" for="ctNutriWater" style="color: #575659; font-weight: 600;">Agua (Litros)</label>
+                        <input type="number" id="ctNutriWater" min="1" max="8" step="0.2" value="2.5" class="input-control"
+                            style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;">
+                    <div>
+                        <label class="input-label" for="ctNutriProt" style="color: #575659; font-weight: 600;">Prot (g)</label>
+                        <input type="number" id="ctNutriProt" min="20" max="400" value="160" class="input-control"
+                            style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                    <div>
+                        <label class="input-label" for="ctNutriCarbs" style="color: #575659; font-weight: 600;">Carbs (g)</label>
+                        <input type="number" id="ctNutriCarbs" min="20" max="700" value="220" class="input-control"
+                            style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                    <div>
+                        <label class="input-label" for="ctNutriFats" style="color: #575659; font-weight: 600;">Grasas (g)</label>
+                        <input type="number" id="ctNutriFats" min="15" max="250" value="70" class="input-control"
+                            style="margin-bottom: 0; background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 11.5px; font-weight: 700; color: #121214;">Distribución por comida (%)</span>
+                    <span id="ctNutriPctTotalBadge" style="font-size: 11px; font-weight: 700; color: #16A34A;">Total: 100%</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;">
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Des.</label>
+                        <input type="number" id="ctNutriPctDes" min="0" max="100" value="25" class="input-control ct-pct-inp" style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Alm.</label>
+                        <input type="number" id="ctNutriPctAlm" min="0" max="100" value="30" class="input-control ct-pct-inp" style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Mer.</label>
+                        <input type="number" id="ctNutriPctMer" min="0" max="100" value="15" class="input-control ct-pct-inp" style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Cena</label>
+                        <input type="number" id="ctNutriPctCen" min="0" max="100" value="25" class="input-control ct-pct-inp" style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Snack</label>
+                        <input type="number" id="ctNutriPctSnk" min="0" max="100" value="5" class="input-control ct-pct-inp" style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.16);">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="coach-ex-sheet-footer" style="border-top: 1px solid rgba(18,18,20,0.08); background: #FAF9F6;">
+            <button type="button" class="coach-ex-btn-delete" id="btnCoachTemplateDelete" style="display: none;">Eliminar</button>
+            <button type="button" class="coach-ex-btn-cancel" onclick="window.closeCoachTemplateSheet && window.closeCoachTemplateSheet();">Cancelar</button>
+            <button type="submit" form="coachTemplateEditorForm" class="coach-ex-btn-save" id="btnCoachTemplateSubmit">Guardar plantilla</button>
+        </div>
+    </div>
+
     <!-- Script Principal de la Aplicación -->
-    <script defer src="app.js?v=161.0"></script>
+    <script defer src="app.js?v=162.0"></script>
 
     <!-- Salvaguarda Crítica de Cero Pantalla Negra: Garantiza que heroSkeleton nunca quede visible -->
     <script>
