@@ -29695,6 +29695,80 @@ const CoachRoutineTemplatesManager = {
         if (typeof showSensToast === 'function') {
             showSensToast(`✓ Plantilla "${newTpl.title}" guardada con éxito en tu biblioteca.`, 'champagne');
         }
+    },
+
+    async applyTemplateDirectlyToAthlete(tplId, athleteId) {
+        const tpl = this.getTemplates().find(t => t.id === tplId);
+        if (!tpl || !athleteId) return false;
+
+        const workoutData = (typeof getCoachAthleteWorkoutData === 'function' ? getCoachAthleteWorkoutData(athleteId) : null) || {};
+        if (!workoutData.calendar_schedule || typeof workoutData.calendar_schedule !== 'object') {
+            workoutData.calendar_schedule = {};
+        }
+
+        const dowMap = {};
+        (tpl.days || []).forEach(d => {
+            const idx = d.dayOfWeekIdx != null ? Number(d.dayOfWeekIdx) : 1;
+            dowMap[idx] = d;
+        });
+
+        const athMod = typeof getAthleteDefaultModality === 'function' ? getAthleteDefaultModality(athleteId) : 'presencial';
+        for (let i = 1; i <= 7; i++) {
+            const dow = i === 7 ? 0 : i;
+            const tDay = dowMap[dow];
+            const dayKey = `day${i}`;
+            if (tDay) {
+                workoutData[dayKey] = {
+                    title: `${tDay.dayName || dayKey} · ${tpl.goal || tpl.title}`,
+                    modality: athMod === 'online' ? 'online' : (tDay.modality || athMod),
+                    muscles: [...(tDay.muscles || [])],
+                    exercises: JSON.parse(JSON.stringify(tDay.exercises || []))
+                };
+            } else {
+                workoutData[dayKey] = {
+                    title: 'Descanso / Recuperación',
+                    modality: athMod,
+                    muscles: [],
+                    exercises: []
+                };
+            }
+        }
+
+        // Sincronizar próximos 7 días en calendar_schedule para que el alumno lo vea hoy mismo
+        const today = new Date();
+        for (let offset = 0; offset < 7; offset++) {
+            const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            const dateStr = `${y}-${m}-${dd}`;
+            const tDay = dowMap[d.getDay()];
+            if (tDay) {
+                workoutData.calendar_schedule[dateStr] = {
+                    dateStr,
+                    dayOfWeek: tDay.dayName || '',
+                    title: `${tDay.dayName || 'Entreno'} · ${tpl.title}`,
+                    modality: athMod === 'online' ? 'online' : (tDay.modality || athMod),
+                    completed: false,
+                    exercises: JSON.parse(JSON.stringify(tDay.exercises || []))
+                };
+            }
+        }
+
+        if (typeof CoachMultiDayActionsManager !== 'undefined' && typeof CoachMultiDayActionsManager.persistWorkoutData === 'function') {
+            const prevAth = CoachMultiDayActionsManager.activeAthleteId;
+            CoachMultiDayActionsManager.activeAthleteId = athleteId;
+            try {
+                await CoachMultiDayActionsManager.persistWorkoutData(workoutData);
+            } finally {
+                CoachMultiDayActionsManager.activeAthleteId = prevAth;
+            }
+        } else {
+            try {
+                localStorage.setItem(`sens_prescribed_workouts_${athleteId}`, JSON.stringify(workoutData));
+            } catch (_) {}
+        }
+        return true;
     }
 };
 window.CoachRoutineTemplatesManager = CoachRoutineTemplatesManager;
@@ -29795,17 +29869,36 @@ const CoachNutritionTemplatesManager = {
             target_fats: tpl.target_fats,
             target_water: tpl.target_water,
             meal_percentages: pcts,
+            goal: tpl.goal || basePlan.goal || '',
             template_title: tpl.title,
             updated_at: new Date().toISOString()
         };
 
-        if (updated.days && typeof updated.days === 'object') {
-            Object.keys(updated.days).forEach(dKey => {
-                if (updated.days[dKey] && typeof updated.days[dKey] === 'object') {
-                    updated.days[dKey].target_calories = tpl.target_calories;
-                }
-            });
+        const mealKeys = ['desayuno', 'almuerzo', 'merienda', 'cena', 'snack'];
+        const hasTemplateFoods = tpl.meals && mealKeys.some(m => Array.isArray(tpl.meals[m]) && tpl.meals[m].length > 0);
+        if (!updated.days || typeof updated.days !== 'object') {
+            updated.days = {};
         }
+        const dayNames = { day1: 'Lunes', day2: 'Martes', day3: 'Miércoles', day4: 'Jueves', day5: 'Viernes', day6: 'Sábado', day7: 'Domingo' };
+        Object.keys(dayNames).forEach(dKey => {
+            if (!updated.days[dKey] || typeof updated.days[dKey] !== 'object') {
+                updated.days[dKey] = { title: dayNames[dKey], target_calories: tpl.target_calories, meals: {} };
+            }
+            updated.days[dKey].target_calories = tpl.target_calories;
+            if (!updated.days[dKey].meals || typeof updated.days[dKey].meals !== 'object') {
+                updated.days[dKey].meals = {};
+            }
+            mealKeys.forEach(mKey => {
+                const targetKcal = Math.round(tpl.target_calories * ((pcts[mKey] || 0) / 100));
+                const existingFoods = (updated.days[dKey].meals[mKey] && Array.isArray(updated.days[dKey].meals[mKey].foods))
+                    ? updated.days[dKey].meals[mKey].foods
+                    : [];
+                updated.days[dKey].meals[mKey] = {
+                    target_kcal: targetKcal,
+                    foods: hasTemplateFoods ? JSON.parse(JSON.stringify(tpl.meals[mKey] || [])) : existingFoods
+                };
+            });
+        });
 
         // 2. Persistir en todas las claves canónicas de localStorage
         try {
@@ -29839,21 +29932,72 @@ const CoachNutritionTemplatesManager = {
 window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
 
 // =============================================================================
-// BIBLIOTECA UNIFICADA DE PLANTILLAS (ENTRENO + NUTRICIÓN) & BOTTOM SHEET NATIVO
+// BIBLIOTECA UNIFICADA DE PLANTILLAS (ENTRENO + NUTRICIÓN) & CONSTRUCTOR REAL
 // =============================================================================
 (function initCoachTemplatesLibraryModule() {
+    const WORKOUT_GOALS = ['Hipertrofia', 'Fuerza', 'Recomposición', 'Resistencia', 'Movilidad'];
+    const NUTRITION_GOALS = ['Déficit', 'Recomposición', 'Superávit', 'Mantenimiento'];
+    const WEEK_DAYS = [
+        { dow: 1, short: 'Lun', name: 'Lunes' },
+        { dow: 2, short: 'Mar', name: 'Martes' },
+        { dow: 3, short: 'Mié', name: 'Miércoles' },
+        { dow: 4, short: 'Jue', name: 'Jueves' },
+        { dow: 5, short: 'Vie', name: 'Viernes' },
+        { dow: 6, short: 'Sáb', name: 'Sábado' },
+        { dow: 0, short: 'Dom', name: 'Domingo' }
+    ];
+    const MEAL_TABS = [
+        { key: 'desayuno', label: 'Desayuno' },
+        { key: 'almuerzo', label: 'Almuerzo' },
+        { key: 'merienda', label: 'Merienda' },
+        { key: 'cena', label: 'Cena' },
+        { key: 'snack', label: 'Snack' }
+    ];
+
     const state = {
         filter: 'all',
         search: '',
+        domain: 'workout',
+        goal: 'Hipertrofia',
         draftWorkoutDays: [],
+        activeDayIdx: 0,
+        draftMeals: { desayuno: [], almuerzo: [], merienda: [], cena: [], snack: [] },
+        activeMealKey: 'desayuno',
+        assignTarget: null,
         libraryBound: false,
-        sheetBound: false
+        sheetBound: false,
+        assignBound: false
     };
 
-    const DEFAULT_DAY_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-
     function esc(str) {
-        return typeof escapeHTML === 'function' ? escapeHTML(String(str ?? '')) : String(str ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+        return typeof escapeHTML === 'function'
+            ? escapeHTML(String(str ?? ''))
+            : String(str ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    }
+
+    function getExerciseCatalog() {
+        if (typeof SENS_EXERCISE_LIBRARY !== 'undefined' && Array.isArray(SENS_EXERCISE_LIBRARY) && SENS_EXERCISE_LIBRARY.length > 0) return SENS_EXERCISE_LIBRARY;
+        if (typeof EXERCISE_CATALOG !== 'undefined' && Array.isArray(EXERCISE_CATALOG)) return EXERCISE_CATALOG;
+        return [];
+    }
+
+    function getFoodCatalog() {
+        if (typeof SENS_FOOD_LIBRARY !== 'undefined' && Array.isArray(SENS_FOOD_LIBRARY) && SENS_FOOD_LIBRARY.length > 0) return SENS_FOOD_LIBRARY;
+        if (typeof window !== 'undefined' && Array.isArray(window.SENS_FOOD_LIBRARY) && window.SENS_FOOD_LIBRARY.length > 0) return window.SENS_FOOD_LIBRARY;
+        if (typeof FOOD_CATALOG !== 'undefined' && Array.isArray(FOOD_CATALOG)) return FOOD_CATALOG;
+        return [];
+    }
+
+    function getRosterAthletes() {
+        let list = [];
+        if (typeof window !== 'undefined' && Array.isArray(window.__coachAthletesCache) && window.__coachAthletesCache.length > 0) {
+            list = window.__coachAthletesCache;
+        } else {
+            try {
+                list = JSON.parse(localStorage.getItem('sens_registered_athletes') || '[]');
+            } catch (_) {}
+        }
+        return Array.isArray(list) ? list : [];
     }
 
     function bindLibraryControls() {
@@ -29894,73 +30038,363 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
         state.libraryBound = true;
     }
 
-    function renderWorkoutDaysPreview() {
-        const container = document.getElementById('ctWorkoutDaysPreview');
+    function renderGoalPills() {
+        const container = document.getElementById('ctSheetGoalPills');
+        const hiddenInp = document.getElementById('ctSheetGoal');
         if (!container) return;
+        const goals = state.domain === 'nutrition' ? NUTRITION_GOALS : WORKOUT_GOALS;
+        if (!goals.includes(state.goal)) state.goal = goals[0];
+        if (hiddenInp) hiddenInp.value = state.goal;
 
-        if (!Array.isArray(state.draftWorkoutDays) || state.draftWorkoutDays.length === 0) {
-            container.innerHTML = `
-                <div style="padding: 12px; border-radius: 12px; background: #FAF9F6; border: 1px dashed rgba(18,18,20,0.16); text-align: center;">
-                    <div style="font-size: 12px; color: #71717A; margin-bottom: 8px;">Sin días configurados todavía.</div>
-                    <button type="button" id="btnCtAddWorkoutDay" style="background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 6px 14px; font-size: 11.5px; font-weight: 700; cursor: pointer;">+ Agregar día</button>
-                </div>
-            `;
-        } else {
-            let html = state.draftWorkoutDays.map((d, idx) => {
-                const exCount = Array.isArray(d.exercises) ? d.exercises.length : 0;
-                const musclesStr = Array.isArray(d.muscles) ? d.muscles.join(', ') : '';
-                return `
-                    <div class="ct-day-row" data-day-idx="${idx}" style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 12px; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08);">
-                        <input type="text" class="input-control ct-day-name-inp" data-day-idx="${idx}" value="${esc(d.dayName || DEFAULT_DAY_NAMES[idx % 7])}" placeholder="Día" style="width: 96px; flex-shrink: 0; margin-bottom: 0; padding: 6px 8px; font-weight: 700; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.14);">
-                        <input type="text" class="input-control ct-day-muscles-inp" data-day-idx="${idx}" value="${esc(musclesStr)}" placeholder="Grupos musculares (ej: Pecho, Tríceps)" style="flex: 1; min-width: 0; margin-bottom: 0; padding: 6px 8px; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.14);">
-                        <span style="font-size: 11px; color: #71717A; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums;">${exCount} ej.</span>
-                        <button type="button" class="btn-ct-remove-day" data-day-idx="${idx}" aria-label="Quitar día" style="background: transparent; border: none; color: #71717A; font-size: 14px; cursor: pointer; padding: 4px 6px;">✕</button>
-                    </div>
-                `;
-            }).join('');
-            html += `
-                <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
-                    <button type="button" id="btnCtAddWorkoutDay" style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.16); border-radius: 999px; padding: 5px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;">+ Agregar día</button>
-                </div>
-            `;
-            container.innerHTML = html;
-        }
+        container.innerHTML = goals.map(g => `
+            <button type="button" class="ct-pill-btn ${state.goal === g ? 'active' : ''}" data-goal="${esc(g)}">${esc(g)}</button>
+        `).join('');
 
-        container.querySelectorAll('.ct-day-name-inp').forEach(inp => {
-            inp.addEventListener('input', () => {
-                const i = parseInt(inp.getAttribute('data-day-idx'), 10);
-                if (state.draftWorkoutDays[i]) state.draftWorkoutDays[i].dayName = inp.value;
+        container.querySelectorAll('.ct-pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.goal = btn.getAttribute('data-goal') || goals[0];
+                if (hiddenInp) hiddenInp.value = state.goal;
+                renderGoalPills();
             });
         });
-        container.querySelectorAll('.ct-day-muscles-inp').forEach(inp => {
+    }
+
+    function sortDraftDays() {
+        const order = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 0: 6 };
+        state.draftWorkoutDays.sort((a, b) => (order[a.dayOfWeekIdx] ?? 9) - (order[b.dayOfWeekIdx] ?? 9));
+    }
+
+    function renderWorkoutBuilder() {
+        const togglesEl = document.getElementById('ctWorkoutDayToggles');
+        const tabsEl = document.getElementById('ctWorkoutDayTabs');
+        const listEl = document.getElementById('ctWorkoutDayExercisesList');
+        const labelEl = document.getElementById('ctActiveDayLabel');
+        const countEl = document.getElementById('ctActiveDayCount');
+        if (!togglesEl || !tabsEl || !listEl) return;
+
+        const activeDows = new Set(state.draftWorkoutDays.map(d => Number(d.dayOfWeekIdx)));
+        togglesEl.innerHTML = WEEK_DAYS.map(wd => `
+            <button type="button" class="ct-day-toggle-btn ${activeDows.has(wd.dow) ? 'active' : ''}" data-dow="${wd.dow}">${wd.short}</button>
+        `).join('');
+
+        togglesEl.querySelectorAll('.ct-day-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const dow = parseInt(btn.getAttribute('data-dow'), 10);
+                const existingIdx = state.draftWorkoutDays.findIndex(d => Number(d.dayOfWeekIdx) === dow);
+                if (existingIdx >= 0) {
+                    if (state.draftWorkoutDays.length <= 1) {
+                        if (typeof showSensToast === 'function') showSensToast('La rutina debe tener al menos 1 día.', 'warning');
+                        return;
+                    }
+                    state.draftWorkoutDays.splice(existingIdx, 1);
+                    if (state.activeDayIdx >= state.draftWorkoutDays.length) state.activeDayIdx = Math.max(0, state.draftWorkoutDays.length - 1);
+                } else {
+                    const meta = WEEK_DAYS.find(w => w.dow === dow) || { dow, name: 'Día' };
+                    state.draftWorkoutDays.push({
+                        dayOfWeekIdx: dow,
+                        dayName: meta.name,
+                        modality: 'presencial',
+                        muscles: [],
+                        exercises: []
+                    });
+                    sortDraftDays();
+                    state.activeDayIdx = state.draftWorkoutDays.findIndex(d => Number(d.dayOfWeekIdx) === dow);
+                }
+                renderWorkoutBuilder();
+            });
+        });
+
+        if (state.draftWorkoutDays.length === 0) {
+            tabsEl.innerHTML = '';
+            listEl.innerHTML = '<div style="font-size: 12px; color: #71717A; text-align: center; padding: 12px;">Activá al menos un día arriba.</div>';
+            return;
+        }
+        if (state.activeDayIdx >= state.draftWorkoutDays.length) state.activeDayIdx = 0;
+
+        tabsEl.innerHTML = state.draftWorkoutDays.map((d, idx) => {
+            const exLen = Array.isArray(d.exercises) ? d.exercises.length : 0;
+            return `<button type="button" class="ct-pill-btn ${idx === state.activeDayIdx ? 'active' : ''}" data-day-tab="${idx}">${esc(d.dayName)} (${exLen})</button>`;
+        }).join('');
+
+        tabsEl.querySelectorAll('.ct-pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.activeDayIdx = parseInt(btn.getAttribute('data-day-tab'), 10) || 0;
+                renderWorkoutBuilder();
+            });
+        });
+
+        const activeDay = state.draftWorkoutDays[state.activeDayIdx];
+        const exercises = Array.isArray(activeDay.exercises) ? activeDay.exercises : [];
+        if (labelEl) labelEl.textContent = `${activeDay.dayName} · Ejercicios`;
+        if (countEl) countEl.textContent = `${exercises.length} ${exercises.length === 1 ? 'ejercicio' : 'ejercicios'}`;
+
+        if (exercises.length === 0) {
+            listEl.innerHTML = `<div style="padding: 14px 10px; text-align: center; font-size: 12px; color: #71717A;">Buscá y tocá un ejercicio arriba para sumarlo a ${esc(activeDay.dayName)}.</div>`;
+            return;
+        }
+
+        listEl.innerHTML = exercises.map((ex, idx) => `
+            <div class="ct-ex-card" data-ex-idx="${idx}" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 12px; padding: 10px;">
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+                    <div style="min-width: 0;">
+                        <div style="font-size: 13px; font-weight: 700; color: #121214; line-height: 1.25;">${esc(ex.name)}</div>
+                        ${ex.muscle ? `<div style="font-size: 11px; color: #71717A;">${esc(ex.muscle)}</div>` : ''}
+                    </div>
+                    <button type="button" class="btn-ct-remove-ex" data-ex-idx="${idx}" aria-label="Quitar ejercicio"
+                        style="background: transparent; border: none; color: #71717A; font-size: 14px; cursor: pointer; padding: 2px 6px;">✕</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;">
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Series</label>
+                        <input type="number" min="1" max="15" value="${ex.sets ?? 3}" class="input-control ct-ex-inp" data-ex-idx="${idx}" data-field="sets"
+                            style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.12);">
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Reps</label>
+                        <input type="text" value="${esc(ex.reps ?? '10-12')}" class="input-control ct-ex-inp" data-ex-idx="${idx}" data-field="reps"
+                            style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.12);">
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Kg</label>
+                        <input type="number" min="0" step="0.5" value="${ex.defaultWeight ?? 20}" class="input-control ct-ex-inp" data-ex-idx="${idx}" data-field="defaultWeight"
+                            style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.12);">
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">RIR</label>
+                        <input type="number" min="0" max="5" step="0.5" value="${ex.rir ?? 2}" class="input-control ct-ex-inp" data-ex-idx="${idx}" data-field="rir"
+                            style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.12);">
+                    </div>
+                    <div>
+                        <label style="font-size: 10px; color: #575659; display: block; text-align: center;">Desc (s)</label>
+                        <input type="number" min="15" step="15" value="${ex.rest ?? 75}" class="input-control ct-ex-inp" data-ex-idx="${idx}" data-field="rest"
+                            style="margin-bottom: 0; padding: 6px 4px; text-align: center; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.12);">
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        listEl.querySelectorAll('.ct-ex-inp').forEach(inp => {
             inp.addEventListener('input', () => {
-                const i = parseInt(inp.getAttribute('data-day-idx'), 10);
-                if (state.draftWorkoutDays[i]) {
-                    state.draftWorkoutDays[i].muscles = inp.value.split(',').map(s => s.trim()).filter(Boolean);
+                const i = parseInt(inp.getAttribute('data-ex-idx'), 10);
+                const field = inp.getAttribute('data-field');
+                const target = activeDay.exercises[i];
+                if (!target) return;
+                if (field === 'reps') target.reps = inp.value;
+                else if (field === 'sets' || field === 'rest') target[field] = parseInt(inp.value, 10) || 0;
+                else target[field] = parseFloat(inp.value) || 0;
+            });
+        });
+
+        listEl.querySelectorAll('.btn-ct-remove-ex').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const i = parseInt(btn.getAttribute('data-ex-idx'), 10);
+                activeDay.exercises.splice(i, 1);
+                renderWorkoutBuilder();
+            });
+        });
+    }
+
+    function renderExerciseSearchResults(query) {
+        const resEl = document.getElementById('ctExerciseSearchResults');
+        if (!resEl) return;
+        const q = (query || '').trim().toLowerCase();
+        if (!q) {
+            resEl.style.display = 'none';
+            resEl.innerHTML = '';
+            return;
+        }
+        const catalog = getExerciseCatalog();
+        const matches = catalog.filter(ex => {
+            const name = (ex.name || '').toLowerCase();
+            const muscle = (ex.nivel_2_grupo_muscular || ex.group_level2 || '').toLowerCase();
+            return name.includes(q) || muscle.includes(q);
+        }).slice(0, 8);
+
+        if (matches.length === 0) {
+            resEl.style.display = 'block';
+            resEl.innerHTML = '<div style="padding: 10px 12px; font-size: 12px; color: #71717A;">Sin coincidencias en el catálogo.</div>';
+            return;
+        }
+
+        resEl.style.display = 'block';
+        resEl.innerHTML = matches.map(ex => {
+            const muscle = ex.nivel_2_grupo_muscular || ex.group_level2 || 'General';
+            return `
+                <button type="button" class="ct-ex-pick-btn" data-ex-id="${esc(ex.id)}"
+                    style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; background: transparent; border: none; border-bottom: 1px solid rgba(18,18,20,0.06); text-align: left; cursor: pointer;">
+                    <div style="min-width: 0;">
+                        <div style="font-size: 12.5px; font-weight: 700; color: #121214;">${esc(ex.name)}</div>
+                        <div style="font-size: 11px; color: #71717A;">${esc(muscle)}</div>
+                    </div>
+                    <span style="font-size: 11.5px; font-weight: 700; color: #705B3E; white-space: nowrap;">+ Agregar</span>
+                </button>
+            `;
+        }).join('');
+
+        resEl.querySelectorAll('.ct-ex-pick-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const exId = btn.getAttribute('data-ex-id');
+                const found = catalog.find(x => String(x.id) === String(exId));
+                const activeDay = state.draftWorkoutDays[state.activeDayIdx];
+                if (!found || !activeDay) return;
+                if (!Array.isArray(activeDay.exercises)) activeDay.exercises = [];
+                const muscle = found.nivel_2_grupo_muscular || found.group_level2 || '';
+                if (muscle && (!Array.isArray(activeDay.muscles) || !activeDay.muscles.includes(muscle))) {
+                    activeDay.muscles = [...(activeDay.muscles || []), muscle];
+                }
+                activeDay.exercises.push({
+                    id: found.id,
+                    name: found.name,
+                    muscle,
+                    sets: 3,
+                    reps: '10-12',
+                    defaultWeight: 20,
+                    rir: 2,
+                    rest: 75,
+                    notes: ''
+                });
+                const inp = document.getElementById('ctExerciseSearchInput');
+                if (inp) inp.value = '';
+                resEl.style.display = 'none';
+                renderWorkoutBuilder();
+            });
+        });
+    }
+
+    function renderNutritionMealsBuilder() {
+        const tabsEl = document.getElementById('ctNutriMealTabs');
+        const listEl = document.getElementById('ctMealFoodsList');
+        const sumEl = document.getElementById('ctMealFoodsSummary');
+        if (!tabsEl || !listEl) return;
+
+        tabsEl.innerHTML = MEAL_TABS.map(m => {
+            const count = (state.draftMeals[m.key] || []).length;
+            return `<button type="button" class="ct-pill-btn ${state.activeMealKey === m.key ? 'active' : ''}" data-meal-tab="${m.key}">${m.label}${count ? ` (${count})` : ''}</button>`;
+        }).join('');
+
+        tabsEl.querySelectorAll('.ct-pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.activeMealKey = btn.getAttribute('data-meal-tab') || 'desayuno';
+                renderNutritionMealsBuilder();
+            });
+        });
+
+        const foods = state.draftMeals[state.activeMealKey] || [];
+        const totalKcal = foods.reduce((acc, f) => acc + (Number(f.kcal) || 0), 0);
+        if (sumEl) sumEl.textContent = `${Math.round(totalKcal)} kcal en comida`;
+
+        if (foods.length === 0) {
+            listEl.innerHTML = '<div style="padding: 10px; text-align: center; font-size: 12px; color: #71717A;">Sin alimentos prearmados en esta comida (opcional).</div>';
+            return;
+        }
+
+        listEl.innerHTML = foods.map((f, idx) => `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 10px; padding: 8px 10px;">
+                <div style="min-width: 0; flex: 1;">
+                    <div style="font-size: 12.5px; font-weight: 700; color: #121214;">${esc(f.name)}</div>
+                    <div style="font-size: 11px; color: #71717A; font-variant-numeric: tabular-nums;">${Math.round(f.kcal || 0)} kcal · P ${Math.round(f.protein || 0)}g · C ${Math.round(f.carbs || 0)}g · G ${Math.round(f.fats || 0)}g</div>
+                </div>
+                <input type="number" min="5" step="5" value="${Math.round(f.grams || 100)}" class="input-control ct-food-grams-inp" data-food-idx="${idx}"
+                    style="width: 68px; margin-bottom: 0; padding: 5px 6px; text-align: center; background: #FAF9F6; border: 1px solid rgba(18,18,20,0.12);">
+                <span style="font-size: 11px; color: #71717A;">g</span>
+                <button type="button" class="btn-ct-remove-food" data-food-idx="${idx}" aria-label="Quitar alimento"
+                    style="background: transparent; border: none; color: #71717A; font-size: 14px; cursor: pointer; padding: 2px 4px;">✕</button>
+            </div>
+        `).join('');
+
+        listEl.querySelectorAll('.ct-food-grams-inp').forEach(inp => {
+            inp.addEventListener('input', () => {
+                const i = parseInt(inp.getAttribute('data-food-idx'), 10);
+                const item = foods[i];
+                if (!item) return;
+                const g = Math.max(1, parseFloat(inp.value) || 0);
+                const baseG = item.base_grams || 100;
+                const ratio = g / baseG;
+                item.grams = g;
+                item.kcal = Math.round((item.base_kcal || 0) * ratio);
+                item.protein = Math.round((item.base_prot || 0) * ratio * 10) / 10;
+                item.carbs = Math.round((item.base_carbs || 0) * ratio * 10) / 10;
+                item.fats = Math.round((item.base_fats || 0) * ratio * 10) / 10;
+                if (sumEl) {
+                    const tot = foods.reduce((acc, x) => acc + (Number(x.kcal) || 0), 0);
+                    sumEl.textContent = `${Math.round(tot)} kcal en comida`;
                 }
             });
         });
-        container.querySelectorAll('.btn-ct-remove-day').forEach(btn => {
+
+        listEl.querySelectorAll('.btn-ct-remove-food').forEach(btn => {
             btn.addEventListener('click', () => {
-                const i = parseInt(btn.getAttribute('data-day-idx'), 10);
-                state.draftWorkoutDays.splice(i, 1);
-                renderWorkoutDaysPreview();
+                const i = parseInt(btn.getAttribute('data-food-idx'), 10);
+                foods.splice(i, 1);
+                renderNutritionMealsBuilder();
             });
         });
-        const addBtn = document.getElementById('btnCtAddWorkoutDay');
-        if (addBtn) {
-            addBtn.addEventListener('click', () => {
-                const nextIdx = state.draftWorkoutDays.length;
-                state.draftWorkoutDays.push({
-                    dayOfWeekIdx: (nextIdx + 1) % 7,
-                    dayName: DEFAULT_DAY_NAMES[nextIdx % 7],
-                    modality: 'presencial',
-                    muscles: ['Full Body'],
-                    exercises: []
-                });
-                renderWorkoutDaysPreview();
-            });
+    }
+
+    function renderFoodSearchResults(query) {
+        const resEl = document.getElementById('ctFoodSearchResults');
+        if (!resEl) return;
+        const q = (query || '').trim().toLowerCase();
+        if (!q) {
+            resEl.style.display = 'none';
+            resEl.innerHTML = '';
+            return;
         }
+        const catalog = getFoodCatalog();
+        const matches = catalog.filter(f => (f.name || '').toLowerCase().includes(q) || (f.category || '').toLowerCase().includes(q)).slice(0, 8);
+
+        if (matches.length === 0) {
+            resEl.style.display = 'block';
+            resEl.innerHTML = '<div style="padding: 10px 12px; font-size: 12px; color: #71717A;">Sin alimentos coincidentes.</div>';
+            return;
+        }
+
+        resEl.style.display = 'block';
+        resEl.innerHTML = matches.map(f => {
+            const kcal = Math.round(f.kcal ?? f.calories ?? 0);
+            return `
+                <button type="button" class="ct-food-pick-btn" data-food-id="${esc(f.id)}"
+                    style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; background: transparent; border: none; border-bottom: 1px solid rgba(18,18,20,0.06); text-align: left; cursor: pointer;">
+                    <div style="min-width: 0;">
+                        <div style="font-size: 12.5px; font-weight: 700; color: #121214;">${esc(f.name)}</div>
+                        <div style="font-size: 11px; color: #71717A;">${kcal} kcal / ${f.serving_grams || 100}g</div>
+                    </div>
+                    <span style="font-size: 11.5px; font-weight: 700; color: #705B3E; white-space: nowrap;">+ Agregar</span>
+                </button>
+            `;
+        }).join('');
+
+        resEl.querySelectorAll('.ct-food-pick-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const foodId = btn.getAttribute('data-food-id');
+                const found = catalog.find(x => String(x.id) === String(foodId));
+                if (!found) return;
+                const baseG = Number(found.serving_grams || 100) || 100;
+                const baseKcal = Number(found.kcal ?? found.calories ?? 0);
+                const baseProt = Number(found.protein ?? found.prot ?? 0);
+                const baseCarbs = Number(found.carbs ?? 0);
+                const baseFats = Number(found.fats ?? found.fat ?? 0);
+                if (!Array.isArray(state.draftMeals[state.activeMealKey])) state.draftMeals[state.activeMealKey] = [];
+                state.draftMeals[state.activeMealKey].push({
+                    id: found.id,
+                    name: found.name,
+                    grams: baseG,
+                    base_grams: baseG,
+                    base_kcal: baseKcal,
+                    base_prot: baseProt,
+                    base_carbs: baseCarbs,
+                    base_fats: baseFats,
+                    kcal: Math.round(baseKcal),
+                    protein: baseProt,
+                    carbs: baseCarbs,
+                    fats: baseFats
+                });
+                const inp = document.getElementById('ctFoodSearchInput');
+                if (inp) inp.value = '';
+                resEl.style.display = 'none';
+                renderNutritionMealsBuilder();
+            });
+        });
     }
 
     function updatePctTotalBadge() {
@@ -29976,6 +30410,7 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
 
     function setSheetDomain(domain) {
         const d = domain === 'nutrition' ? 'nutrition' : 'workout';
+        state.domain = d;
         const domainInput = document.getElementById('ctSheetDomain');
         if (domainInput) domainInput.value = d;
         document.querySelectorAll('#ctSheetTypePills .coach-domain-switch-btn').forEach(btn => {
@@ -29985,6 +30420,7 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
         const ntFields = document.getElementById('ctNutritionFields');
         if (wkFields) wkFields.style.display = d === 'workout' ? 'block' : 'none';
         if (ntFields) ntFields.style.display = d === 'nutrition' ? 'block' : 'none';
+        renderGoalPills();
     }
 
     function importWorkoutFromPlanner() {
@@ -30013,61 +30449,65 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
             });
         });
 
+        document.getElementById('ctExerciseSearchInput')?.addEventListener('input', (e) => {
+            renderExerciseSearchResults(e.target.value);
+        });
+
+        document.getElementById('ctFoodSearchInput')?.addEventListener('input', (e) => {
+            renderFoodSearchResults(e.target.value);
+        });
+
         document.querySelectorAll('#coachTemplateEditorSheet .ct-pct-inp').forEach(inp => {
             inp.addEventListener('input', updatePctTotalBadge);
         });
 
-        const importWkBtn = document.getElementById('btnCtImportCurrentWorkout');
-        if (importWkBtn) {
-            importWkBtn.addEventListener('click', () => {
-                const imported = importWorkoutFromPlanner();
-                if (imported.length === 0) {
-                    if (typeof showSensToast === 'function') showSensToast('No hay días activos en el planificador de Entreno.', 'warning');
-                    return;
-                }
-                state.draftWorkoutDays = imported;
-                renderWorkoutDaysPreview();
-                if (typeof showSensToast === 'function') showSensToast(`✓ ${imported.length} días importados del planificador.`, 'champagne');
-            });
-        }
+        document.getElementById('btnCtImportCurrentWorkout')?.addEventListener('click', () => {
+            const imported = importWorkoutFromPlanner();
+            if (imported.length === 0) {
+                if (typeof showSensToast === 'function') showSensToast('No hay días activos en el planificador de Entreno.', 'warning');
+                return;
+            }
+            state.draftWorkoutDays = imported;
+            state.activeDayIdx = 0;
+            sortDraftDays();
+            renderWorkoutBuilder();
+            if (typeof showSensToast === 'function') showSensToast(`✓ ${imported.length} días importados de Entreno.`, 'champagne');
+        });
 
-        const importNtBtn = document.getElementById('btnCtImportCurrentNutrition');
-        if (importNtBtn) {
-            importNtBtn.addEventListener('click', () => {
-                const cache = (window.CoachNutritionMaster && window.CoachNutritionMaster.dayPlanCache) || {};
-                const pct = cache.meal_percentages || { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 };
-                const setVal = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
-                setVal('ctNutriKcal', cache.target_calories || 2150);
-                setVal('ctNutriWater', cache.target_water || 2.5);
-                setVal('ctNutriProt', cache.target_protein || 160);
-                setVal('ctNutriCarbs', cache.target_carbs || 220);
-                setVal('ctNutriFats', cache.target_fats || 70);
-                setVal('ctNutriPctDes', pct.desayuno ?? 25);
-                setVal('ctNutriPctAlm', pct.almuerzo ?? 30);
-                setVal('ctNutriPctMer', pct.merienda ?? 15);
-                setVal('ctNutriPctCen', pct.cena ?? 25);
-                setVal('ctNutriPctSnk', pct.snack ?? 5);
-                updatePctTotalBadge();
-                if (typeof showSensToast === 'function') showSensToast('✓ Metas nutricionales importadas del alumno activo.', 'champagne');
+        document.getElementById('btnCtImportCurrentNutrition')?.addEventListener('click', () => {
+            const cache = (window.CoachNutritionMaster && window.CoachNutritionMaster.dayPlanCache) || {};
+            const pct = cache.meal_percentages || { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 };
+            const setVal = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
+            setVal('ctNutriKcal', cache.target_calories || 2150);
+            setVal('ctNutriWater', cache.target_water || 2.5);
+            setVal('ctNutriProt', cache.target_protein || 160);
+            setVal('ctNutriCarbs', cache.target_carbs || 220);
+            setVal('ctNutriFats', cache.target_fats || 70);
+            setVal('ctNutriPctDes', pct.desayuno ?? 25);
+            setVal('ctNutriPctAlm', pct.almuerzo ?? 30);
+            setVal('ctNutriPctMer', pct.merienda ?? 15);
+            setVal('ctNutriPctCen', pct.cena ?? 25);
+            setVal('ctNutriPctSnk', pct.snack ?? 5);
+            const firstDayMeals = (cache.days && (cache.days.day1?.meals || Object.values(cache.days)[0]?.meals)) || {};
+            MEAL_TABS.forEach(m => {
+                const foods = (firstDayMeals[m.key] && Array.isArray(firstDayMeals[m.key].foods)) ? firstDayMeals[m.key].foods : [];
+                state.draftMeals[m.key] = JSON.parse(JSON.stringify(foods));
             });
-        }
+            updatePctTotalBadge();
+            renderNutritionMealsBuilder();
+            if (typeof showSensToast === 'function') showSensToast('✓ Metas y comidas importadas del alumno activo.', 'champagne');
+        });
 
-        const delBtn = document.getElementById('btnCoachTemplateDelete');
-        if (delBtn) {
-            delBtn.addEventListener('click', () => {
-                const editId = document.getElementById('ctSheetEditId')?.value;
-                const domain = document.getElementById('ctSheetDomain')?.value || 'workout';
-                if (!editId) return;
-                if (domain === 'nutrition') {
-                    CoachNutritionTemplatesManager.deleteTemplate(editId);
-                } else {
-                    CoachRoutineTemplatesManager.deleteTemplate(editId);
-                }
-                window.closeCoachTemplateSheet();
-                window.renderCoachTemplatesLibraryTab();
-                if (typeof showSensToast === 'function') showSensToast('Plantilla eliminada.', 'info');
-            });
-        }
+        document.getElementById('btnCoachTemplateDelete')?.addEventListener('click', () => {
+            const editId = document.getElementById('ctSheetEditId')?.value;
+            const domain = document.getElementById('ctSheetDomain')?.value || 'workout';
+            if (!editId) return;
+            if (domain === 'nutrition') CoachNutritionTemplatesManager.deleteTemplate(editId);
+            else CoachRoutineTemplatesManager.deleteTemplate(editId);
+            window.closeCoachTemplateSheet();
+            window.renderCoachTemplatesLibraryTab();
+            if (typeof showSensToast === 'function') showSensToast('Plantilla eliminada.', 'info');
+        });
 
         const handleTemplateFormSubmit = (e) => {
             if (e && typeof e.preventDefault === 'function') e.preventDefault();
@@ -30076,6 +30516,7 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
             const titleEl = document.getElementById('ctSheetTitle');
             const title = (titleEl?.value || '').trim();
             const description = (document.getElementById('ctSheetDesc')?.value || '').trim();
+            const goal = (document.getElementById('ctSheetGoal')?.value || state.goal || '').trim();
             if (!title) {
                 if (typeof showSensToast === 'function') showSensToast('Ingresá un nombre para la plantilla.', 'warning');
                 if (titleEl) titleEl.focus();
@@ -30091,6 +30532,7 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
                 const tpl = {
                     id: editId || ('ntpl-' + Date.now()),
                     title,
+                    goal,
                     description: description || 'Protocolo nutricional personalizado.',
                     target_calories: parseInt(document.getElementById('ctNutriKcal')?.value || '2150', 10) || 2150,
                     target_protein: parseInt(document.getElementById('ctNutriProt')?.value || '160', 10) || 160,
@@ -30103,17 +30545,23 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
                         merienda: parseInt(document.getElementById('ctNutriPctMer')?.value || '15', 10) || 0,
                         cena: parseInt(document.getElementById('ctNutriPctCen')?.value || '25', 10) || 0,
                         snack: parseInt(document.getElementById('ctNutriPctSnk')?.value || '5', 10) || 0
-                    }
+                    },
+                    meals: JSON.parse(JSON.stringify(state.draftMeals))
                 };
                 CoachNutritionTemplatesManager.saveTemplate(tpl);
             } else {
-                const days = state.draftWorkoutDays.map((d, idx) => ({
-                    dayOfWeekIdx: d.dayOfWeekIdx != null ? d.dayOfWeekIdx : ((idx + 1) % 7),
-                    dayName: (d.dayName || DEFAULT_DAY_NAMES[idx % 7]).trim(),
-                    modality: d.modality || 'presencial',
-                    muscles: Array.isArray(d.muscles) && d.muscles.length > 0 ? d.muscles : ['Full Body'],
-                    exercises: Array.isArray(d.exercises) ? d.exercises : []
-                }));
+                sortDraftDays();
+                const days = state.draftWorkoutDays.map((d, idx) => {
+                    const exs = Array.isArray(d.exercises) ? d.exercises : [];
+                    const autoMuscles = Array.from(new Set(exs.map(x => x.muscle).filter(Boolean)));
+                    return {
+                        dayOfWeekIdx: d.dayOfWeekIdx != null ? d.dayOfWeekIdx : ((idx + 1) % 7),
+                        dayName: (d.dayName || 'Día').trim(),
+                        modality: d.modality || 'presencial',
+                        muscles: autoMuscles.length > 0 ? autoMuscles : (Array.isArray(d.muscles) ? d.muscles : []),
+                        exercises: JSON.parse(JSON.stringify(exs))
+                    };
+                });
                 if (days.length === 0) {
                     if (typeof showSensToast === 'function') showSensToast('Agregá al menos un día de entrenamiento.', 'warning');
                     return;
@@ -30121,7 +30569,8 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
                 const tpl = {
                     id: editId || ('custom-' + Date.now()),
                     title,
-                    description: description || `Plantilla de entrenamiento (${days.length} días).`,
+                    goal,
+                    description: description || `Rutina de ${goal || 'entrenamiento'} (${days.length} días).`,
                     daysCount: days.length,
                     days
                 };
@@ -30140,13 +30589,93 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
         };
 
         form.addEventListener('submit', handleTemplateFormSubmit);
-        const submitBtn = document.getElementById('btnCoachTemplateSubmit');
-        if (submitBtn) {
-            submitBtn.addEventListener('click', handleTemplateFormSubmit);
-        }
-
+        document.getElementById('btnCoachTemplateSubmit')?.addEventListener('click', handleTemplateFormSubmit);
         state.sheetBound = true;
     }
+
+    function renderAssignAthletesList(filterQuery = '') {
+        const listEl = document.getElementById('ctAssignAthleteList');
+        if (!listEl) return;
+        const activeAthId = (typeof getActiveAthleteId === 'function' ? getActiveAthleteId() : null) || AppState.activeAthleteId || 'mock_vip';
+        const q = (filterQuery || '').trim().toLowerCase();
+        const athletes = getRosterAthletes().filter(a => {
+            const name = (a.full_name || a.email || '').toLowerCase();
+            return !q || name.includes(q);
+        });
+
+        if (athletes.length === 0) {
+            listEl.innerHTML = '<div style="padding: 16px; text-align: center; font-size: 12.5px; color: #71717A;">No se encontraron alumnos en tu roster.</div>';
+            return;
+        }
+
+        listEl.innerHTML = athletes.map(a => {
+            const isActive = a.id === activeAthId;
+            return `
+                <button type="button" class="ct-assign-ath-btn" data-ath-id="${esc(a.id)}"
+                    style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.1); border-radius: 14px; text-align: left; cursor: pointer;">
+                    <div>
+                        <div style="font-size: 13.5px; font-weight: 700; color: #121214;">${esc(a.full_name || a.email || 'Alumno')}</div>
+                        <div style="font-size: 11.5px; color: #71717A;">${esc(a.email || '')}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        ${isActive ? '<span class="pill pill-champagne" style="font-size: 10px; padding: 2px 8px;">Activo</span>' : ''}
+                        <span style="font-size: 12px; font-weight: 700; color: #121214;">Asignar →</span>
+                    </div>
+                </button>
+            `;
+        }).join('');
+
+        listEl.querySelectorAll('.ct-assign-ath-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const athId = btn.getAttribute('data-ath-id');
+                const ath = athletes.find(x => x.id === athId);
+                if (!state.assignTarget || !athId) return;
+                const { domain, tplId, title } = state.assignTarget;
+                if (domain === 'nutrition') {
+                    CoachNutritionTemplatesManager.applyTemplateToAthlete(tplId, athId);
+                } else {
+                    await CoachRoutineTemplatesManager.applyTemplateDirectlyToAthlete(tplId, athId);
+                }
+                window.closeCoachTemplateAssignSheet();
+                if (typeof showSensToast === 'function') {
+                    showSensToast(`✓ "${title}" asignada a ${ath?.full_name || 'alumno'}.`, 'champagne');
+                }
+            });
+        });
+    }
+
+    window.openCoachTemplateAssignSheet = function (domain, tplId) {
+        const sheet = document.getElementById('coachTemplateAssignSheet');
+        const backdrop = document.getElementById('coachTemplateAssignBackdrop');
+        const subEl = document.getElementById('ctAssignSubtitle');
+        const searchInp = document.getElementById('ctAssignAthleteSearch');
+        if (!sheet || !backdrop) return;
+
+        const tpl = domain === 'nutrition'
+            ? CoachNutritionTemplatesManager.getTemplates().find(t => t.id === tplId)
+            : CoachRoutineTemplatesManager.getTemplates().find(t => t.id === tplId);
+        if (!tpl) return;
+
+        state.assignTarget = { domain, tplId, title: tpl.title };
+        if (subEl) subEl.textContent = `Seleccioná el alumno para asignarle "${tpl.title}".`;
+        if (searchInp) searchInp.value = '';
+        if (!state.assignBound && searchInp) {
+            searchInp.addEventListener('input', () => renderAssignAthletesList(searchInp.value));
+            state.assignBound = true;
+        }
+        renderAssignAthletesList('');
+        backdrop.style.display = 'block';
+        sheet.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeCoachTemplateAssignSheet = function () {
+        const sheet = document.getElementById('coachTemplateAssignSheet');
+        const backdrop = document.getElementById('coachTemplateAssignBackdrop');
+        if (sheet) sheet.style.display = 'none';
+        if (backdrop) backdrop.style.display = 'none';
+        document.body.style.overflow = '';
+    };
 
     window.renderCoachTemplatesLibraryTab = function () {
         bindLibraryControls();
@@ -30157,12 +30686,11 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
         const ntList = CoachNutritionTemplatesManager.getTemplates().map(t => ({ ...t, _domain: 'nutrition' }));
         let combined = [...wkList, ...ntList];
 
-        if (state.filter !== 'all') {
-            combined = combined.filter(t => t._domain === state.filter);
-        }
+        if (state.filter !== 'all') combined = combined.filter(t => t._domain === state.filter);
         if (state.search) {
             combined = combined.filter(t =>
                 (t.title || '').toLowerCase().includes(state.search) ||
+                (t.goal || '').toLowerCase().includes(state.search) ||
                 (t.description || '').toLowerCase().includes(state.search)
             );
         }
@@ -30171,7 +30699,7 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
             grid.innerHTML = `
                 <div style="grid-column: 1 / -1; background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 28px 18px; text-align: center;">
                     <div style="font-size: 14px; font-weight: 700; color: #121214; margin-bottom: 4px;">No hay plantillas para mostrar</div>
-                    <div style="font-size: 12.5px; color: #71717A; margin-bottom: 14px;">Creá una nueva plantilla de entrenamiento o nutrición para reutilizarla con tus alumnos.</div>
+                    <div style="font-size: 12.5px; color: #71717A; margin-bottom: 14px;">Armá una rutina con ejercicios reales o un plan nutricional para reutilizarlos con tus alumnos.</div>
                     <button type="button" id="btnEmptyCreateTemplate" style="background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 9px 18px; font-size: 12.5px; font-weight: 700; cursor: pointer;">+ Nueva plantilla</button>
                 </div>
             `;
@@ -30183,9 +30711,16 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
 
         grid.innerHTML = combined.map(tpl => {
             const isNutri = tpl._domain === 'nutrition';
+            const totalEx = isNutri ? 0 : (tpl.days || []).reduce((acc, d) => acc + (Array.isArray(d.exercises) ? d.exercises.length : 0), 0);
+            const totalFoods = isNutri && tpl.meals ? Object.values(tpl.meals).reduce((acc, arr) => acc + (Array.isArray(arr) ? arr.length : 0), 0) : 0;
+
             const badgeHtml = isNutri
-                ? `<span class="pill" style="font-size: 10px; font-weight: 800; background: #FAF7F2; color: #705B3E; border: 1px solid #E5CBA7; padding: 3px 9px;">Nutrición</span>`
-                : `<span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; padding: 3px 9px;">Entreno · ${tpl.daysCount || (tpl.days || []).length} días</span>`;
+                ? `<span class="pill" style="font-size: 10px; font-weight: 800; background: #FAF7F2; color: #705B3E; border: 1px solid #E5CBA7; padding: 3px 9px;">Nutrición${totalFoods ? ` · ${totalFoods} alim.` : ''}</span>`
+                : `<span class="pill pill-champagne" style="font-size: 10px; font-weight: 800; padding: 3px 9px;">Entreno · ${tpl.daysCount || (tpl.days || []).length} días · ${totalEx} ej.</span>`;
+
+            const goalBadge = tpl.goal
+                ? `<span style="font-size: 10.5px; font-weight: 700; color: #575659; background: #F4F3F1; padding: 3px 8px; border-radius: 999px;">${esc(tpl.goal)}</span>`
+                : '';
 
             const metaHtml = isNutri
                 ? `
@@ -30197,39 +30732,47 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
                 `
                 : `
                     <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                        ${(tpl.days || []).slice(0, 5).map(d => `
-                            <span style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); padding: 4px 8px; border-radius: 8px; font-size: 11px; color: #575659;">
-                                <strong style="color: #121214;">${esc(d.dayName)}:</strong> ${esc((d.muscles || []).slice(0, 2).join(', ') || 'Rutina')}
-                            </span>
-                        `).join('')}
+                        ${(tpl.days || []).slice(0, 4).map(d => {
+                            const exPreview = (d.exercises || []).slice(0, 2).map(e => e.name).join(', ');
+                            return `<span style="background: #FAF9F6; border: 1px solid rgba(18,18,20,0.08); padding: 4px 8px; border-radius: 8px; font-size: 11px; color: #575659;">
+                                <strong style="color: #121214;">${esc(d.dayName)}:</strong> ${esc(exPreview || (d.muscles || []).slice(0, 2).join(', ') || 'Sin ejercicios')}
+                            </span>`;
+                        }).join('')}
                     </div>
                 `;
 
             return `
                 <article class="coach-tpl-card" style="background: #FFFFFF; border: 1px solid rgba(18,18,20,0.08); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
                     <div>
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+                        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;">
                             ${badgeHtml}
+                            ${goalBadge}
                         </div>
                         <h4 style="margin: 0 0 4px 0; font-size: 15px; font-weight: 800; color: #121214; letter-spacing: -0.01em;">${esc(tpl.title)}</h4>
                         <p style="margin: 0; font-size: 12.5px; color: #71717A; line-height: 1.4;">${esc(tpl.description || '')}</p>
                     </div>
                     ${metaHtml}
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 8px; border-top: 1px solid rgba(18,18,20,0.06);">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-top: 8px; border-top: 1px solid rgba(18,18,20,0.06);">
                         <div style="display: flex; gap: 6px;">
                             <button type="button" class="btn-tpl-card-edit" data-domain="${tpl._domain}" data-tpl-id="${esc(tpl.id)}"
-                                style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.14); border-radius: 999px; padding: 6px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                style="background: #FFFFFF; color: #121214; border: 1px solid rgba(18,18,20,0.14); border-radius: 999px; padding: 6px 11px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
                                 Editar
                             </button>
                             <button type="button" class="btn-tpl-card-delete" data-domain="${tpl._domain}" data-tpl-id="${esc(tpl.id)}"
-                                style="background: #FFFFFF; color: #B91C1C; border: 1px solid rgba(185,28,28,0.22); border-radius: 999px; padding: 6px 11px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                style="background: #FFFFFF; color: #B91C1C; border: 1px solid rgba(185,28,28,0.22); border-radius: 999px; padding: 6px 10px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
                                 Eliminar
                             </button>
                         </div>
-                        <button type="button" class="btn-tpl-card-apply" data-domain="${tpl._domain}" data-tpl-id="${esc(tpl.id)}"
-                            style="background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 7px 14px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
-                            Aplicar →
-                        </button>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="btn-tpl-card-apply" data-domain="${tpl._domain}" data-tpl-id="${esc(tpl.id)}"
+                                style="background: #FAF7F2; color: #705B3E; border: 1px solid #E5CBA7; border-radius: 999px; padding: 6px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                Cargar
+                            </button>
+                            <button type="button" class="btn-tpl-card-assign" data-domain="${tpl._domain}" data-tpl-id="${esc(tpl.id)}"
+                                style="background: #121214; color: #FAF9F6; border: none; border-radius: 999px; padding: 6px 13px; font-size: 11.5px; font-weight: 700; cursor: pointer;">
+                                Asignar
+                            </button>
+                        </div>
                     </div>
                 </article>
             `;
@@ -30258,11 +30801,8 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
                 }
                 const domain = btn.getAttribute('data-domain');
                 const tplId = btn.getAttribute('data-tpl-id');
-                if (domain === 'nutrition') {
-                    CoachNutritionTemplatesManager.deleteTemplate(tplId);
-                } else {
-                    CoachRoutineTemplatesManager.deleteTemplate(tplId);
-                }
+                if (domain === 'nutrition') CoachNutritionTemplatesManager.deleteTemplate(tplId);
+                else CoachRoutineTemplatesManager.deleteTemplate(tplId);
                 window.renderCoachTemplatesLibraryTab();
                 if (typeof showSensToast === 'function') showSensToast('Plantilla eliminada.', 'info');
             });
@@ -30274,18 +30814,25 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
                 const tplId = btn.getAttribute('data-tpl-id');
                 if (domain === 'nutrition') {
                     const ok = CoachNutritionTemplatesManager.applyTemplateToAthlete(tplId);
-                    if (ok && typeof window.switchCoachSubTab === 'function') {
-                        window.switchCoachSubTab('paneNutrition');
-                    }
+                    if (ok && typeof window.switchCoachSubTab === 'function') window.switchCoachSubTab('paneNutrition');
                 } else {
                     CoachRoutineTemplatesManager.loadTemplateIntoWizard(tplId);
                 }
+            });
+        });
+
+        grid.querySelectorAll('.btn-tpl-card-assign').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.openCoachTemplateAssignSheet(btn.getAttribute('data-domain'), btn.getAttribute('data-tpl-id'));
             });
         });
     };
 
     window.openCoachTemplateSheet = function (domain = 'workout', tplId = null) {
         bindSheetControls();
+        if (typeof ensureMasterDatabasesLoaded === 'function' && (getExerciseCatalog().length === 0 || getFoodCatalog().length === 0)) {
+            try { ensureMasterDatabasesLoaded(); } catch (_) {}
+        }
         const sheet = document.getElementById('coachTemplateEditorSheet');
         const backdrop = document.getElementById('coachTemplateEditorBackdrop');
         if (!sheet || !backdrop) return;
@@ -30307,12 +30854,20 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
         if (typeWrap) typeWrap.style.display = existing ? 'none' : 'block';
         if (delBtn) delBtn.style.display = existing ? 'inline-flex' : 'none';
 
+        state.goal = (existing && existing.goal) ? existing.goal : (d === 'nutrition' ? NUTRITION_GOALS[0] : WORKOUT_GOALS[0]);
         setSheetDomain(d);
 
         const titleInp = document.getElementById('ctSheetTitle');
         const descInp = document.getElementById('ctSheetDesc');
         if (titleInp) titleInp.value = existing ? (existing.title || '') : '';
         if (descInp) descInp.value = existing ? (existing.description || '') : '';
+
+        const exSearch = document.getElementById('ctExerciseSearchInput');
+        if (exSearch) exSearch.value = '';
+        renderExerciseSearchResults('');
+        const foodSearch = document.getElementById('ctFoodSearchInput');
+        if (foodSearch) foodSearch.value = '';
+        renderFoodSearchResults('');
 
         if (d === 'nutrition') {
             const pct = (existing && existing.meal_percentages) || { desayuno: 25, almuerzo: 30, merienda: 15, cena: 25, snack: 5 };
@@ -30327,19 +30882,27 @@ window.CoachNutritionTemplatesManager = CoachNutritionTemplatesManager;
             setVal('ctNutriPctMer', pct.merienda ?? 15);
             setVal('ctNutriPctCen', pct.cena ?? 25);
             setVal('ctNutriPctSnk', pct.snack ?? 5);
+            MEAL_TABS.forEach(m => {
+                const arr = existing && existing.meals && Array.isArray(existing.meals[m.key]) ? existing.meals[m.key] : [];
+                state.draftMeals[m.key] = JSON.parse(JSON.stringify(arr));
+            });
+            state.activeMealKey = 'desayuno';
             updatePctTotalBadge();
+            renderNutritionMealsBuilder();
         } else {
             if (existing && Array.isArray(existing.days)) {
                 state.draftWorkoutDays = JSON.parse(JSON.stringify(existing.days));
             } else {
                 const plannerDays = importWorkoutFromPlanner();
                 state.draftWorkoutDays = plannerDays.length > 0 ? plannerDays : [
-                    { dayOfWeekIdx: 1, dayName: 'Lunes', modality: 'presencial', muscles: ['Tren Superior'], exercises: [] },
-                    { dayOfWeekIdx: 3, dayName: 'Miércoles', modality: 'presencial', muscles: ['Tren Inferior'], exercises: [] },
-                    { dayOfWeekIdx: 5, dayName: 'Viernes', modality: 'presencial', muscles: ['Full Body'], exercises: [] }
+                    { dayOfWeekIdx: 1, dayName: 'Lunes', modality: 'presencial', muscles: [], exercises: [] },
+                    { dayOfWeekIdx: 3, dayName: 'Miércoles', modality: 'presencial', muscles: [], exercises: [] },
+                    { dayOfWeekIdx: 5, dayName: 'Viernes', modality: 'presencial', muscles: [], exercises: [] }
                 ];
             }
-            renderWorkoutDaysPreview();
+            sortDraftDays();
+            state.activeDayIdx = 0;
+            renderWorkoutBuilder();
         }
 
         backdrop.style.display = 'block';

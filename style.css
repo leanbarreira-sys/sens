@@ -39600,7 +39600,46 @@ body.in-portal #coachHubView .coach-domain-switch-btn.active {
 @media (max-width: 900px) {
     #coachTemplateEditorSheet input,
     #coachTemplateEditorSheet textarea,
+    #coachTemplateAssignSheet input,
     #coachTemplatesSearchInput {
         font-size: 16px !important;
     }
+}
+
+#coachTemplateEditorSheet .ct-pill-btn {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.12);
+    color: #575659;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#coachTemplateEditorSheet .ct-pill-btn.active {
+    background: #FAF7F2;
+    border-color: #E5CBA7;
+    color: #705B3E;
+    font-weight: 700;
+}
+
+#coachTemplateEditorSheet .ct-day-toggle-btn {
+    background: #FFFFFF;
+    border: 1px solid rgba(18, 18, 20, 0.12);
+    color: #71717A;
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#coachTemplateEditorSheet .ct-day-toggle-btn.active {
+    background: #121214;
+    border-color: #121214;
+    color: #FAF9F6;
+    font-weight: 700;
 }
